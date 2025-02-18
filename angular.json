@@ -33,7 +33,7 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/public/variables.scss"
+              "public/variables.scss"
             ],
             "scripts": []
           },
