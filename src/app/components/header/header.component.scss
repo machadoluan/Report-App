@@ -10,6 +10,8 @@ header {
     align-items: center;
     justify-content: space-between;
     position: fixed;
+    z-index: 9999;
+    background-color: $background-color;
 
     span {
         font-size: 18px;
