@@ -1,0 +1,144 @@
+@use '../../../../public/variables' as *;
+
+
+.container-login {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .login {
+        padding: 2rem;
+        border: 2px solid $card-border;
+        border-radius: 20px;
+        background-color: $background-color;
+
+        .login_content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+
+            .login_title {
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .login_desc {
+                font-size: 14px;
+            }
+
+            form {
+                width: 345px;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                justify-content: space-between;
+
+
+                .form-group {
+                    display: flex;
+                    align-items: center;
+                    border: 2px solid $card-border;
+                    padding: .7rem;
+                    border-radius: 6px;
+                    justify-content: space-between;
+                    gap: .5rem;
+
+
+                    input {
+                        background-color: transparent;
+                        border: none;
+                        outline: none;
+                        color: $color;
+                        width: 100%;
+                    }
+
+                    .pi-eye {
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .user {
+                display: flex;
+                justify-content: space-between;
+
+                .checkbox {
+                    display: flex;
+                    gap: .5rem;
+                    align-items: center;
+
+                    label {
+                        font-size: 12px;
+                    }
+                }
+
+                .forgot {
+                    font-size: 12px;
+                    color: $primary;
+                    cursor: pointer;
+                }
+
+            }
+
+
+
+            .login_btn {
+                padding: .5rem 0;
+                border-radius: 6px;
+                background-color: $primary;
+                border: none;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+::ng-deep .p-checkbox-box {
+    background-color: transparent !important;
+}
+
+::ng-deep .p-checkbox-checked .p-checkbox-box {
+    background-color: $primary !important;
+    border-color: $primary !important;
+}
+
+::ng-deep .p-checkbox-checked .p-checkbox-icon {
+    color: white !important;
+    width: .7rem;
+}
+
+::ng-deep .p-checkbox-input {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+@media screen and (max-width: 430px) {
+
+    .login {
+        width: 90%;
+        gap: 4rem 2rem !important;
+
+        .login_content {
+            gap: 2rem !important;
+
+            form {
+                width: 100% !important;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .login {
+        padding: 2rem 1rem !important;
+        width: 90%;
+
+        .login_content {
+            form {
+                width: 100% !important;
+            }
+        }
+    }
+}
