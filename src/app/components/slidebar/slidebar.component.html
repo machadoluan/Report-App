@@ -1,1 +1,47 @@
-<p>slidebar works!</p>
+<div class="container-slide">
+    <div class="first">
+        <div class="logo">
+            Painel Admin
+        </div>
+        <div class="links">
+            <span class="link" [ngClass]="{'active': isActive('/dashboard')}" routerLink="/dashboard">
+                <div class="icon">
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                </div>
+                <span>Dashboard</span>
+            </span>
+            <span class="link" [ngClass]="{'active': isActive('/trips')}" routerLink="/trips">
+                <div class="icon">
+                    <i class="fa-solid fa-road"></i>
+                </div>
+
+                <span>Viagens</span>
+            </span>
+            <span class="link" [ngClass]="{'active': isActive('/reports')}" routerLink="/reports">
+                <div class="icon">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+
+                <span>Registros</span>
+            </span>
+            <span class="link" [ngClass]="{'active': isActive('/exports')}" routerLink="/exports">
+                <div class="icon">
+                    <i class="fa-solid fa-file-export"></i>
+                </div>
+
+
+                <span>Exportar</span>
+            </span>
+        </div>
+    </div>
+
+
+    <div class="account">
+        <div class="avatar">
+            <img src="https://avatars.githubusercontent.com/u/143294087?v=4" alt="">
+        </div>
+        <div class="info">
+            <span class="name">Lucas</span>
+        </div>
+    </div>
+</div>
