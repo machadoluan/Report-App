@@ -8,23 +8,30 @@ import { ExportsComponent } from './pages/exports/exports.component';
 export const routes: Routes = [
     {
         path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
     },
     {
         path: 'dashboard',
-        component: DashboardComponent
+        component: DashboardComponent,
+        data: { title: 'Dashboard' }
+
     },
     {
         path: 'reports',
-        component: ReportsComponent
+        component: ReportsComponent,
+        data: { title: 'Registros' }
+
     },
     {
         path: 'trips',
-        component: TripsComponent
+        component: TripsComponent,
+        data: { title: 'Viagens' }
+
     },
     {
         path: 'exports',
-        component: ExportsComponent
+        component: ExportsComponent,
+        data: { title: 'Exportar' }
     }
 
 ];
