@@ -6,16 +6,17 @@
                 <div class="login_desc">Por favor, ensira seus dados</div>
             </div>
 
-            <form>
+            <form [formGroup]="userLogin">
                 <div class="form-group">
                     <i class="pi pi-user"></i>
-                    <input type="email" class="form-control" id="email" placeholder="Usuário">
+                    <input type="email" class="form-control" id="username" placeholder="Usuário"
+                        formControlName="username">
                 </div>
 
                 <div class="form-group">
                     <i class="pi pi-lock"></i>
-                    <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="email"
-                        placeholder="Senha">
+                    <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="password"
+                        formControlName="password" placeholder="Senha">
                     <i class="pi" [ngClass]="{'pi-eye': showPassword, 'pi-eye-slash': !showPassword}"
                         (click)="toggleShowPassword()"></i>
                 </div>
@@ -23,14 +24,14 @@
 
             <div class="user">
                 <div class="checkbox">
-                    <p-checkbox formControlName="city" value="New York" inputId="lembre" />
+                    <p-checkbox value="New York" inputId="lembre" />
                     <label for="lembre" class="ml-2">Lembre-me</label>
                 </div>
 
                 <a href="" class="forgot">Esqueci minha senha</a>
             </div>
 
-            <button class="login_btn"> Entrar </button>
+            <button class="login_btn" [disabled]="userLogin.invalid"> Entrar </button>
         </div>
     </div>
 </div>

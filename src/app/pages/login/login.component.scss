@@ -34,6 +34,7 @@
                 flex-direction: column;
                 gap: 1rem;
                 justify-content: space-between;
+                transition: border-color 0.3s ease, outline 0.3s ease;
 
 
                 .form-group {
@@ -56,6 +57,11 @@
 
                     .pi-eye {
                         cursor: pointer;
+                    }
+
+                    &:focus-within {
+                        outline: 2px solid rgba($color: $primary, $alpha: 0.2);
+                        border: 1px solid #3B82F6;
                     }
                 }
             }
@@ -90,6 +96,14 @@
                 background-color: $primary;
                 border: none;
                 cursor: pointer;
+                transition: background-color 0.3s ease;
+                /* Adiciona transição suave */
+
+                /* Estilo quando o botão está desabilitado */
+                &:disabled {
+                    background-color: rgba($color: $primary, $alpha: 0.5);
+                    /* Vermelho com 50% de opacidade */
+                }
             }
         }
     }
