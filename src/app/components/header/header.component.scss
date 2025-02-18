@@ -1,0 +1,23 @@
+@use '../../../../public/variables' as *;
+
+
+header {
+    width: calc(100% - 270px);
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $card-border;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+
+    span {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    i {
+        color: #565656;
+
+    }
+}
