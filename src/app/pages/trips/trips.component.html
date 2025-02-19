@@ -1,1 +1,75 @@
-<p>trips works!</p>
+<div class="container_viagens">
+    <div class="viagens_header">
+        <span>
+            <span class="title">Todas as viagens</span>
+            {{viagens.length}}
+        </span>
+
+        <div class="acoes">
+            <div class="search">
+                <p-iconfield>
+                    <p-inputicon styleClass="pi pi-search" />
+                    <input type="text" pInputText placeholder="Search" />
+                </p-iconfield>
+            </div>
+            <div class="filter">
+                <i class="pi pi-filter"></i>
+                Filtro
+            </div>
+            <div class="filter" *ngIf="selectedViagem.length > 0" (click)="showDialog()">
+                <i class="pi pi-file-export"></i>
+                Exportar
+            </div>
+            <div class="btn_new_viagem">
+                <i class="pi pi-plus"></i>
+                Add Viagem
+            </div>
+        </div>
+    </div>
+
+
+    <div class="viagens_table">
+        <p-table [value]="viagens" [paginator]="true" [totalRecords]="100" [rows]="10" [(selection)]="selectedViagem"
+            dataKey="id" [tableStyle]="{'min-width': '50rem'}">
+            <ng-template #header>
+                <tr>
+                    <th class="checkbox"><p-tableHeaderCheckbox /></th>
+                    <th class="clientes">Clientes</th>
+                    <th class="colunm origem">Origem</th>
+                    <th class="colunm destino">Destino</th>
+                    <th class="colunm data_inicio">Data Inicio</th>
+                    <th class="colunm data_fim">Data Fim</th>
+                    <th class="colunm status">Status</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-viagem>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="viagem" />
+                    </td>
+                    <td class="clientes">{{viagem.cliente}}</td>
+                    <td class="origem">{{viagem.origem}}</td>
+                    <td class="destino">{{viagem.destino}}</td>
+                    <td class="data_inicio">{{viagem.data_inicio}}</td>
+                    <td class="data_fim">{{viagem.data_fim}}</td>
+                    <td class="status"><p-tag [severity]="viagem.status === 'Concluída' ? 'success' : 'warn'"
+                            [value]="viagem.status" /></td>
+                    <div class="btn_menu">
+                        <i class="fa-solid fa-ellipsis-vertical" style="color: black;" (click)="viagessm(viagem)"></i>
+                    </div>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-dialog header="Selecione o Formato de Exportação" [(visible)]="displayDialog" [style]="{width: '400px'}"
+    [modal]="true" draggable="false">
+    <div class="select">
+        <p-selectButton [options]="exportOptions" [(ngModel)]="selectedFormat"></p-selectButton>
+    </div>
+    <ng-template pTemplate="footer">
+        <button id="cancel">Cancelar</button>
+        <button id="exportar" (click)="export()">Exportar</button>
+    </ng-template>
+</p-dialog>
