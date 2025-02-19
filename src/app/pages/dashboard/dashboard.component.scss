@@ -1,6 +1,6 @@
 @use '../../../../public/variables' as *;
 
-@mixin card($width: 370px, $height: 80vh) {
+@mixin card($width: 380px, $height: 80vh) {
     width: $width;
     height: $height;
     border-radius: 30px;
@@ -159,6 +159,7 @@
                     padding-top: 30px;
                     display: flex;
                     flex-direction: column;
+                    gap: .5rem;
 
                     .valor {
                         font-weight: bold;

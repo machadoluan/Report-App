@@ -27,7 +27,7 @@
                 <div class="circle">
                     <div class="text">
                         <span>Referente: 03/23</span>
-                        <span class="valor">R$: 0,00</span>
+                        <span class="valor">{{formatarDinheiro(faturamento)}}</span>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                 <div class="registro">
                     <span class="cliente">{{ultimoRelario.tipo}}</span>
                     <span class="origem_destino">{{ultimoRelario.data}}</span>
-                    <span class="valor">R$: {{ultimoRelario.hora}}</span>
+                    <span class="valor">{{ultimoRelario.hora}}</span>
                 </div>
             </div>
 
@@ -82,7 +82,7 @@
             <div class="viagem" *ngFor="let viagem of viagens">
                 <span class="cliente">{{viagem.cliente}}</span>
                 <span class="origem_destino">{{viagem.origem}}/{{viagem.destino}}</span>
-                <span class="valor">R$: {{viagem.valor}}</span>
+                <span class="valor">{{formatarDinheiro(viagem.valor)}}</span>
             </div>
         </div>
 

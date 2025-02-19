@@ -46,4 +46,11 @@ export class DashboardComponent {
   ];
 
   ultimoRelario: any = this.registros[this.registros.length - 1];
+  faturamento = Object.values(this.viagens).reduce((acc, val) => acc + val.valor, 0)
+
+
+
+  formatarDinheiro(valor: number): string {
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
 }
