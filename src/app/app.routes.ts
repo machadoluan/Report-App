@@ -7,6 +7,10 @@ import { ExportsComponent } from './pages/exports/exports.component';
 
 export const routes: Routes = [
     {
+        path: '',
+        component: DashboardComponent,
+    },
+    {
         path: 'login',
         component: LoginComponent,
     },
