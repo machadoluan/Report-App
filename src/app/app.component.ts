@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { SlidebarComponent } from './components/slidebar/slidebar.component';
 import { HeaderComponent } from "./components/header/header.component";
@@ -11,11 +11,16 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  isSidebarOpen = false;
   title = 'reportApp';
 
   constructor(public router: Router) { }
 
   isRouteLogin(): boolean {
     return this.router.url === '/login';
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 }

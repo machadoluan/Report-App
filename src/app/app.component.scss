@@ -1,8 +1,23 @@
+/* app.component.css */
+
+
 .container {
-    margin-left: 250px;
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
 }
 
 .main {
-    padding-top: 5.5rem;
-    padding-right: 20px;
+    padding: 5.5rem 20px 0 20px;
+}
+
+
+.container.sidebar-open {
+    margin-left: 250px;
+}
+
+@media screen and (max-width: 990px) {
+    .container.sidebar-open {
+        margin-left: 0;
+    }
+    
 }

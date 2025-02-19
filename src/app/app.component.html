@@ -4,9 +4,11 @@
 </ng-container>
 
 <ng-template #defaultLayout>
-    <app-slidebar></app-slidebar>
-    <div class="container">
-        <app-header></app-header>
+    <div class="container-slide">
+        <app-slidebar [class.open]="isSidebarOpen" [isOpen]="isSidebarOpen" (closeSidebar)="toggleSidebar()"> </app-slidebar>
+    </div>
+    <div class="container" [class.sidebar-open]="isSidebarOpen"> 
+        <app-header [isSidebarOpen]="isSidebarOpen" (toggleSidebar)="toggleSidebar()"></app-header>
         <div class="main">
             <router-outlet></router-outlet>
         </div>
