@@ -2,16 +2,48 @@
 
 
 header {
-    width: calc(100% - 270px);
+    width: 100%;
     padding-top: 2rem;
     padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 20px;
     border-bottom: 1px solid $card-border;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: fixed;
-    z-index: 9999;
+    z-index: 999;
     background-color: $background-color;
+
+    &.sidebar-open {
+        width: calc(100% - 250px);
+    }
+
+    .icon {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 200ms ease-in-out;
+
+        &:hover {
+            background-color: $primary;
+
+            i {
+                color: white;
+            }
+        }
+
+
+    }
+
+    .title-btn {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
 
     span {
         font-size: 18px;
@@ -21,5 +53,25 @@ header {
     i {
         color: #565656;
 
+    }
+}
+
+
+@media screen and (max-width: 990px) {
+    header {
+
+
+        &.sidebar-open {
+            width: 100%;
+        }
+
+    }
+}
+
+@media screen and (max-width: 750px) {
+    header {
+        .icon {
+            display: none;
+        }
     }
 }

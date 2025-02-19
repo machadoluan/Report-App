@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 
@@ -8,6 +8,9 @@ import { filter, map } from 'rxjs/operators';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  @Input() isSidebarOpen = false;
+  @Output() toggleSidebar = new EventEmitter<void>();
+  
   title = "Dashboard";
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
@@ -36,5 +39,10 @@ export class HeaderComponent implements OnInit {
       route = route.firstChild;
     }
     this.title = route.snapshot.data['title'] || 'Dashboard';
+  }
+
+
+  onToggleSidebar() {
+    this.toggleSidebar.emit();
   }
 }
