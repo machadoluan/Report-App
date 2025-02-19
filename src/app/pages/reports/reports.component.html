@@ -9,7 +9,7 @@
             <div class="search">
                 <p-iconfield>
                     <p-inputicon styleClass="pi pi-search" />
-                    <input type="text" pInputText placeholder="Search" />
+                    <input type="text" pInputText placeholder="Search" (input)="applyFilterGlobal($event)" />
                 </p-iconfield>
             </div>
             <div class="filter">
@@ -27,11 +27,10 @@
         </div>
     </div>
 
-
     <div class="registros_table">
-        <p-table [value]="registros" [paginator]="true" [rows]="10" [(selection)]="selectedRegistros"
-            dataKey="viagem_id" [tableStyle]="{'min-width': '50rem'}">
-            <ng-template #header>
+        <p-table #dt1 [value]="registros" [paginator]="true" [rows]="10" [(selection)]="selectedRegistros"
+            dataKey="viagem_id" [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['viagem_nome', 'tipo', 'data', 'hora', 'descricao']">
+            <ng-template pTemplate="header">
                 <tr>
                     <th class="checkbox"><p-tableHeaderCheckbox /></th>
                     <th class="registros">Registros</th>
@@ -42,11 +41,9 @@
                     <th class="colunm status">Descrição</th>
                 </tr>
             </ng-template>
-            <ng-template #body let-registro>
+            <ng-template pTemplate="body" let-registro>
                 <tr>
-                    <td>
-                        <p-tableCheckbox [value]="registro" />
-                    </td>
+                    <td><p-tableCheckbox [value]="registro" /></td>
                     <td class="registros">Jornada</td>
                     <td class="sssssss">{{getViagemNome(registro.viagem_id)}}</td>
                     <td class="colunm data">{{registro.tipo}}</td>
@@ -58,7 +55,6 @@
         </p-table>
     </div>
 </div>
-
 
 <p-dialog header="Selecione o Formato de Exportação" [(visible)]="displayDialog" [style]="{width: '400px'}"
     [modal]="true" draggable="false">

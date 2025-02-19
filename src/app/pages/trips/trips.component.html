@@ -9,7 +9,7 @@
             <div class="search">
                 <p-iconfield>
                     <p-inputicon styleClass="pi pi-search" />
-                    <input type="text" pInputText placeholder="Search" />
+                    <input type="text" pInputText placeholder="Search" (input)="applyFilterGlobal($event)" />
                 </p-iconfield>
             </div>
             <div class="filter">
@@ -29,8 +29,8 @@
 
 
     <div class="viagens_table">
-        <p-table [value]="viagens" [paginator]="true" [totalRecords]="100" [rows]="10" [(selection)]="selectedViagem"
-            dataKey="id" [tableStyle]="{'min-width': '50rem'}">
+        <p-table #dt1 [value]="viagens" [paginator]="true" [totalRecords]="100" [rows]="10" [(selection)]="selectedViagem"
+            dataKey="id" [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['cliente', 'origem', 'destino', 'data_inicio', 'data_fim', 'status']">
             <ng-template #header>
                 <tr>
                     <th class="checkbox"><p-tableHeaderCheckbox /></th>

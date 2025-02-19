@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { viagem } from '../../types/models.type';
 import { InputIcon } from 'primeng/inputicon';
 import { IconField } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
@@ -19,6 +19,8 @@ import * as XLSX from 'xlsx';
   styleUrl: './trips.component.scss'
 })
 export class TripsComponent implements OnInit {
+  @ViewChild('dt1') dt1!: Table;
+
   displayDialog: boolean = false;
   selectedFormat: string = 'pdf';
   exportOptions: any[] = [
@@ -85,38 +87,38 @@ export class TripsComponent implements OnInit {
 
   exportToExcel() {
     console.log('Exportando para Excel...');
-  
+
     // Verifica se selectedViagem está vazio e usa viagens como fallback
     const dadosExportacao = this.selectedViagem.length > 0 ? this.selectedViagem : this.viagens;
-  
+
     // Verifica os dados para exportação
     console.log('Dados para exportação:', dadosExportacao);
-  
+
     // Cria uma planilha vazia
     const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([]);
-  
+
     // Adiciona um título na primeira linha
     XLSX.utils.sheet_add_aoa(worksheet, [['Relatório de Viagens']], { origin: 'A1' });
-  
+
     // Adiciona cabeçalhos personalizados
     XLSX.utils.sheet_add_aoa(worksheet, [['ID', 'Origem', 'Destino', 'Data Início', 'Data Fim', 'Status', 'Cliente', 'Valor (R$)']], { origin: 'A2' });
-  
+
     // Adiciona os dados à planilha
     XLSX.utils.sheet_add_json(worksheet, dadosExportacao, {
       header: ['id', 'origem', 'destino', 'data_inicio', 'data_fim', 'status', 'cliente', 'valor'],
       skipHeader: true, // Não adiciona o cabeçalho novamente
       origin: 'A3' // Começa a adicionar os dados a partir da linha 3
     });
-  
+
     // Adiciona uma fórmula para somar os valores na coluna "valor"
     const totalRow = dadosExportacao.length + 3; // +3 para pular o título e os cabeçalhos
     XLSX.utils.sheet_add_aoa(worksheet, [['Total', , , , , , , { f: `SUM(H3:H${totalRow})` }]], { origin: `A${totalRow + 1}` });
-  
+
     // Mescla células para o título
     worksheet['!merges'] = [
       { s: { r: 0, c: 0 }, e: { r: 0, c: 7 } } // Mescla da coluna A até H na primeira linha
     ];
-  
+
     // Aplica estilos ao título
     const titleCell = worksheet['A1'];
     if (titleCell) {
@@ -126,7 +128,7 @@ export class TripsComponent implements OnInit {
         fill: { fgColor: { rgb: '4F81BD' } } // Cor de fundo azul
       };
     }
-  
+
     // Aplica estilos aos cabeçalhos
     for (let col = 0; col < 8; col++) {
       const headerCell = worksheet[XLSX.utils.encode_cell({ r: 1, c: col })];
@@ -138,7 +140,7 @@ export class TripsComponent implements OnInit {
         };
       }
     }
-  
+
     // Aplica estilos aos dados
     for (let row = 2; row <= totalRow; row++) {
       for (let col = 0; col < 8; col++) {
@@ -153,7 +155,7 @@ export class TripsComponent implements OnInit {
             },
             alignment: { horizontal: 'center' }
           };
-  
+
           // Formata a coluna "Valor (R$)" como moeda
           if (col === 7) {
             cell.z = 'R$ #,##0.00';
@@ -161,7 +163,7 @@ export class TripsComponent implements OnInit {
         }
       }
     }
-  
+
     // Aplica estilos à linha de total
     const totalCell = worksheet[XLSX.utils.encode_cell({ r: totalRow + 1, c: 7 })];
     if (totalCell) {
@@ -171,10 +173,10 @@ export class TripsComponent implements OnInit {
         numFmt: 'R$ #,##0.00' // Formato de moeda
       };
     }
-  
+
     // Congela os cabeçalhos
     worksheet['!freeze'] = { xSplit: 0, ySplit: 2, topLeftCell: 'A3', activePane: 'bottomRight' };
-  
+
     // Autoajusta as colunas
     const range = XLSX.utils.decode_range(worksheet['!ref']!);
     for (let col = range.s.c; col <= range.e.c; col++) {
@@ -191,13 +193,19 @@ export class TripsComponent implements OnInit {
       worksheet['!cols'] = worksheet['!cols'] || [];
       worksheet['!cols'][col] = { wch: maxWidth };
     }
-  
+
     // Cria um novo workbook e adiciona a planilha
     const workbook: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Relatório');
-  
+
     // Gera o arquivo Excel e faz o download
     XLSX.writeFile(workbook, 'relatorio_viagens.xlsx');
+  }
+
+  applyFilterGlobal(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    console.log('Filtrando por:', filterValue); // Verifique se o valor está sendo capturado
+    this.dt1.filterGlobal(filterValue, 'contains');
   }
 
 }

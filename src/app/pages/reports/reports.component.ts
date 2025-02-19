@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { registro, viagem } from '../../types/models.type';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { InputIcon } from 'primeng/inputicon';
 import { IconField } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,6 +18,7 @@ import * as XLSX from 'xlsx';
   styleUrl: './reports.component.scss'
 })
 export class ReportsComponent implements OnInit {
+  @ViewChild('dt1') dt1!: Table;
   displayDialog: boolean = false;
   selectedFormat: string = 'pdf';
   exportOptions: any[] = [
@@ -61,7 +62,10 @@ export class ReportsComponent implements OnInit {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    console.log(this.getViagemNome(5))
+    this.registros = this.registros.map(registro => ({
+      ...registro,
+      viagem_nome: this.getViagemNome(registro.viagem_id) // Adiciona o nome da viagem
+  }));
   }
 
 
@@ -199,5 +203,12 @@ export class ReportsComponent implements OnInit {
     // Gera o arquivo Excel e faz o download
     XLSX.writeFile(workbook, 'relatorio_inicio_jornada.xlsx');
   }
+
+  applyFilterGlobal(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    console.log('Filtrando por:', filterValue); // Verifique se o valor está sendo capturado
+    this.dt1.filterGlobal(filterValue, 'contains');
+  }
+
 }
 
