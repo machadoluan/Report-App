@@ -1,0 +1,314 @@
+@use '../../../../public/variables' as *;
+
+@mixin card($width: 370px, $height: 80vh) {
+    width: $width;
+    height: $height;
+    border-radius: 30px;
+    padding: 1rem;
+    border: 3px solid $card-border;
+    text-align: center;
+    position: relative;
+}
+
+.container-dashboard {
+    width: 100%;
+    height: calc(100vh - 5.5rem);
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+
+    .card {
+        @include card();
+
+        .viagens {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            padding-top: 20px;
+            height: 90%;
+            overflow: hidden;
+
+            .viagem {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                padding: .5rem;
+                border: 2px solid $card-border;
+                border-radius: 6px;
+                cursor: pointer;
+
+                // .cliente{
+                //     text-align: start;
+                //     width: 4.5rem;
+                // }
+            }
+        }
+
+        .see-more {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            transition: opacity 500ms ease-in-out;
+
+            span {
+                font-size: 14px;
+                cursor: pointer;
+
+                i {
+                    font-size: 10px;
+                }
+            }
+        }
+    }
+
+    .cards-report,
+    .cards-atalho {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        border: none;
+        padding: 0;
+
+        .ultima_viagem,
+        .atalho {
+            @include card($width: 100%, $height: 230px);
+
+            .atalhos {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+
+                div {
+                    width: 90px;
+                    height: 90px;
+                    gap: 1rem;
+                    border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 12px;
+                    border: 1px solid $card-border;
+                    cursor: pointer;
+
+
+                    &:hover {
+                        background-color: $card-border;
+                    }
+
+                    i {
+                        font-size: 25px;
+                        color: #565656;
+                    }
+                }
+            }
+
+            .registros {
+                display: flex;
+                flex-direction: column;
+                gap: .5rem;
+                align-items: center;
+                justify-content: center;
+                // padding-top: 20px;
+                height: 80%;
+                overflow: hidden;
+
+                .registro {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 12px;
+                    padding: .5rem;
+                    border: 2px solid $card-border;
+                    border-radius: 6px;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .ultima_imagem,
+        .card_faturamento {
+            @include card($width: 100%, $height: 100%);
+
+            .faturamento {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .circle {
+                    display: flex;
+                    width: 90%;
+                    height: 140px;
+                    border-top-left-radius: 200px;
+                    border-top-right-radius: 200px;
+                    border: 10px solid #465FFF;
+                    border-bottom: 0;
+                }
+
+                .circle>.text {
+                    margin: auto;
+                    padding-top: 30px;
+                    display: flex;
+                    flex-direction: column;
+
+                    .valor {
+                        font-weight: bold;
+                        font-size: 16px;
+
+                    }
+                }
+            }
+
+
+
+
+
+            .foto {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                width: 100%;
+
+                svg {}
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1090px) {
+    .container-dashboard {
+        flex-direction: column;
+        gap: 1.5rem;
+        height: auto;
+
+        .card {
+            width: 100%;
+            height: auto;
+            padding: 0 !important;
+            margin-bottom: 0 !important;
+            flex-direction: row;
+
+        }
+
+        .card_viagem {
+            height: 400px !important;
+            padding: 1rem !important;
+
+            .viagens {
+                .viagem {
+                    font-size: 10px;
+
+                }
+            }
+        }
+
+        .cards-atalho {
+            margin-top: 1rem !important;
+
+        }
+
+        .card_faturamento {
+            height: auto !important;
+
+            .faturamento {
+                .circle {
+
+                    border: none !important;
+                }
+            }
+        }
+    }
+
+}
+
+@media screen and (max-width: 750px) {
+    .container-dashboard {
+        flex-direction: column;
+        gap: 1.5rem;
+        height: auto;
+
+
+
+
+
+        .cards-report,
+        .cards-atalho {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .atalho {
+            display: none;
+        }
+    }
+
+}
+
+@media screen and (max-width: 400px) {
+    .container-dashboard {
+        flex-direction: column;
+        gap: 1.5rem;
+        height: auto;
+
+        .card {
+            width: 100%;
+            height: auto;
+            padding: 0 !important;
+        }
+
+        .card_viagem {
+            height: 400px !important;
+            padding: 1rem !important;
+
+            .viagens {
+                .viagem {
+                    font-size: 10px;
+
+                }
+            }
+        }
+
+
+
+        .ultima_imagem {
+            // height: 30px !important;
+
+            .foto {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+
+                svg {
+                    width: 150px;
+                }
+            }
+        }
+
+        .card_faturamento,
+        .ultima_viagem {
+            height: 150px !important;
+
+            .faturamento {
+
+                .circle>.text {
+                    padding-top: 0 !important;
+
+
+                }
+            }
+
+        }
+    }
+
+}
