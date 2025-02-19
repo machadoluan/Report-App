@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -9,11 +9,18 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './slidebar.component.scss'
 })
 export class SlidebarComponent {
+  @Input() isOpen = false;
+  @Output() closeSidebar = new EventEmitter<void>();
 
-  constructor(private router: Router){}
+  constructor(private router: Router) { }
 
   isActive(route: string): boolean {
     return this.router.url === route;
+  }
+
+
+  close() {
+    this.closeSidebar.emit();
   }
 
 }

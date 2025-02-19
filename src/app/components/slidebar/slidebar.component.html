@@ -1,7 +1,8 @@
-<div class="container-slide">
+<div class="container-slide" [class.open]="isOpen">
     <div class="first">
         <div class="logo">
-            Painel Admin
+            <span>Painel Admin</span>
+            <i class="fa-solid fa-x" (click)="close()"></i>
         </div>
         <div class="links">
             <span class="link" [ngClass]="{'active': isActive('/dashboard')}" routerLink="/dashboard">
