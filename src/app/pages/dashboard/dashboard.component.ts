@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { registro, viagem } from '../../types/models.type';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { CreateTripsComponent } from '../../components/create-trips/create-trips.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CreateTripsComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  @ViewChild(CreateTripsComponent, { static: true }) dialogCreateTrips!: CreateTripsComponent;
 
   viagens: viagem[] = [
     { id: 1, origem: 'São Paulo', destino: 'Rio de Janeiro', data_inicio: '01/01/2021', data_fim: '05/01/2021', status: 'Concluída', cliente: 'Cliente A', valor: 1000 },
@@ -31,7 +33,7 @@ export class DashboardComponent {
     { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
     { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
   ];
-  
+
   registros: registro[] = [
     { viagem_id: 1, tipo: 'Check-in', data: '01/01/2021', hora: '08:00', descricao: 'Check-in realizado com sucesso' },
     { viagem_id: 2, tipo: 'Check-in', data: '10/02/2021', hora: '09:00', descricao: 'Check-in realizado com sucesso' },
@@ -49,6 +51,9 @@ export class DashboardComponent {
   faturamento = Object.values(this.viagens).reduce((acc, val) => acc + val.valor, 0)
 
 
+  ngOnInit(): void {
+    this.dialogCreateTrips.showDialog()
+  }
 
   formatarDinheiro(valor: number): string {
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
