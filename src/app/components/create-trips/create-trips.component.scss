@@ -1,0 +1,19 @@
+::ng-deep .p-dialog{
+    height: 100vh;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+    .data_hora{
+        display: flex;
+        gap: 1rem;
+    }
+}

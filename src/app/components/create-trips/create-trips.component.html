@@ -1,0 +1,41 @@
+<p-dialog [(visible)]="display" [modal]="true" [draggable]="false" [resizable]="false" header="Criar Viagem">
+
+    <form>
+        <div class="form-group">
+            <label for="cliente">Cliente</label>
+            <input pInputText id="cliente" aria-describedby="username-help" />
+        </div>
+        <div class="form-group">
+            <label for="origem">Origem</label>
+            <input pInputText id="origem" aria-describedby="username-help" />
+        </div>
+        <div class="form-group">
+            <label for="destino">Destino</label>
+            <input pInputText id="destino" aria-describedby="username-help" />
+        </div>
+        <div class="form-group">
+            <label for="valor">Valor</label>
+            <input pInputText id="valor" aria-describedby="username-help" />
+        </div>
+        <div class="data_hora">
+            <div class="form-group">
+                <label for="data">Data</label>
+                <input pInputText id="valor" mask="00/00/0000" aria-describedby="username-help" />
+
+            </div>
+            <div class="form-group">
+                <label for="hora">Hora</label>
+                <input pInputText id="valor" aria-describedby="username-help" />
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <input pInputText id="descricao" aria-describedby="username-help" />
+        </div>
+    </form>
+    <div class="btns">
+        <button (click)="closeDialog()">Cancelar</button>
+        <button>Criar</button>
+    </div>
+</p-dialog>
