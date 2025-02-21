@@ -206,7 +206,6 @@ export class ReportsComponent implements OnInit {
 
   applyFilterGlobal(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log('Filtrando por:', filterValue); // Verifique se o valor está sendo capturado
     this.dt1.filterGlobal(filterValue, 'contains');
   }
 

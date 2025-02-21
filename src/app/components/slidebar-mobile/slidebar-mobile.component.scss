@@ -1,15 +1,14 @@
-@use '../../../../public/variables' as *;
-
+ 
 
 .container-slide {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 9999;
+    z-index: 99;
     transition: all 0.5s;
     padding: 1rem 0;
-    background-color: $background-color;
+    background-color: var(--background-color);
     display: none;
 
 
@@ -20,7 +19,7 @@
 
         .link {
             i {
-                color: $icon-color;
+                color: var(--icon-color);
             }
         }
 
@@ -30,12 +29,12 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 12px;
-            color: $primary ;
+            color: var(--primary) ;
             font-weight: bold;
 
             i {
                 font-size: 24px;
-                color: $primary ;
+                color: var(--primary) ;
 
             }
         }

@@ -14,7 +14,7 @@
             </div>
             <div class="filter">
                 <i class="pi pi-filter"></i>
-                Filtro
+                <span>Filtro</span>
             </div>
             <div class="filter" *ngIf="selectedViagem.length > 0" (click)="showDialog()">
                 <i class="pi pi-file-export"></i>
@@ -29,8 +29,9 @@
 
 
     <div class="viagens_table">
-        <p-table #dt1 [value]="viagens" [paginator]="true" [totalRecords]="100" [rows]="10" [(selection)]="selectedViagem"
-            dataKey="id" [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['cliente', 'origem', 'destino', 'data_inicio', 'data_fim', 'status']">
+        <p-table #dt1 [value]="viagens" [paginator]="true" [totalRecords]="100" [rows]="10"
+            [(selection)]="selectedViagem" dataKey="id" [tableStyle]="{'min-width': '50rem'}"
+            [globalFilterFields]="['cliente', 'origem', 'destino', 'data_inicio', 'data_fim', 'status']">
             <ng-template #header>
                 <tr>
                     <th class="checkbox"><p-tableHeaderCheckbox /></th>
@@ -59,7 +60,27 @@
                     </div>
                 </tr>
             </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="4">Nenhuma viagem encontrada.</td>
+                </tr>
+            </ng-template>
         </p-table>
+    </div>
+
+
+    <div class="viagens_mobile">
+        <div class="viagem" *ngFor="let viagem of viagens">
+            <span class="cliente">{{viagem.cliente}}</span>
+
+            <div class="viagem_dados">
+                <span id="viagem">{{viagem.origem}} → {{viagem.destino}}</span>
+                <span>
+                    <p-tag [severity]="viagem.status === 'Concluída' ? 'success' : 'warn'" [value]="viagem.status" />
+                </span>
+            </div>
+        </div>
     </div>
 </div>
 

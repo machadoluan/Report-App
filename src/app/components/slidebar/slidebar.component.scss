@@ -1,12 +1,11 @@
-@use '../../../../public/variables' as *;
-
+ 
 
 .container-slide {
     width: 230px;
     height: 100vh;
     position: fixed;
     border-radius: 0 30px 30px 0;
-    border-right: 2px solid $card-border;
+    border-right: 2px solid var(--card-border);
     box-shadow: 0px 0px 6px 7px #E4E7EC;
     display: flex;
     flex-direction: column;
@@ -15,7 +14,7 @@
     padding-top: 2rem;
     left: -250px;
     transition: left 0.3s ease;
-    background-color: $background-color;
+    background-color: var(--background-color);
 
     &.open {
         left: 0;
@@ -55,13 +54,13 @@
             gap: .5rem;
 
             .active {
-                background-color: rgba($color: $primary, $alpha: 0.2);
+                background-color: rgba(var(--primary), 0.2);
                 color: white;
                 border-radius: 10px;
 
                 i,
                 span {
-                    color: $primary !important;
+                    color: var(--primary) !important;
                     font-weight: 550;
                 }
             }
@@ -84,14 +83,14 @@
 
                     i {
                         font-size: 18px;
-                        color: $icon-color;
+                        color: var(--icon-color);
                     }
                 }
 
 
                 span {
                     font-size: 16px;
-                    color: $color;
+                    color: var(--color);
                 }
             }
         }
@@ -99,7 +98,7 @@
     }
 
     .account {
-        border-top: 2px solid $card-border;
+        border-top: 2px solid var(--card-border);
         padding: 1rem;
         width: 100%;
         display: flex;
@@ -124,7 +123,7 @@
 
         .name {
             font-size: 16px;
-            color: $color;
+            color: var(--color);
         }
     }
 

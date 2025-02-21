@@ -3,16 +3,18 @@ import { registro, viagem } from '../../types/models.type';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CreateTripsComponent } from '../../components/create-trips/create-trips.component';
+import { CreateReportsComponent } from '../../components/create-reports/create-reports.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink, CreateTripsComponent],
+  imports: [CommonModule, RouterLink, CreateTripsComponent, CreateReportsComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 
 export class DashboardComponent implements OnInit {
   @ViewChild(CreateTripsComponent, { static: true }) dialogCreateTrips!: CreateTripsComponent;
+  @ViewChild(CreateReportsComponent, { static: true }) dialogCreateReports!: CreateReportsComponent;
 
   viagens: viagem[] = [
     { id: 1, origem: 'São Paulo', destino: 'Rio de Janeiro', data_inicio: '01/01/2021', data_fim: '05/01/2021', status: 'Concluída', cliente: 'Cliente A', valor: 1000 },
@@ -52,10 +54,20 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.dialogCreateTrips.showDialog()
+    this.criarRegistro()
   }
 
   formatarDinheiro(valor: number): string {
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  criarViagem() {
+    this.dialogCreateTrips.showDialog()
+
+  }
+
+  criarRegistro() {
+    this.dialogCreateReports.showDialog()
+
   }
 }

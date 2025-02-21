@@ -1,1 +1,70 @@
-<p>create-reports works!</p>
+<p-dialog [(visible)]="display" [modal]="true" [draggable]="false" [resizable]="false" header="Criar Registro">
+
+    <form>
+        <div class="form-group">
+            <label for="cliente">Viagem</label>
+            <p-select [options]="viagens" optionLabel="nomeFormatado" placeholder="Selecionar a viagem"
+                class="w-full md:w-56" />
+        </div>
+        <div class="form-group">
+            <label for="origem">Tipo</label>
+            <p-select [options]="registroTipo" optionLabel="Tipo" placeholder="Selecione o tipo do registro"
+                class="w-full md:w-56" />
+
+        </div>
+        <div class="data_hora">
+            <div class="form-group">
+                <label for="data">Data</label>
+                <input pInputText id="data" mask="00/00/0000" aria-describedby="username-help"
+                    placeholder="Data de Inicio" />
+
+            </div>
+            <div class="form-group">
+                <label for="hora">Hora</label>
+                <input pInputText id="hora" mask="00:00" aria-describedby="username-help" placeholder="Data de Fim" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <textarea rows="5" cols="30" pTextarea autoResize="none" placeholder="Digite algo..."></textarea>
+        </div>
+        <div class="form-group file_photo">
+            <label for="foto">Selecionar imagem</label>
+            <input type="file" id="foto" name="foto" accept="image/*" class="form-control"
+                (change)="onFilesSelected($event)" multiple #fileInput>
+
+            <div class="file-add" *ngIf="selectedFiles.length > 0">
+                <div *ngFor="let file of selectedFiles; let i = index" class="item">
+                    <!-- Nome do arquivo -->
+                    <img [src]="imagePreviews[i]" *ngIf="imagePreviews[i]" alt="Image preview" width="200px" class="img"
+                        (click)="openFullScreenImage(imagePreviews[i])">
+                    <!-- Pré-visualização da imagem -->
+                    <div class="excluir" (click)="removeFile(i)">
+                        <i class="fa-solid fa-x" style="color: white; font-size: 10px;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+
+    <ng-template #footer>
+        <div class="btns">
+            <button (click)="closeDialog()">Cancelar</button>
+            <button>Criar</button>
+        </div>
+    </ng-template>
+
+</p-dialog>
+
+
+
+<div class="full-screen-image" *ngIf="fullScreenImageUrl">
+    <div class="excluir" (click)="closeFullScreenImage()" style="display: grid; top: 10px; right: 10px; width: 30px;
+    height: 30px;">
+      <i class="fa-solid fa-x" style="color: white; font-size: 16px; "></i>
+    </div>
+    <img [src]="fullScreenImageUrl" alt="Full screen image">
+  </div>
+  

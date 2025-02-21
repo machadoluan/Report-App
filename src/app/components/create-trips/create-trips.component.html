@@ -3,39 +3,42 @@
     <form>
         <div class="form-group">
             <label for="cliente">Cliente</label>
-            <input pInputText id="cliente" aria-describedby="username-help" />
+            <input pInputText id="cliente" aria-describedby="username-help" placeholder="Digite o nome do cliente" />
         </div>
         <div class="form-group">
             <label for="origem">Origem</label>
-            <input pInputText id="origem" aria-describedby="username-help" />
+            <input pInputText id="origem" aria-describedby="username-help" placeholder="Digite a origem" />
         </div>
         <div class="form-group">
             <label for="destino">Destino</label>
-            <input pInputText id="destino" aria-describedby="username-help" />
+            <input pInputText id="destino" aria-describedby="username-help" placeholder="Digite o destino" />
         </div>
         <div class="form-group">
             <label for="valor">Valor</label>
-            <input pInputText id="valor" aria-describedby="username-help" />
+            <input pInputText id="valor" aria-describedby="username-help" placeholder="Digite o valor da viagem" />
         </div>
         <div class="data_hora">
             <div class="form-group">
-                <label for="data">Data</label>
-                <input pInputText id="valor" mask="00/00/0000" aria-describedby="username-help" />
+                <label for="data">Data inicio</label>
+                <input pInputText id="valor" mask="00/00/0000" aria-describedby="username-help"
+                    placeholder="Data de Inicio" />
 
             </div>
             <div class="form-group">
-                <label for="hora">Hora</label>
-                <input pInputText id="valor" aria-describedby="username-help" />
+                <label for="data">Data Fim</label>
+                <input pInputText id="valor" mask="00/00/0000" aria-describedby="username-help"
+                    placeholder="Data de Fim" />
 
             </div>
         </div>
         <div class="form-group">
             <label for="descricao">Descrição</label>
-            <input pInputText id="descricao" aria-describedby="username-help" />
+            <textarea rows="5" cols="30" pTextarea autoResize="none" placeholder="Digite algo..."></textarea>
+        </div>
+        <div class="btns">
+            <button (click)="closeDialog()">Cancelar</button>
+            <button>Criar</button>
         </div>
     </form>
-    <div class="btns">
-        <button (click)="closeDialog()">Cancelar</button>
-        <button>Criar</button>
-    </div>
+    
 </p-dialog>
