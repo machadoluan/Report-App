@@ -1,23 +1,35 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { registro, viagem } from '../../types/models.type';
+import { Component, OnInit } from '@angular/core';
+import { viagem } from '../../types/models.type';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { CreateTripsComponent } from '../../components/create-trips/create-trips.component';
-import { CreateReportsComponent } from '../../components/create-reports/create-reports.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { FormsModule } from '@angular/forms';
+import { SelectModule } from 'primeng/select';
+
 
 @Component({
-  selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink, CreateTripsComponent, CreateReportsComponent],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
-})
+  selector: 'app-trip-details',
+  imports: [CommonModule,
+    InputTextModule,
+    TextareaModule,
+    NgxMaskDirective,
+    FormsModule,
+    SelectModule,
+    RouterLink
 
-export class DashboardComponent implements OnInit {
-  @ViewChild(CreateTripsComponent, { static: true }) dialogCreateTrips!: CreateTripsComponent;
-  @ViewChild(CreateReportsComponent, { static: true }) dialogCreateReports!: CreateReportsComponent;
+  ],
+  standalone: true,
+  templateUrl: './trip-details.component.html',
+  styleUrl: './trip-details.component.scss'
+})
+export class TripDetailsComponent implements OnInit {
+
+  constructor(private route: ActivatedRoute) { }
 
   viagens: viagem[] = [
-    { id: 1, origem: 'São Paulo', destino: 'Rio de Janeiro', data_inicio: '01/01/2021', data_fim: '05/01/2021', status: 'Concluída', cliente: 'Cliente A', valor: 1000 },
+    { id: 1, origem: 'São Paulo', destino: 'Rio de Janeiro', data_inicio: '01/01/2021', data_fim: '05/01/2021', status: 'Em andamento', cliente: 'Cliente A', valor: 1000 },
     { id: 2, origem: 'Brasília', destino: 'Salvador', data_inicio: '10/02/2021', data_fim: '15/02/2021', status: 'Concluída', cliente: 'Cliente B', valor: 1500 },
     { id: 3, origem: 'Curitiba', destino: 'Porto Alegre', data_inicio: '20/03/2021', data_fim: '25/03/2021', status: 'Concluída', cliente: 'Cliente C', valor: 1200 },
     { id: 4, origem: 'Manaus', destino: 'Belém', data_inicio: '05/04/2021', data_fim: '10/04/2021', status: 'Concluída', cliente: 'Cliente D', valor: 1300 },
@@ -34,40 +46,48 @@ export class DashboardComponent implements OnInit {
     { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
     { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
     { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
+    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
+    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
+    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
   ];
 
-  registros: registro[] = [
-    { viagem_id: 1, tipo: 'Check-in', data: '01/01/2021', hora: '08:00', descricao: 'Check-in realizado com sucesso' },
-    { viagem_id: 2, tipo: 'Check-in', data: '10/02/2021', hora: '09:00', descricao: 'Check-in realizado com sucesso' },
-    { viagem_id: 3, tipo: 'Check-in', data: '20/03/2021', hora: '10:00', descricao: 'Check-in realizado com sucesso' },
-    { viagem_id: 4, tipo: 'Check-in', data: '05/04/2021', hora: '11:00', descricao: 'Check-in realizado com sucesso' },
-    { viagem_id: 5, tipo: 'Check-in', data: '15/05/2021', hora: '12:00', descricao: 'Check-in realizado com sucesso' },
-    { viagem_id: 6, tipo: 'Check-in', data: '25/06/2021', hora: '13:00', descricao: 'Check-in realizado com sucesso' },
-    { viagem_id: 7, tipo: 'Check-in', data: '05/07/2021', hora: '14:00', descricao: 'Check-in realizado com sucesso' },
-    { viagem_id: 8, tipo: 'Check-in', data: '15/08/2021', hora: '15:00', descricao: 'Check-in realizado com sucesso' },
-    { viagem_id: 9, tipo: 'Check-in', data: '25/09/2021', hora: '16:00', descricao: 'Check-in realizado com sucesso' },
-    { viagem_id: 10, tipo: 'Check-in', data: '05/10/2021', hora: '17:00', descricao: 'Check-in realizado com sucesso' },
-  ];
+  viagem: viagem | undefined
+  editTrip: boolean = false;
 
-  ultimoRelario: any = this.registros[this.registros.length - 1];
-  faturamento = Object.values(this.viagens).reduce((acc, val) => acc + val.valor, 0)
+  statusOptions = [
+    { Status: "Em andamento" },
+    { Status: "Concluído" }
+  ]
+
 
 
   ngOnInit(): void {
-    
+    const id = this.route.snapshot.paramMap.get('id');
+
+    this.viagem = this.viagens.find(v => v.id === Number(id));
+
+    console.log(this.viagem)
   }
 
-  formatarDinheiro(valor: number): string {
-    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  shareTrip() {
+    if (this.viagem) {
+      if (navigator.share) {
+        navigator.share({
+          title: `Viagem para ${this.viagem.destino}`,
+          text: `Confira os detalhes da viagem para ${this.viagem.destino}.`,
+          url: window.location.href
+        })
+          .then(() => console.log('Viagem compartilhada com sucesso!'))
+          .catch((error) => console.log('Erro ao compartilhar:', error));
+      } else {
+        console.log('API de compartilhamento não suportada neste navegador.');
+      }
+    }
+
   }
 
-  criarViagem() {
-    this.dialogCreateTrips.showDialog()
 
-  }
-
-  criarRegistro() {
-    this.dialogCreateReports.showDialog()
-
+  toggleEdit() {
+    this.editTrip = !this.editTrip
   }
 }

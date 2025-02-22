@@ -4,6 +4,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { TripsComponent } from './pages/trips/trips.component';
 import { ExportsComponent } from './pages/exports/exports.component';
+import { TripDetailsComponent } from './components/trip-details/trip-details.component';
 
 export const routes: Routes = [
     {
@@ -27,8 +28,14 @@ export const routes: Routes = [
 
     },
     {
-        path: 'trips',
+        path: 'trip',
         component: TripsComponent,
+        data: { title: 'Viagens' }
+
+    },
+    {
+        path: 'trip/:id',
+        component: TripDetailsComponent,
         data: { title: 'Viagens' }
 
     },

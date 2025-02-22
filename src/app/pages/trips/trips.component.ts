@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trips',
@@ -51,6 +52,12 @@ export class TripsComponent implements OnInit {
   ];
 
   selectedViagem: viagem[] = []
+
+  constructor(
+    private router: Router
+  ) {
+
+  }
 
   ngOnInit(): void {
     console.log(this.selectedViagem)
@@ -206,6 +213,11 @@ export class TripsComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     console.log('Filtrando por:', filterValue); // Verifique se o valor está sendo capturado
     this.dt1.filterGlobal(filterValue, 'contains');
+  }
+
+
+  openViagem(viagem: any) {
+    this.router.navigate(['/trip', viagem.id])
   }
 
 }

@@ -71,7 +71,7 @@
 
 
     <div class="viagens_mobile">
-        <div class="viagem" *ngFor="let viagem of viagens">
+        <div class="viagem" *ngFor="let viagem of viagens" (click)="openViagem(viagem)">
             <span class="cliente">{{viagem.cliente}}</span>
 
             <div class="viagem_dados">
