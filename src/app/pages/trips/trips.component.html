@@ -71,9 +71,9 @@
 
 
     <div class="viagens_mobile">
-        <div class="viagem" *ngFor="let viagem of viagens" (click)="openViagem(viagem)">
+        <div class="viagem" *ngFor="let viagem of filteredViagens" (click)="openViagem(viagem)">
             <span class="cliente">{{viagem.cliente}}</span>
-
+    
             <div class="viagem_dados">
                 <span id="viagem">{{viagem.origem}} → {{viagem.destino}}</span>
                 <span>
@@ -82,6 +82,7 @@
             </div>
         </div>
     </div>
+    
 </div>
 
 <p-dialog header="Selecione o Formato de Exportação" [(visible)]="displayDialog" [style]="{width: '400px'}"

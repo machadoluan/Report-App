@@ -50,13 +50,15 @@ export class TripsComponent implements OnInit {
     { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
     { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
   ];
+  filteredViagens: any[] = []; // Lista filtrada para a versão móvel
+  searchTerm: string = ''; // Termo de pesquisa
 
   selectedViagem: viagem[] = []
 
   constructor(
     private router: Router
   ) {
-
+    this.filteredViagens = this.viagens;
   }
 
   ngOnInit(): void {
@@ -210,11 +212,27 @@ export class TripsComponent implements OnInit {
   }
 
   applyFilterGlobal(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    console.log('Filtrando por:', filterValue); // Verifique se o valor está sendo capturado
-    this.dt1.filterGlobal(filterValue, 'contains');
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    console.log('Filtrando por:', filterValue); // Verifique no console se o valor está correto
+  
+    // Verifica se a referência da tabela existe antes de tentar filtrar
+    if (this.dt1) {
+      this.dt1.filterGlobal(filterValue, 'contains');
+    }
+  
+    // Filtra as viagens para exibição na versão mobile
+    if (!filterValue) {
+      this.filteredViagens = [...this.viagens]; // Restaura a lista original
+      return;
+    }
+  
+    this.filteredViagens = this.viagens.filter(viagem =>
+      viagem.cliente?.toLowerCase().includes(filterValue) ||
+      viagem.origem?.toLowerCase().includes(filterValue) ||
+      viagem.destino?.toLowerCase().includes(filterValue) ||
+      viagem.status?.toLowerCase().includes(filterValue)
+    );
   }
-
 
   openViagem(viagem: any) {
     this.router.navigate(['/trip', viagem.id])
