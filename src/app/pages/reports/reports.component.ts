@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { registro, viagem } from '../../types/models.type';
 import { Table, TableModule } from 'primeng/table';
 import { InputIcon } from 'primeng/inputicon';
@@ -9,15 +9,18 @@ import { DialogModule } from 'primeng/dialog';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { CreateReportsComponent } from '../../components/create-reports/create-reports.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reports',
-  imports: [InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule
-  ],
+  imports: [InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule, OverlayBadgeModule, CreateReportsComponent],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })
 export class ReportsComponent implements OnInit {
+  @ViewChild(CreateReportsComponent, { static: true }) dialogCreateReports!: CreateReportsComponent;
   @ViewChild('dt1') dt1!: Table;
   displayDialog: boolean = false;
   selectedFormat: string = 'pdf';
@@ -25,47 +28,33 @@ export class ReportsComponent implements OnInit {
     { label: 'PDF', value: 'pdf' },
     { label: 'Excel', value: 'excel' }
   ];
-  registros: registro[] = [
-    { viagem_id: 1, tipo: 'Inicio de jornada', data: '01/01/2021', hora: '08:00', descricao: 'Inicio de jornada realizado com sucesso' },
-    { viagem_id: 2, tipo: 'Inicio de jornada', data: '10/02/2021', hora: '09:00', descricao: 'Inicio de jornada realizado com sucesso' },
-    { viagem_id: 3, tipo: 'Inicio de jornada', data: '20/03/2021', hora: '10:00', descricao: 'Inicio de jornada realizado com sucesso' },
-    { viagem_id: 4, tipo: 'Inicio de jornada', data: '05/04/2021', hora: '11:00', descricao: 'Inicio de jornada realizado com sucesso' },
-    { viagem_id: 5, tipo: 'Inicio de jornada', data: '15/05/2021', hora: '12:00', descricao: 'Inicio de jornada realizado com sucesso' },
-    { viagem_id: 6, tipo: 'Inicio de jornada', data: '25/06/2021', hora: '13:00', descricao: 'Inicio de jornada realizado com sucesso' },
-    { viagem_id: 7, tipo: 'Inicio de jornada', data: '05/07/2021', hora: '14:00', descricao: 'Inicio de jornada realizado com sucesso' },
-    { viagem_id: 8, tipo: 'Inicio de jornada', data: '15/08/2021', hora: '15:00', descricao: 'Inicio de jornada realizado com sucesso' },
-    { viagem_id: 9, tipo: 'Inicio de jornada', data: '25/09/2021', hora: '16:00', descricao: 'Inicio de jornada realizado com sucesso' }
-  ];
 
-  viagens: viagem[] = [
-    { id: 1, origem: 'São Paulo', destino: 'Rio de Janeiro', data_inicio: '01/01/2021', data_fim: '05/01/2021', status: 'Concluída', cliente: 'Cliente A', valor: 1000 },
-    { id: 2, origem: 'Brasília', destino: 'Salvador', data_inicio: '10/02/2021', data_fim: '15/02/2021', status: 'Concluída', cliente: 'Cliente B', valor: 1500 },
-    { id: 3, origem: 'Curitiba', destino: 'Porto Alegre', data_inicio: '20/03/2021', data_fim: '25/03/2021', status: 'Concluída', cliente: 'Cliente C', valor: 1200 },
-    { id: 4, origem: 'Manaus', destino: 'Belém', data_inicio: '05/04/2021', data_fim: '10/04/2021', status: 'Concluída', cliente: 'Cliente D', valor: 1300 },
-    { id: 5, origem: 'Fortaleza', destino: 'Recife', data_inicio: '15/05/2021', data_fim: '20/05/2021', status: 'Concluída', cliente: 'Cliente E', valor: 1400 },
-    { id: 6, origem: 'Goiânia', destino: 'Campo Grande', data_inicio: '25/06/2021', data_fim: '30/06/2021', status: 'Concluída', cliente: 'Cliente F', valor: 1100 },
-    { id: 7, origem: 'Florianópolis', destino: 'Joinville', data_inicio: '05/07/2021', data_fim: '10/07/2021', status: 'Concluída', cliente: 'Cliente G', valor: 1600 },
-    { id: 8, origem: 'Vitória', destino: 'Belo Horizonte', data_inicio: '15/08/2021', data_fim: '20/08/2021', status: 'Concluída', cliente: 'Cliente H', valor: 1700 },
-    { id: 9, origem: 'Natal', destino: 'João Pessoa', data_inicio: '25/09/2021', data_fim: '30/09/2021', status: 'Concluída', cliente: 'Cliente I', valor: 1800 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-  ];
+  registros: registro[] = [];
 
-  selectedRegistros: any[] = []
+  viagens: viagem[] = [];
+
+  selectedRegistros: any[] = [];
+  filteredReports: any[] = [];
+  selectedFilters: string[] = [];
+  filter: boolean = false
+  searchText: string = '';
+
+  constructor(
+    private router: Router
+  ) {
+
+  }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.registros = this.registros.map(registro => ({
       ...registro,
       viagem_nome: this.getViagemNome(registro.viagem_id) // Adiciona o nome da viagem
-  }));
+    }));
+
+    this.filteredReports = this.registros;
+
+
+    console.log(this.filteredReports)
   }
 
 
@@ -101,40 +90,40 @@ export class ReportsComponent implements OnInit {
 
   exportToExcel() {
     console.log('Exportando para Excel...');
-  
+
     // Verifica se selectedRelatorios está vazio e usa relatorios como fallback
     const dadosExportacao = this.selectedRegistros.length > 0 ? this.selectedRegistros : this.registros;
-  
+
     // Mapeia os dados para substituir viagem_id pelo nome da viagem
     const dadosComNomeViagem = dadosExportacao.map(registro => ({
       ...registro,
       viagem_nome: this.getViagemNome(registro.viagem_id) // Adiciona o nome da viagem
     }));
-  
+
     // Verifica os dados para exportação
     console.log('Dados para exportação:', dadosComNomeViagem);
-  
+
     // Cria uma planilha vazia
     const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([]);
-  
+
     // Adiciona um título na primeira linha
     XLSX.utils.sheet_add_aoa(worksheet, [['Relatório de Início de Jornada']], { origin: 'A1' });
-  
+
     // Adiciona cabeçalhos personalizados
     XLSX.utils.sheet_add_aoa(worksheet, [['Viagem', 'Tipo', 'Data', 'Hora', 'Descrição']], { origin: 'A2' });
-  
+
     // Adiciona os dados à planilha
     XLSX.utils.sheet_add_json(worksheet, dadosComNomeViagem, {
       header: ['viagem_nome', 'tipo', 'data', 'hora', 'descricao'], // Usa viagem_nome no lugar de viagem_id
       skipHeader: true, // Não adiciona o cabeçalho novamente
       origin: 'A3' // Começa a adicionar os dados a partir da linha 3
     });
-  
+
     // Mescla células para o título
     worksheet['!merges'] = [
       { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } } // Mescla da coluna A até E na primeira linha
     ];
-  
+
     // Aplica estilos ao título
     const titleCell = worksheet['A1'];
     if (titleCell) {
@@ -144,7 +133,7 @@ export class ReportsComponent implements OnInit {
         fill: { fgColor: { rgb: '4F81BD' } } // Cor de fundo azul
       };
     }
-  
+
     // Aplica estilos aos cabeçalhos
     for (let col = 0; col < 5; col++) {
       const headerCell = worksheet[XLSX.utils.encode_cell({ r: 1, c: col })];
@@ -156,7 +145,7 @@ export class ReportsComponent implements OnInit {
         };
       }
     }
-  
+
     // Aplica estilos aos dados
     const totalRow = dadosComNomeViagem.length + 2; // +2 para pular o título e os cabeçalhos
     for (let row = 2; row <= totalRow; row++) {
@@ -175,10 +164,10 @@ export class ReportsComponent implements OnInit {
         }
       }
     }
-  
+
     // Congela os cabeçalhos
     worksheet['!freeze'] = { xSplit: 0, ySplit: 2, topLeftCell: 'A3', activePane: 'bottomRight' };
-  
+
     // Autoajusta as colunas
     const range = XLSX.utils.decode_range(worksheet['!ref']!);
     for (let col = range.s.c; col <= range.e.c; col++) {
@@ -195,19 +184,92 @@ export class ReportsComponent implements OnInit {
       worksheet['!cols'] = worksheet['!cols'] || [];
       worksheet['!cols'][col] = { wch: maxWidth };
     }
-  
+
     // Cria um novo workbook e adiciona a planilha
     const workbook: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Relatório');
-  
+
     // Gera o arquivo Excel e faz o download
     XLSX.writeFile(workbook, 'relatorio_inicio_jornada.xlsx');
   }
 
   applyFilterGlobal(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dt1.filterGlobal(filterValue, 'contains');
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    console.log('Filtrando por:', filterValue); // Verifique no console se o valor está correto
+
+    // Verifica se a referência da tabela existe antes de tentar filtrar
+    if (this.dt1) {
+      this.dt1.filterGlobal(filterValue, 'contains');
+    }
+
+    // Filtra as viagens para exibição na versão mobile
+    if (!filterValue) {
+      this.filteredReports = [...this.registros]; // Restaura a lista original
+      return;
+    }
+
+    this.filteredReports = this.registros.filter(report =>
+      report.data?.toLowerCase().includes(filterValue) ||
+      report.hora?.toLowerCase().includes(filterValue) ||
+      report.descricao?.toLowerCase().includes(filterValue) ||
+      report.viagem_nome?.toLowerCase().includes(filterValue) ||
+      report.tipo?.toLowerCase().includes(filterValue)
+    );
+
+    console.log(this.filteredReports)
   }
+
+  openFilter() {
+    this.filter = !this.filter
+  }
+
+  toggleFilter(filter: string) {
+    const index = this.selectedFilters.indexOf(filter);
+    if (index === -1) {
+      this.selectedFilters.push(filter);
+    } else {
+      this.selectedFilters.splice(index, 1);
+    }
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    this.filteredReports = this.registros.filter(registro => {
+      const matchesSearch = this.searchText
+        ? Object.values(registro).some(value =>
+          value.toString().toLowerCase().includes(this.searchText)
+        )
+        : true;
+
+      const matchesFilters = this.selectedFilters.length === 0 ||
+        this.selectedFilters.some(filter => {
+          if (filter === 'hoje') return registro.data === new Date().toLocaleDateString('pt-BR');
+          if (filter === 'jornada') return registro.tipo === "Inicio de Jornada" || registro.tipo === "Fim de Jornada";
+          if (filter === 'almoço') return registro.tipo === "Inicio de Almoço" || registro.tipo === "Fim de Almoço";
+          if (filter === 'pausa') return registro.tipo === "Inicio de Pausa" || registro.tipo === "Fim de Pausa";
+          if (filter === 'espera') return registro.tipo === "Inicio de Espera" || registro.tipo === "Fim de Espera";
+          if (filter === 'viagem') return registro.tipo === "Reinicio de Viagem";
+          return false;
+        });
+
+      return matchesSearch && matchesFilters;
+    });
+
+    if (this.filteredReports.length === 0) {
+      console.log('Nenhum encontrado');
+    }
+  }
+
+
+  createReport() {
+    this.dialogCreateReports.showDialog()
+  }
+
+
+  openReports(viagem: any) {
+    this.router.navigate(['/report', viagem.viagem_id])
+  }
+
 
 }
 

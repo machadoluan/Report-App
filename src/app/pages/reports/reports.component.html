@@ -12,15 +12,77 @@
                     <input type="text" pInputText placeholder="Search" (input)="applyFilterGlobal($event)" />
                 </p-iconfield>
             </div>
-            <div class="filter">
+            <p-overlaybadge [value]="selectedFilters.length" *ngIf="selectedFilters.length">
+                <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}">
+                    <i class="pi pi-filter"></i>
+                    <span>Filtro</span>
+                    <div class="filter_content" *ngIf="filter">
+                        <nav class="filter_nav">
+                            <ul class="filter_list">
+                                <li class="filter_item" (click)="toggleFilter('hoje')">
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('hoje')">Hoje</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('jornada')">
+                                    <a class="filter_link"
+                                        [class.active]="selectedFilters.includes('jornada')">Jornada</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('almoço')">
+                                    <a class="filter_link"
+                                        [class.active]="selectedFilters.includes('almoço')">Almoço</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('pausa')">
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('pausa')">Pausa</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('espera')">
+                                    <a class="filter_link"
+                                        [class.active]="selectedFilters.includes('espera')">Espera</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('viagem')">
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('viagem')">Reinicio
+                                        de Viagem</a>
+                                </li>
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </p-overlaybadge>
+            <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}"
+                *ngIf="!selectedFilters.length">
                 <i class="pi pi-filter"></i>
-                Filtro
+                <span>Filtro</span>
+                <div class="filter_content" *ngIf="filter">
+                    <nav class="filter_nav">
+                        <ul class="filter_list">
+                            <li class="filter_item" (click)="toggleFilter('hoje')">
+                                <a class="filter_link" [class.active]="selectedFilters.includes('hoje')">Hoje</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('jornada')">
+                                <a class="filter_link" [class.active]="selectedFilters.includes('jornada')">Jornada</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('almoço')">
+                                <a class="filter_link" [class.active]="selectedFilters.includes('almoço')">Almoço</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('pausa')">
+                                <a class="filter_link" [class.active]="selectedFilters.includes('pausa')">Pausa</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('espera')">
+                                <a class="filter_link" [class.active]="selectedFilters.includes('espera')">Espera</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('viagem')">
+                                <a class="filter_link" [class.active]="selectedFilters.includes('viagem')">Reinicio de
+                                    Viagem</a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
             </div>
             <div class="filter" *ngIf="selectedRegistros.length > 0" (click)="showDialog()">
                 <i class="pi pi-file-export"></i>
                 Exportar
             </div>
-            <div class="btn_new_viagem">
+            <div class="btn_new_viagem" (click)="createReport()">
                 <i class="pi pi-plus"></i>
                 Add Registro
             </div>
@@ -28,8 +90,9 @@
     </div>
 
     <div class="registros_table">
-        <p-table #dt1 [value]="registros" [paginator]="true" [rows]="10" [(selection)]="selectedRegistros"
-            dataKey="viagem_id" [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['viagem_nome', 'tipo', 'data', 'hora', 'descricao']">
+        <p-table #dt1 [value]="filteredReports" [paginator]="true" [rows]="10" [(selection)]="selectedRegistros"
+            dataKey="viagem_id" [tableStyle]="{'min-width': '50rem'}"
+            [globalFilterFields]="['viagem_nome', 'tipo', 'data', 'hora', 'descricao']">
             <ng-template pTemplate="header">
                 <tr>
                     <th class="checkbox"><p-tableHeaderCheckbox /></th>
@@ -60,6 +123,26 @@
             </ng-template>
         </p-table>
     </div>
+
+
+
+    <div class="reports_mobile">
+        <div class="report" *ngFor="let report of filteredReports" (click)="openReports(report)">
+            <span class="cliente">{{report.tipo}}</span>
+
+            <div class="report_dados">
+                <span id="tipo">{{report.viagem_nome}}</span>
+                <div>
+                    <span>{{report.data}}</span>
+                    <span>{{report.hora}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="filteredReports.length === 0">
+            Nenhum registro encontrado.
+        </div>
+    </div>
 </div>
 
 <p-dialog header="Selecione o Formato de Exportação" [(visible)]="displayDialog" [style]="{width: '400px'}"
@@ -72,3 +155,5 @@
         <button id="exportar" (click)="export()">Exportar</button>
     </ng-template>
 </p-dialog>
+
+<app-create-reports></app-create-reports>

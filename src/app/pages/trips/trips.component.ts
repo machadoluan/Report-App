@@ -11,15 +11,17 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { Router } from '@angular/router';
+import { CreateTripsComponent } from "../../components/create-trips/create-trips.component";
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
 @Component({
   selector: 'app-trips',
-  imports: [InputIcon, IconField, InputTextModule, TableModule, Tag, CommonModule, DialogModule, SelectButtonModule, FormsModule
-  ],
+  imports: [InputIcon, IconField, InputTextModule, TableModule, Tag, CommonModule, DialogModule, SelectButtonModule, FormsModule, CreateTripsComponent, OverlayBadgeModule],
   templateUrl: './trips.component.html',
   styleUrl: './trips.component.scss'
 })
 export class TripsComponent implements OnInit {
+  @ViewChild(CreateTripsComponent, { static: true }) dialogCreateTrips!: CreateTripsComponent;
   @ViewChild('dt1') dt1!: Table;
 
   displayDialog: boolean = false;
@@ -28,32 +30,12 @@ export class TripsComponent implements OnInit {
     { label: 'PDF', value: 'pdf' },
     { label: 'Excel', value: 'excel' }
   ];
-  viagens: viagem[] = [
-    { id: 1, origem: 'São Paulo', destino: 'Rio de Janeiro', data_inicio: '01/01/2021', data_fim: '05/01/2021', status: 'Em andamento', cliente: 'Cliente A', valor: 1000 },
-    { id: 2, origem: 'Brasília', destino: 'Salvador', data_inicio: '10/02/2021', data_fim: '15/02/2021', status: 'Concluída', cliente: 'Cliente B', valor: 1500 },
-    { id: 3, origem: 'Curitiba', destino: 'Porto Alegre', data_inicio: '20/03/2021', data_fim: '25/03/2021', status: 'Concluída', cliente: 'Cliente C', valor: 1200 },
-    { id: 4, origem: 'Manaus', destino: 'Belém', data_inicio: '05/04/2021', data_fim: '10/04/2021', status: 'Concluída', cliente: 'Cliente D', valor: 1300 },
-    { id: 5, origem: 'Fortaleza', destino: 'Recife', data_inicio: '15/05/2021', data_fim: '20/05/2021', status: 'Concluída', cliente: 'Cliente E', valor: 1400 },
-    { id: 6, origem: 'Goiânia', destino: 'Campo Grande', data_inicio: '25/06/2021', data_fim: '30/06/2021', status: 'Concluída', cliente: 'Cliente F', valor: 1100 },
-    { id: 7, origem: 'Florianópolis', destino: 'Joinville', data_inicio: '05/07/2021', data_fim: '10/07/2021', status: 'Concluída', cliente: 'Cliente G', valor: 1600 },
-    { id: 8, origem: 'Vitória', destino: 'Belo Horizonte', data_inicio: '15/08/2021', data_fim: '20/08/2021', status: 'Concluída', cliente: 'Cliente H', valor: 1700 },
-    { id: 9, origem: 'Natal', destino: 'João Pessoa', data_inicio: '25/09/2021', data_fim: '30/09/2021', status: 'Concluída', cliente: 'Cliente I', valor: 1800 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-    { id: 10, origem: 'Aracaju', destino: 'Maceió', data_inicio: '05/10/2021', data_fim: '10/10/2021', status: 'Concluída', cliente: 'Cliente J', valor: 1900 },
-  ];
-  filteredViagens: any[] = []; // Lista filtrada para a versão móvel
-  searchTerm: string = ''; // Termo de pesquisa
-
+  viagens: viagem[] = [];
+  filteredViagens: any[] = []; 
+  filter: boolean = false
   selectedViagem: viagem[] = []
+  selectedFilters: string[] = [];
+  searchText: string = '';
 
   constructor(
     private router: Router
@@ -211,6 +193,34 @@ export class TripsComponent implements OnInit {
     XLSX.writeFile(workbook, 'relatorio_viagens.xlsx');
   }
 
+
+
+
+
+  openViagem(viagem: any) {
+    this.router.navigate(['/trip', viagem.id])
+  }
+
+  openFilter() {
+    this.filter = !this.filter
+  }
+
+  createTrip() {
+    this.dialogCreateTrips.showDialog()
+  }
+
+
+  toggleFilter(filter: string) {
+    const index = this.selectedFilters.indexOf(filter);
+    if (index === -1) {
+      this.selectedFilters.push(filter);
+    } else {
+      this.selectedFilters.splice(index, 1);
+    }
+    this.applyFilters();
+  }
+
+  // Atualiza a pesquisa global
   applyFilterGlobal(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     console.log('Filtrando por:', filterValue); // Verifique no console se o valor está correto
@@ -233,9 +243,44 @@ export class TripsComponent implements OnInit {
       viagem.status?.toLowerCase().includes(filterValue)
     );
   }
-
-  openViagem(viagem: any) {
-    this.router.navigate(['/trip', viagem.id])
+  // Aplica os filtros e pesquisa à lista de viagens
+  applyFilters() {
+    this.filteredViagens = this.viagens.filter(viagem => {
+      const matchesSearch = this.searchText
+        ? Object.values(viagem).some(value =>
+            value.toString().toLowerCase().includes(this.searchText.toLowerCase())
+          )
+        : true;
+  
+      const hasStatusFilter = this.selectedFilters.includes('Concluídas') || this.selectedFilters.includes('Em andamento');
+      const matchesFilters = !hasStatusFilter || this.selectedFilters.some(filter => {
+        if (filter === 'Concluídas') return viagem.status === 'Concluída';
+        if (filter === 'Em andamento') return viagem.status === 'Em andamento';
+        return false;
+      });
+  
+      return matchesSearch && matchesFilters;
+    });
+  
+    // Aplica ordenação após a filtragem
+    if (this.selectedFilters.includes('A a Z')) {
+      this.filteredViagens.sort((a, b) => a.cliente.localeCompare(b.cliente));
+    }
+    if (this.selectedFilters.includes('Z a A')) {
+      this.filteredViagens.sort((a, b) => b.cliente.localeCompare(a.cliente));
+    }
+    if (this.selectedFilters.includes('Primeiro até o último')) {
+      this.filteredViagens.sort((a, b) => a.id - b.id);
+    }
+    if (this.selectedFilters.includes('Último até o primeiro')) {
+      this.filteredViagens.sort((a, b) => b.id - a.id);
+    }
+    if (this.selectedFilters.includes('Valores: maior para menor')) {
+      this.filteredViagens.sort((a, b) => b.valor - a.valor);
+    }
+    if (this.selectedFilters.includes('Valores: menor para maior')) {
+      this.filteredViagens.sort((a, b) => a.valor - b.valor);
+    }
   }
-
+  
 }

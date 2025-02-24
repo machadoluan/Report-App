@@ -3,8 +3,11 @@ import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { TripsComponent } from './pages/trips/trips.component';
-import { ExportsComponent } from './pages/exports/exports.component';
 import { TripDetailsComponent } from './components/trip-details/trip-details.component';
+import { ReportDetailsComponent } from './components/report-details/report-details.component';
+import { CreateTripsComponent } from './components/create-trips/create-trips.component';
+import { CreateTripComponent } from './pages/create-trip/create-trip.component';
+import { CreateReportComponent } from './pages/create-report/create-report.component';
 
 export const routes: Routes = [
     {
@@ -40,9 +43,25 @@ export const routes: Routes = [
 
     },
     {
-        path: 'exports',
-        component: ExportsComponent,
-        data: { title: 'Exportar' }
+        path: 'trip/:id',
+        component: TripDetailsComponent,
+        data: { title: 'Viagens' }
+
+    },
+    {
+        path: 'report/:id',
+        component: ReportDetailsComponent,
+        data: { title: 'Registros' }
+    },
+    {
+        path: 'createTrip',
+        component: CreateTripComponent,
+        data: { title: 'Criar viagem' }
+    },
+    {
+        path: 'createReport',
+        component: CreateReportComponent,
+        data: { title: 'Criar Registro' }
     }
 
 ];

@@ -1,19 +1,20 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { NgxMaskDirective } from 'ngx-mask';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
 import { viagem } from '../../types/models.type';
-import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-create-reports',
-  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule],
-  templateUrl: './create-reports.component.html',
-  styleUrl: './create-reports.component.scss'
+  selector: 'app-create-report',
+  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, RouterLink],
+  templateUrl: './create-report.component.html',
+  styleUrl: './create-report.component.scss'
 })
-export class CreateReportsComponent implements OnInit {
+export class CreateReportComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   display: boolean = false;

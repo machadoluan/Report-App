@@ -12,15 +12,83 @@
                     <input type="text" pInputText placeholder="Search" (input)="applyFilterGlobal($event)" />
                 </p-iconfield>
             </div>
-            <div class="filter">
+            <p-overlaybadge [value]="selectedFilters.length"  *ngIf="selectedFilters.length">
+                <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}">
+                    <i class="pi pi-filter"></i>
+                    <span>Filtro</span>
+                    <div class="filter_content" *ngIf="filter">
+                        <nav class="filter_nav">
+                            <ul class="filter_list">
+                                <li class="filter_item" (click)="toggleFilter('A a Z')" >
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('A a Z')">A a Z</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('Z a A')" >
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('Z a A')">Z a A</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('Primeiro até o último')" >
+                                    <a class="filter_link"[class.active]="selectedFilters.includes('Primeiro até o último')">Primeiro até o último</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('Último até o primeiro')" >
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('Último até o primeiro')">Último até o primeiro</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('Valores: maior para menor')" >
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('Valores: maior para menor')">Valores: maior para menor</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('Valores: menor para maior')" >
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('Valores: menor para maior')">Valores: menor para maior</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('Concluídas')">
+                                    <a class="filter_link"  [class.active]="selectedFilters.includes('Concluídas')">Concluídas</a>
+                                </li>
+                                <li class="filter_item" (click)="toggleFilter('Em andamento')" >
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('Em andamento')">Em andamento</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </p-overlaybadge>
+
+            <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}" *ngIf="!selectedFilters.length">
                 <i class="pi pi-filter"></i>
                 <span>Filtro</span>
+                <div class="filter_content" *ngIf="filter">
+                    <nav class="filter_nav">
+                        <ul class="filter_list">
+                            <li class="filter_item" (click)="toggleFilter('A a Z')" >
+                                <a class="filter_link" [class.active]="selectedFilters.includes('A a Z')">A a Z</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('Z a A')" >
+                                <a class="filter_link" [class.active]="selectedFilters.includes('Z a A')">Z a A</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('Primeiro até o último')" >
+                                <a class="filter_link"[class.active]="selectedFilters.includes('Primeiro até o último')">Primeiro até o último</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('Último até o primeiro')" >
+                                <a class="filter_link" [class.active]="selectedFilters.includes('Último até o primeiro')">Último até o primeiro</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('Valores: maior para menor')" >
+                                <a class="filter_link" [class.active]="selectedFilters.includes('Valores: maior para menor')">Valores: maior para menor</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('Valores: menor para maior')" >
+                                <a class="filter_link" [class.active]="selectedFilters.includes('Valores: menor para maior')">Valores: menor para maior</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('Concluídas')">
+                                <a class="filter_link"  [class.active]="selectedFilters.includes('Concluídas')">Concluídas</a>
+                            </li>
+                            <li class="filter_item" (click)="toggleFilter('Em andamento')" >
+                                <a class="filter_link" [class.active]="selectedFilters.includes('Em andamento')">Em andamento</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
+           
             <div class="filter" *ngIf="selectedViagem.length > 0" (click)="showDialog()">
                 <i class="pi pi-file-export"></i>
                 Exportar
             </div>
-            <div class="btn_new_viagem">
+            <div class="btn_new_viagem" (click)="createTrip()">
                 <i class="pi pi-plus"></i>
                 Add Viagem
             </div>
@@ -29,7 +97,7 @@
 
 
     <div class="viagens_table">
-        <p-table #dt1 [value]="viagens" [paginator]="true" [totalRecords]="100" [rows]="10"
+        <p-table #dt1 [value]="filteredViagens" [paginator]="true" [totalRecords]="100" [rows]="10"
             [(selection)]="selectedViagem" dataKey="id" [tableStyle]="{'min-width': '50rem'}"
             [globalFilterFields]="['cliente', 'origem', 'destino', 'data_inicio', 'data_fim', 'status']">
             <ng-template #header>
@@ -81,8 +149,11 @@
                 </span>
             </div>
         </div>
+
+        <div *ngIf="filteredViagens.length === 0">
+            Nenhuma viagem encontrada.
+        </div>
     </div>
-    
 </div>
 
 <p-dialog header="Selecione o Formato de Exportação" [(visible)]="displayDialog" [style]="{width: '400px'}"
@@ -95,3 +166,9 @@
         <button id="exportar" (click)="export()">Exportar</button>
     </ng-template>
 </p-dialog>
+
+
+
+
+
+<app-create-trips></app-create-trips>

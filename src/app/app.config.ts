@@ -16,6 +16,6 @@ export const appConfig: ApplicationConfig = {
         preset: Aura
       }
     }),
-    provideNgxMask()
+    provideNgxMask(), provideAnimationsAsync()
   ]
 };

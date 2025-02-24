@@ -1,1 +1,71 @@
-<p>report-details works!</p>
+<div class="container_trip">
+    <header>
+        <div class="back" routerLink="/reports">
+            <i class="fa-solid fa-angle-left"></i>
+        </div>
+        <div class="viagem" *ngIf="registro">
+            {{registro.tipo}}
+        </div>
+        <div class="share" (click)="shareTrip()">
+            <i class="fa-solid fa-share-from-square"></i>
+        </div>
+    </header>
+
+    <div class="trip_content">
+        <form *ngIf="registro">
+            <div class="form-group">
+                <label for="cliente">Viagem atual</label>
+                <input pInputText id="cliente" name="cliente" aria-describedby="username-help"
+                    placeholder="Digite o nome do cliente" [(ngModel)]="registro.viagem_nome" disabled />
+            </div>
+            <div class="form-group">
+                <label for="origem">Tipo</label>
+                <input pInputText id="cliente" name="cliente" aria-describedby="username-help"
+                    placeholder="Digite o nome do cliente" [(ngModel)]="registro.tipo" [disabled]="!editReport" />
+
+            </div>
+            <div class="data_hora">
+                <div class="form-group">
+                    <label for="data_incio">Data</label>
+                    <input pInputText id="data_incio " name="data_incio" mask="00/00/0000"
+                        aria-describedby="username-help" [(ngModel)]="registro.data" [disabled]="!editReport"
+                        placeholder="Data de Inicio" />
+
+                </div>
+                <div class="form-group">
+                    <label for="data_fim">Hora</label>
+                    <input pInputText id="data_fim" name="data_fim" aria-describedby="username-help"
+                        [(ngModel)]="registro.hora" [disabled]="!editReport" placeholder="Data de Fim" />
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                <textarea rows="5" cols="30" name="descricao" pTextarea autoResize="none" [disabled]="!editReport"
+                    placeholder="Digite algo..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Fotos</label>
+                <div class="photos">
+                    <div class="img">
+                        <img src="https://t3.ftcdn.net/jpg/05/15/12/60/360_F_515126051_S5td5PvQQUkbeqaNHS6z8xW5rH7DEQ3K.jpg"
+                            alt="">
+
+                        <div class="delete" *ngIf="editReport">
+                            <i class="fa-solid fa-trash"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="btns">
+                <button *ngIf="editReport" (click)="toggleEdit()">Salvar</button>
+                <button *ngIf="editReport">Excluir</button>
+                <button *ngIf="!editReport" (click)="toggleEdit()">Editar dados</button>
+            </div>
+        </form>
+    </div>
+
+</div>

@@ -16,4 +16,5 @@ export type registro = {
     hora: string;
     descricao: string;
     // img: string;
+    viagem_nome: string;
 }
