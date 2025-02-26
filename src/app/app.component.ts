@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { SlidebarMobileComponent } from "./components/slidebar-mobile/slidebar-mobile.component";
 import { ToastModule } from 'primeng/toast';
 
-
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, SlidebarComponent, HeaderComponent, CommonModule, SlidebarMobileComponent, ToastModule],

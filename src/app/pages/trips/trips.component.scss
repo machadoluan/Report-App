@@ -30,7 +30,7 @@
                  }
              }
 
-             .filter {
+             .atalho-btn {
                  display: flex;
                  align-items: center;
                  padding: .5rem 1rem;
@@ -49,6 +49,20 @@
 
                  &.openFilter {
                      background-color: var(--card-border);
+                 }
+
+                 &.delete {
+                     border: 1px solid rgba($color: red, $alpha: 0.7) !important;
+                     background-color: red;
+                     color: white;
+                     font-weight: 500;
+
+                     i {
+                         color: white;
+
+                         font-size: 14px;
+
+                     }
                  }
 
 
@@ -283,7 +297,18 @@
      display: flex;
  }
 
- ::ng-deep .p-dialog {
+
+
+ ::ng-deep .p-confirmdialog {
+     width: 30% !important;
+     height: 30% !important;
+     background-color: white !important;
+     color: #000 !important;
+ }
+
+ ::ng-deep .meu_dialog {
+     height: 25% !important;
+     width: 30% !important;
      border-color: none !important;
      background-color: var(--background-color) !important;
 
@@ -302,9 +327,12 @@
              cursor: pointer;
 
              &#cancel {
-                 background-color: red;
+                 border: 1px solid #000 !important;
+                 background-color: transparent !important;
                  border: none;
                  border-radius: 5px;
+                 color: black !important;
+                 font-weight: 500;
              }
 
              &#exportar {
@@ -315,7 +343,6 @@
          }
      }
  }
-
 
  ::ng-deep .p-tag-success {
      width: 90%;
@@ -475,4 +502,13 @@
      background-color: var(--primary);
      color: white;
      outline: none !important;
+ }
+
+ ::ng-deep .p-button-outlined.p-button-secondary {
+     color: #000 !important;
+ }
+
+ ::ng-deep .p-button-danger {
+     background-color: red !important;
+     color: white !important;
  }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { viagem } from '../../types/models.type';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -11,6 +11,9 @@ import { ViagensService } from '../../service/viagens.service';
 import { ToastrService } from '../../service/toastr.service';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { DatePickerModule } from 'primeng/datepicker';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 
 
@@ -26,13 +29,18 @@ import { DatePickerModule } from 'primeng/datepicker';
     SelectModule,
     RouterLink,
     CurrencyMaskModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DialogModule,
+    ConfirmDialog
+
   ],
   standalone: true,
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss'
 })
 export class TripDetailsComponent implements OnInit {
+  showDialog: boolean = false;
+  isMobile: boolean = window.innerWidth <= 750;
 
 
   viagem: viagem | undefined
@@ -52,7 +60,10 @@ export class TripDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private tripService: ViagensService,
     private toastrService: ToastrService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private confirmationService: ConfirmationService
+
   ) {
     this.dadosUpdate = this.fb.group({
       cliente: [""],
@@ -68,6 +79,24 @@ export class TripDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrips()
+    if (!this.isMobile) {
+      this.openDialog()
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.isMobile = window.innerWidth <= 750;
+  }
+
+  openDialog() {
+    if (!this.isMobile) {
+      this.showDialog = true;
+    }
+  }
+
+  closeDialog() {
+    this.showDialog = false;
   }
 
   shareTrip() {
@@ -96,7 +125,9 @@ export class TripDetailsComponent implements OnInit {
         (data) => {
           this.viagem = data;
           this.dadosUpdate.patchValue(data)
-          console.log(data)
+          console.log("dados", this.dadosUpdate.value)
+          console.log('data formata', this.formatarData(this.dadosUpdate.value.dataInicio))
+
         },
         (err) => {
           console.error("Deu error:", err)
@@ -118,17 +149,23 @@ export class TripDetailsComponent implements OnInit {
       this.toastrService.showError('ID da viagem não encontrado.');
       return;
     }
-  
+
+    if (!this.dadosUpdate.dirty) {
+      this.toggleEdit()
+    }
+
     const dadosFormatados = {
       ...this.dadosUpdate.value,
       id: this.viagem.id, // Inclui o ID da viagem
       dataInicio: this.formatarData(this.dadosUpdate.value.dataInicio), // Formatar data
       dataFim: this.dadosUpdate.value.dataFim ? this.formatarData(this.dadosUpdate.value.dataFim) : '' // Formatar 
     };
-  
+
     const dadosParaEnviar = this.filtrarDados(dadosFormatados);
-  
-    this.tripService.updateTrip(dadosParaEnviar).subscribe(
+
+    console.log("Update", dadosFormatados)
+
+    this.tripService.updateTrip(dadosFormatados).subscribe(
       (res) => {
         this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} atualizada `);
         this.toggleEdit(); // Desativa o modo de edição
@@ -141,11 +178,20 @@ export class TripDetailsComponent implements OnInit {
   }
 
   formatarData(data: Date | string): string {
-    const dateObj = new Date(data); // Converte para objeto Date
-    const dia = String(dateObj.getDate()).padStart(2, '0'); // Dia com 2 dígitos
-    const mes = String(dateObj.getMonth() + 1).padStart(2, '0'); // Mês com 2 dígitos
-    const ano = dateObj.getFullYear(); // Ano com 4 dígitos
-    return `${dia}/${mes}/${ano}`; // Formato dd/MM/yyyy
+    if (!data) return ''; // Retorna string vazia se for nulo/indefinido
+
+    if (typeof data === 'string' && !/^\d{4}-\d{2}-\d{2}$/.test(data)) {
+      return data; // Se já estiver no formato dd/MM/yyyy, retorna como está
+    }
+
+    const dateObj = new Date(data);
+    if (isNaN(dateObj.getTime())) return ''; // Verifica se a data é inválida
+
+    const dia = String(dateObj.getDate()).padStart(2, '0');
+    const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const ano = dateObj.getFullYear();
+
+    return `${dia}/${mes}/${ano}`;
   }
 
   filtrarDados(dados: any): any {
@@ -159,6 +205,47 @@ export class TripDetailsComponent implements OnInit {
     }
 
     return dadosFiltrados;
+  }
+
+
+  delete(event: Event, viagem: any) {
+
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Você deseja deletar permanente?`,
+      header: 'Deletar viagem',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
+
+      accept: () => {
+        this.tripService.deleteTripId(viagem.id).subscribe(
+          (res) => {
+            this.toastrService.showSucess(`Viagem apagada com sucesso!`)
+            this.router.navigate(['/trip'])
+
+          },
+          (err) => {
+            this.toastrService.showError(`Erro ao deletar viagem, tente novamente mais tarde!`)
+
+          }
+        )
+
+      },
+      reject: () => {
+      },
+    });
+  }
+
+  redirecionar() {
+    this.router.navigate(['/trip'])
   }
 
 }

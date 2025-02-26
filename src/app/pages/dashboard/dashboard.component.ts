@@ -25,8 +25,8 @@ export class DashboardComponent implements OnInit {
   registros: registro[] = [];
 
   ultimoRelario: any = this.registros[this.registros.length - 1];
-  faturamento = Object.values(this.viagens).reduce((acc, val) => acc + val.valor, 0)
   user: any;
+  faturamento: any;
 
   constructor(
     private tripService: ViagensService
@@ -40,6 +40,8 @@ export class DashboardComponent implements OnInit {
     this.tripService.getTrips().subscribe(
       (data) => {
         this.viagens = data;
+        this.faturamento = Object.values(this.viagens).reduce((acc, val) => acc + val.valor, 0)
+
         console.log(data)
       },
       (err) => {

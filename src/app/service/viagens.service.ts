@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { viagem } from '../types/models.type';
 import { catchError, Observable, throwError } from 'rxjs';
@@ -38,6 +38,22 @@ export class ViagensService {
   // Atualiza uma viagem existente
   updateTrip(dadosUpdate: viagem): Observable<viagem> {
     return this.http.put<viagem>(this.apiUrl, dadosUpdate).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  deleteTripId(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  deleteTripMultiple(ids: number[]) {
+    console.log(ids)
+
+    return this.http.request('DELETE', `${this.apiUrl}`, {
+      body: { ids }, // Aqui enviamos os IDs no corpo da requisição
+    }).pipe(
       catchError(this.handleError)
     );
   }

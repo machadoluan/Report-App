@@ -6,7 +6,7 @@ import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import { provideNgxMask } from 'ngx-mask';
 import { provideHttpClient } from '@angular/common/http';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +20,7 @@ export const appConfig: ApplicationConfig = {
       }
     }),
     provideNgxMask(), provideAnimationsAsync(),
-    MessageService
+    MessageService,
+    ConfirmationService
   ]
 };

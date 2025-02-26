@@ -14,16 +14,37 @@ import { Router } from '@angular/router';
 import { CreateTripsComponent } from "../../components/create-trips/create-trips.component";
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { ViagensService } from '../../service/viagens.service';
+import { PopoverModule } from 'primeng/popover';
+import { ButtonModule } from 'primeng/button';
+import { ToastrService } from '../../service/toastr.service';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+
 
 @Component({
   selector: 'app-trips',
-  imports: [InputIcon, IconField, InputTextModule, TableModule, Tag, CommonModule, DialogModule, SelectButtonModule, FormsModule, CreateTripsComponent, OverlayBadgeModule],
+  imports: [InputIcon,
+    IconField,
+    InputTextModule,
+    TableModule,
+    Tag,
+    CommonModule,
+    DialogModule,
+    SelectButtonModule,
+    FormsModule,
+    CreateTripsComponent,
+    OverlayBadgeModule,
+    PopoverModule,
+    ButtonModule,
+    ConfirmDialog
+  ],
   templateUrl: './trips.component.html',
   styleUrl: './trips.component.scss'
 })
 export class TripsComponent implements OnInit {
   @ViewChild(CreateTripsComponent, { static: true }) dialogCreateTrips!: CreateTripsComponent;
   @ViewChild('dt1') dt1!: Table;
+
 
   displayDialog: boolean = false;
   selectedFormat: string = 'pdf';
@@ -40,7 +61,9 @@ export class TripsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private tripService: ViagensService
+    private tripService: ViagensService,
+    private toastrService: ToastrService,
+    private confirmationService: ConfirmationService
   ) {
   }
 
@@ -221,7 +244,8 @@ export class TripsComponent implements OnInit {
   }
 
   openViagem(viagem: any) {
-    this.router.navigate(['/trip', viagem.id])
+    console.log(viagem)
+    this.router.navigate(['/trip', viagem[0].id])
   }
 
   openFilter() {
@@ -304,5 +328,47 @@ export class TripsComponent implements OnInit {
     if (this.selectedFilters.includes('Valores: menor para maior')) {
       this.filteredViagens.sort((a, b) => a.valor - b.valor);
     }
+  }
+
+
+
+  delete(event: Event, viagem: any[]) {
+
+    const ids = viagem.map(v => v.id)
+
+    console.log('viagem', ids)
+
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Você deseja deletar permanente?`,
+      header: 'Deletar viagem',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
+
+      accept: () => {
+        this.tripService.deleteTripMultiple(ids).subscribe(
+          (res) => {
+            this.toastrService.showSucess(`Viagem apagada com sucesso!`)
+            window.location.reload();
+
+          },
+          (err) => {
+            this.toastrService.showError(`Erro ao deletar viagem, tente novamente mais tarde!`)
+
+          }
+        )
+
+      },
+      reject: () => {
+      },
+    });
   }
 }

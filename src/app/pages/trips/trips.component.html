@@ -13,7 +13,7 @@
                 </p-iconfield>
             </div>
             <p-overlaybadge [value]="selectedFilters.length" *ngIf="selectedFilters.length">
-                <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}">
+                <div class="atalho-btn filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}">
                     <i class="pi pi-filter"></i>
                     <span>Filtro</span>
                     <div class="filter_content" *ngIf="filter">
@@ -59,7 +59,7 @@
                 </div>
             </p-overlaybadge>
 
-            <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}"
+            <div class="atalho-btn filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}"
                 *ngIf="!selectedFilters.length">
                 <i class="pi pi-filter"></i>
                 <span>Filtro</span>
@@ -105,9 +105,18 @@
                 </div>
             </div>
 
-            <div class="filter" *ngIf="selectedViagem.length > 0" (click)="showDialog()">
+            <div class="atalho-btn exxport" *ngIf="selectedViagem.length > 0" (click)="showDialog()">
                 <i class="pi pi-file-export"></i>
                 Exportar
+            </div>
+            <div class="atalho-btn details" *ngIf="selectedViagem.length > 0 && selectedViagem.length < 2" (click)="openViagem(selectedViagem)">
+                <i class="pi pi-info-circle
+                "></i>
+                Detalhes
+            </div>
+            <div class="atalho-btn delete" *ngIf="selectedViagem.length > 0" (click)="delete($event, selectedViagem)">
+                <i class="pi pi-trash"></i>
+                Delete
             </div>
             <div class="btn_new_viagem" (click)="createTrip()">
                 <i class="pi pi-plus"></i>
@@ -144,9 +153,7 @@
                     <td class="dataFim">{{viagem.dataFim}}</td>
                     <td class="status"><p-tag [severity]="viagem.status === 'Concluída' ? 'success' : 'warn'"
                             [value]="viagem.status" /></td>
-                    <div class="btn_menu">
-                        <i class="fa-solid fa-ellipsis-vertical" style="color: black;" (click)="viagessm(viagem)"></i>
-                    </div>
+
                 </tr>
             </ng-template>
 
@@ -177,7 +184,7 @@
     </div>
 </div>
 
-<p-dialog header="Selecione o Formato de Exportação" [(visible)]="displayDialog" [style]="{width: '400px'}"
+<p-dialog header="Selecione o Formato de Exportação" [(visible)]="displayDialog" [style]="{width: '400px'}" styleClass="meu_dialog"
     [modal]="true" draggable="false">
     <div class="select">
         <p-selectButton [options]="exportOptions" [(ngModel)]="selectedFormat"></p-selectButton>
@@ -193,3 +200,4 @@
 
 
 <app-create-trips></app-create-trips>
+<p-confirmdialog />
