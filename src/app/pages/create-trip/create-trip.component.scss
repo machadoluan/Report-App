@@ -44,8 +44,7 @@
 }
 
 
-.p-inputtext,
-.p-textarea {
+::ng-deep .p-inputtext, .p-textarea, {
     background-color: transparent !important;
     color: var(--color) !important;
     font-size: 12px;

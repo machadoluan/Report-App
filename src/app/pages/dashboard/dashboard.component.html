@@ -44,11 +44,13 @@
             Ultimo registro
 
             <div class="registros">
-                <div class="registro">
+                <div class="registro" *ngIf="ultimoRelario">
                     <span class="cliente">{{ultimoRelario.tipo}}</span>
                     <span class="origem_destino">{{ultimoRelario.data}}</span>
                     <span class="valor">{{ultimoRelario.hora}}</span>
                 </div>
+
+                <span class="zero_inform" *ngIf="!ultimoRelario">Nenhum registro foi encontrado</span>
             </div>
 
             <div class="see-more">
@@ -76,15 +78,16 @@
         </div>
     </div>
     <div class="card_viagem card">
-        Histórico de Viagens
+        <span>Histórico de Viagens</span>
 
-        <div class="viagens">
+        <div class="viagens" *ngIf="viagens.length > 0">
             <div class="viagem" *ngFor="let viagem of viagens">
                 <span class="cliente">{{viagem.cliente}}</span>
                 <span class="origem_destino">{{viagem.origem}}/{{viagem.destino}}</span>
                 <span class="valor">{{formatarDinheiro(viagem.valor)}}</span>
             </div>
         </div>
+        <span class="zero_inform" *ngIf="viagens.length <= 0">Nenhum registro foi encontrado</span>
 
         <div class="see-more">
             <span routerLink="/trips">Ver tudo <i class="fa-solid fa-chevron-right"></i></span>

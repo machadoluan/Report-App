@@ -2,11 +2,12 @@ export type viagem = {
     origem: string;
     cliente: string;
     destino: string;
-    data_inicio: string;
-    data_fim: string;
+    dataInicio: string;
+    dataFim: string;
     status: string;
     valor: number;
     id: number;
+    descricao: string;
 }
 
 export type registro = {
@@ -15,6 +16,6 @@ export type registro = {
     data: string;
     hora: string;
     descricao: string;
-    // img: string;
+    img: string;
     viagem_nome: string;
 }

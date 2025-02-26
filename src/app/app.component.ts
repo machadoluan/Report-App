@@ -4,10 +4,12 @@ import { SlidebarComponent } from './components/slidebar/slidebar.component';
 import { HeaderComponent } from "./components/header/header.component";
 import { CommonModule } from '@angular/common';
 import { SlidebarMobileComponent } from "./components/slidebar-mobile/slidebar-mobile.component";
+import { ToastModule } from 'primeng/toast';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SlidebarComponent, HeaderComponent, CommonModule, SlidebarMobileComponent],
+  imports: [RouterOutlet, SlidebarComponent, HeaderComponent, CommonModule, SlidebarMobileComponent, ToastModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

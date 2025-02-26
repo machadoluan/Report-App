@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 import { Router } from '@angular/router';
 import { CreateTripsComponent } from "../../components/create-trips/create-trips.component";
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { ViagensService } from '../../service/viagens.service';
 
 @Component({
   selector: 'app-trips',
@@ -31,20 +32,21 @@ export class TripsComponent implements OnInit {
     { label: 'Excel', value: 'excel' }
   ];
   viagens: viagem[] = [];
-  filteredViagens: any[] = []; 
+  filteredViagens: any[] = [];
   filter: boolean = false
   selectedViagem: viagem[] = []
   selectedFilters: string[] = [];
   searchText: string = '';
 
   constructor(
-    private router: Router
+    private router: Router,
+    private tripService: ViagensService
   ) {
-    this.filteredViagens = this.viagens;
   }
 
   ngOnInit(): void {
     console.log(this.selectedViagem)
+    this.loadTrips()
   }
 
   viagessm(viagem: any) {
@@ -83,6 +85,11 @@ export class TripsComponent implements OnInit {
     const dadosExportacao = this.selectedViagem.length > 0 ? this.selectedViagem : this.viagens;
 
     // Verifica os dados para exportação
+    if (!dadosExportacao || dadosExportacao.length === 0) {
+      console.error('Nenhum dado para exportar.');
+      return;
+    }
+
     console.log('Dados para exportação:', dadosExportacao);
 
     // Cria uma planilha vazia
@@ -92,22 +99,24 @@ export class TripsComponent implements OnInit {
     XLSX.utils.sheet_add_aoa(worksheet, [['Relatório de Viagens']], { origin: 'A1' });
 
     // Adiciona cabeçalhos personalizados
-    XLSX.utils.sheet_add_aoa(worksheet, [['ID', 'Origem', 'Destino', 'Data Início', 'Data Fim', 'Status', 'Cliente', 'Valor (R$)']], { origin: 'A2' });
+    XLSX.utils.sheet_add_aoa(worksheet, [
+      ['ID', 'Origem', 'Destino', 'Data Início', 'Data Fim', 'Status', 'Cliente', 'Valor (R$)', 'Descrição', 'Data de Criação', 'Data de Upload']
+    ], { origin: 'A2' });
 
     // Adiciona os dados à planilha
     XLSX.utils.sheet_add_json(worksheet, dadosExportacao, {
-      header: ['id', 'origem', 'destino', 'data_inicio', 'data_fim', 'status', 'cliente', 'valor'],
+      header: ['id', 'origem', 'destino', 'dataInicio', 'dataFim', 'status', 'cliente', 'valor', 'descricao', 'createdAt', 'updatedAt'],
       skipHeader: true, // Não adiciona o cabeçalho novamente
       origin: 'A3' // Começa a adicionar os dados a partir da linha 3
     });
 
     // Adiciona uma fórmula para somar os valores na coluna "valor"
     const totalRow = dadosExportacao.length + 3; // +3 para pular o título e os cabeçalhos
-    XLSX.utils.sheet_add_aoa(worksheet, [['Total', , , , , , , { f: `SUM(H3:H${totalRow})` }]], { origin: `A${totalRow + 1}` });
+    XLSX.utils.sheet_add_aoa(worksheet, [['Total', , , , , , , { f: `SUM(H3:H${totalRow})` }, , ,]], { origin: `A${totalRow + 1}` });
 
     // Mescla células para o título
     worksheet['!merges'] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: 7 } } // Mescla da coluna A até H na primeira linha
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 10 } } // Mescla da coluna A até K na primeira linha
     ];
 
     // Aplica estilos ao título
@@ -121,7 +130,7 @@ export class TripsComponent implements OnInit {
     }
 
     // Aplica estilos aos cabeçalhos
-    for (let col = 0; col < 8; col++) {
+    for (let col = 0; col < 11; col++) { // 11 colunas no total
       const headerCell = worksheet[XLSX.utils.encode_cell({ r: 1, c: col })];
       if (headerCell) {
         headerCell.s = {
@@ -134,7 +143,7 @@ export class TripsComponent implements OnInit {
 
     // Aplica estilos aos dados
     for (let row = 2; row <= totalRow; row++) {
-      for (let col = 0; col < 8; col++) {
+      for (let col = 0; col < 11; col++) { // 11 colunas no total
         const cell = worksheet[XLSX.utils.encode_cell({ r: row, c: col })];
         if (cell) {
           cell.s = {
@@ -150,6 +159,11 @@ export class TripsComponent implements OnInit {
           // Formata a coluna "Valor (R$)" como moeda
           if (col === 7) {
             cell.z = 'R$ #,##0.00';
+          }
+
+          // Formata as colunas de data
+          if (col === 9 || col === 10) { // createdAt e updatedAt
+            cell.z = 'dd/mm/yyyy hh:mm:ss';
           }
         }
       }
@@ -193,9 +207,18 @@ export class TripsComponent implements OnInit {
     XLSX.writeFile(workbook, 'relatorio_viagens.xlsx');
   }
 
-
-
-
+  loadTrips() {
+    this.tripService.getTrips().subscribe(
+      (data) => {
+        this.viagens = data;
+        this.filteredViagens = this.viagens;
+        console.log(data)
+      },
+      (err) => {
+        console.error("Deu error:", err)
+      }
+    )
+  }
 
   openViagem(viagem: any) {
     this.router.navigate(['/trip', viagem.id])
@@ -224,18 +247,18 @@ export class TripsComponent implements OnInit {
   applyFilterGlobal(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     console.log('Filtrando por:', filterValue); // Verifique no console se o valor está correto
-  
+
     // Verifica se a referência da tabela existe antes de tentar filtrar
     if (this.dt1) {
       this.dt1.filterGlobal(filterValue, 'contains');
     }
-  
+
     // Filtra as viagens para exibição na versão mobile
     if (!filterValue) {
       this.filteredViagens = [...this.viagens]; // Restaura a lista original
       return;
     }
-  
+
     this.filteredViagens = this.viagens.filter(viagem =>
       viagem.cliente?.toLowerCase().includes(filterValue) ||
       viagem.origem?.toLowerCase().includes(filterValue) ||
@@ -248,20 +271,20 @@ export class TripsComponent implements OnInit {
     this.filteredViagens = this.viagens.filter(viagem => {
       const matchesSearch = this.searchText
         ? Object.values(viagem).some(value =>
-            value.toString().toLowerCase().includes(this.searchText.toLowerCase())
-          )
+          value.toString().toLowerCase().includes(this.searchText.toLowerCase())
+        )
         : true;
-  
+
       const hasStatusFilter = this.selectedFilters.includes('Concluídas') || this.selectedFilters.includes('Em andamento');
       const matchesFilters = !hasStatusFilter || this.selectedFilters.some(filter => {
         if (filter === 'Concluídas') return viagem.status === 'Concluída';
         if (filter === 'Em andamento') return viagem.status === 'Em andamento';
         return false;
       });
-  
+
       return matchesSearch && matchesFilters;
     });
-  
+
     // Aplica ordenação após a filtragem
     if (this.selectedFilters.includes('A a Z')) {
       this.filteredViagens.sort((a, b) => a.cliente.localeCompare(b.cliente));
@@ -282,5 +305,4 @@ export class TripsComponent implements OnInit {
       this.filteredViagens.sort((a, b) => a.valor - b.valor);
     }
   }
-  
 }

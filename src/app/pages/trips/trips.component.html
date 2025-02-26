@@ -12,36 +12,46 @@
                     <input type="text" pInputText placeholder="Search" (input)="applyFilterGlobal($event)" />
                 </p-iconfield>
             </div>
-            <p-overlaybadge [value]="selectedFilters.length"  *ngIf="selectedFilters.length">
+            <p-overlaybadge [value]="selectedFilters.length" *ngIf="selectedFilters.length">
                 <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}">
                     <i class="pi pi-filter"></i>
                     <span>Filtro</span>
                     <div class="filter_content" *ngIf="filter">
                         <nav class="filter_nav">
                             <ul class="filter_list">
-                                <li class="filter_item" (click)="toggleFilter('A a Z')" >
+                                <li class="filter_item" (click)="toggleFilter('A a Z')">
                                     <a class="filter_link" [class.active]="selectedFilters.includes('A a Z')">A a Z</a>
                                 </li>
-                                <li class="filter_item" (click)="toggleFilter('Z a A')" >
+                                <li class="filter_item" (click)="toggleFilter('Z a A')">
                                     <a class="filter_link" [class.active]="selectedFilters.includes('Z a A')">Z a A</a>
                                 </li>
-                                <li class="filter_item" (click)="toggleFilter('Primeiro até o último')" >
-                                    <a class="filter_link"[class.active]="selectedFilters.includes('Primeiro até o último')">Primeiro até o último</a>
+                                <li class="filter_item" (click)="toggleFilter('Primeiro até o último')">
+                                    <a class="filter_link"
+                                        [class.active]="selectedFilters.includes('Primeiro até o último')">Primeiro até
+                                        o último</a>
                                 </li>
-                                <li class="filter_item" (click)="toggleFilter('Último até o primeiro')" >
-                                    <a class="filter_link" [class.active]="selectedFilters.includes('Último até o primeiro')">Último até o primeiro</a>
+                                <li class="filter_item" (click)="toggleFilter('Último até o primeiro')">
+                                    <a class="filter_link"
+                                        [class.active]="selectedFilters.includes('Último até o primeiro')">Último até o
+                                        primeiro</a>
                                 </li>
-                                <li class="filter_item" (click)="toggleFilter('Valores: maior para menor')" >
-                                    <a class="filter_link" [class.active]="selectedFilters.includes('Valores: maior para menor')">Valores: maior para menor</a>
+                                <li class="filter_item" (click)="toggleFilter('Valores: maior para menor')">
+                                    <a class="filter_link"
+                                        [class.active]="selectedFilters.includes('Valores: maior para menor')">Valores:
+                                        maior para menor</a>
                                 </li>
-                                <li class="filter_item" (click)="toggleFilter('Valores: menor para maior')" >
-                                    <a class="filter_link" [class.active]="selectedFilters.includes('Valores: menor para maior')">Valores: menor para maior</a>
+                                <li class="filter_item" (click)="toggleFilter('Valores: menor para maior')">
+                                    <a class="filter_link"
+                                        [class.active]="selectedFilters.includes('Valores: menor para maior')">Valores:
+                                        menor para maior</a>
                                 </li>
                                 <li class="filter_item" (click)="toggleFilter('Concluídas')">
-                                    <a class="filter_link"  [class.active]="selectedFilters.includes('Concluídas')">Concluídas</a>
+                                    <a class="filter_link"
+                                        [class.active]="selectedFilters.includes('Concluídas')">Concluídas</a>
                                 </li>
-                                <li class="filter_item" (click)="toggleFilter('Em andamento')" >
-                                    <a class="filter_link" [class.active]="selectedFilters.includes('Em andamento')">Em andamento</a>
+                                <li class="filter_item" (click)="toggleFilter('Em andamento')">
+                                    <a class="filter_link" [class.active]="selectedFilters.includes('Em andamento')">Em
+                                        andamento</a>
                                 </li>
                             </ul>
                         </nav>
@@ -49,41 +59,52 @@
                 </div>
             </p-overlaybadge>
 
-            <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}" *ngIf="!selectedFilters.length">
+            <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}"
+                *ngIf="!selectedFilters.length">
                 <i class="pi pi-filter"></i>
                 <span>Filtro</span>
                 <div class="filter_content" *ngIf="filter">
                     <nav class="filter_nav">
                         <ul class="filter_list">
-                            <li class="filter_item" (click)="toggleFilter('A a Z')" >
+                            <li class="filter_item" (click)="toggleFilter('A a Z')">
                                 <a class="filter_link" [class.active]="selectedFilters.includes('A a Z')">A a Z</a>
                             </li>
-                            <li class="filter_item" (click)="toggleFilter('Z a A')" >
+                            <li class="filter_item" (click)="toggleFilter('Z a A')">
                                 <a class="filter_link" [class.active]="selectedFilters.includes('Z a A')">Z a A</a>
                             </li>
-                            <li class="filter_item" (click)="toggleFilter('Primeiro até o último')" >
-                                <a class="filter_link"[class.active]="selectedFilters.includes('Primeiro até o último')">Primeiro até o último</a>
+                            <li class="filter_item" (click)="toggleFilter('Primeiro até o último')">
+                                <a class="filter_link"
+                                    [class.active]="selectedFilters.includes('Primeiro até o último')">Primeiro até o
+                                    último</a>
                             </li>
-                            <li class="filter_item" (click)="toggleFilter('Último até o primeiro')" >
-                                <a class="filter_link" [class.active]="selectedFilters.includes('Último até o primeiro')">Último até o primeiro</a>
+                            <li class="filter_item" (click)="toggleFilter('Último até o primeiro')">
+                                <a class="filter_link"
+                                    [class.active]="selectedFilters.includes('Último até o primeiro')">Último até o
+                                    primeiro</a>
                             </li>
-                            <li class="filter_item" (click)="toggleFilter('Valores: maior para menor')" >
-                                <a class="filter_link" [class.active]="selectedFilters.includes('Valores: maior para menor')">Valores: maior para menor</a>
+                            <li class="filter_item" (click)="toggleFilter('Valores: maior para menor')">
+                                <a class="filter_link"
+                                    [class.active]="selectedFilters.includes('Valores: maior para menor')">Valores:
+                                    maior para menor</a>
                             </li>
-                            <li class="filter_item" (click)="toggleFilter('Valores: menor para maior')" >
-                                <a class="filter_link" [class.active]="selectedFilters.includes('Valores: menor para maior')">Valores: menor para maior</a>
+                            <li class="filter_item" (click)="toggleFilter('Valores: menor para maior')">
+                                <a class="filter_link"
+                                    [class.active]="selectedFilters.includes('Valores: menor para maior')">Valores:
+                                    menor para maior</a>
                             </li>
                             <li class="filter_item" (click)="toggleFilter('Concluídas')">
-                                <a class="filter_link"  [class.active]="selectedFilters.includes('Concluídas')">Concluídas</a>
+                                <a class="filter_link"
+                                    [class.active]="selectedFilters.includes('Concluídas')">Concluídas</a>
                             </li>
-                            <li class="filter_item" (click)="toggleFilter('Em andamento')" >
-                                <a class="filter_link" [class.active]="selectedFilters.includes('Em andamento')">Em andamento</a>
+                            <li class="filter_item" (click)="toggleFilter('Em andamento')">
+                                <a class="filter_link" [class.active]="selectedFilters.includes('Em andamento')">Em
+                                    andamento</a>
                             </li>
                         </ul>
                     </nav>
                 </div>
             </div>
-           
+
             <div class="filter" *ngIf="selectedViagem.length > 0" (click)="showDialog()">
                 <i class="pi pi-file-export"></i>
                 Exportar
@@ -106,8 +127,8 @@
                     <th class="clientes">Clientes</th>
                     <th class="colunm origem">Origem</th>
                     <th class="colunm destino">Destino</th>
-                    <th class="colunm data_inicio">Data Inicio</th>
-                    <th class="colunm data_fim">Data Fim</th>
+                    <th class="colunm dataInicio">Data Inicio</th>
+                    <th class="colunm dataFim">Data Fim</th>
                     <th class="colunm status">Status</th>
                 </tr>
             </ng-template>
@@ -119,8 +140,8 @@
                     <td class="clientes">{{viagem.cliente}}</td>
                     <td class="origem">{{viagem.origem}}</td>
                     <td class="destino">{{viagem.destino}}</td>
-                    <td class="data_inicio">{{viagem.data_inicio}}</td>
-                    <td class="data_fim">{{viagem.data_fim}}</td>
+                    <td class="dataInicio">{{viagem.dataInicio}}</td>
+                    <td class="dataFim">{{viagem.dataFim}}</td>
                     <td class="status"><p-tag [severity]="viagem.status === 'Concluída' ? 'success' : 'warn'"
                             [value]="viagem.status" /></td>
                     <div class="btn_menu">
@@ -141,7 +162,7 @@
     <div class="viagens_mobile">
         <div class="viagem" *ngFor="let viagem of filteredViagens" (click)="openViagem(viagem)">
             <span class="cliente">{{viagem.cliente}}</span>
-    
+
             <div class="viagem_dados">
                 <span id="viagem">{{viagem.origem}} → {{viagem.destino}}</span>
                 <span>
