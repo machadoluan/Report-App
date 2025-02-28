@@ -1,4 +1,4 @@
-<div class="container_trip">
+<div class="container_trip"  *ngIf="isMobile">
     <header>
         <div class="back" routerLink="/reports">
             <i class="fa-solid fa-angle-left"></i>
@@ -69,3 +69,65 @@
     </div>
 
 </div>
+
+
+
+<p-dialog [(visible)]="showDialog" [draggable]="false" (onHide)="redirecionar()" [resizable]="false" [modal]="true" [closable]="true"   [dismissableMask]="true" styleClass="meu_dialo3"
+    [style]="{width: '50vw'}">
+
+    <ng-template #header>
+        <div class="flex justify-between items-center w-full">
+            <div class="viagem" *ngIf="registro">
+               Detalhes do registro
+            </div>
+          
+        </div>
+    </ng-template>
+
+    <ng-container *ngIf="registro">
+        <form [formGroup]="dadosUpdate" class="form-desk">
+            <div class="form-group" >
+                <label for="cliente">Cliente</label>
+                <input pInputText id="cliente" name="cliente" aria-describedby="username-help"
+                    placeholder="Digite o nome do cliente"  formControlName="cliente" />
+            </div>
+            <div class="form-group">
+                <label for="origem">Origem</label>
+                <input pInputText id="origem" name="origem" aria-describedby="username-help"
+                    placeholder="Digite a origem"  formControlName="origem" />
+            </div>
+            <div class="form-group">
+                <label for="destino">Destino</label>
+                <input pInputText id="destino" name="destino" aria-describedby="username-help"
+                    placeholder="Digite o destino"  formControlName="destino" />
+            </div>
+            <div class="form-group">
+                <label for="valor">Valor</label>
+                <input pInputText id="valor" name="valor" formControlName="valor" aria-describedby="username-help"
+                    currencyMask
+                    [options]="{prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left', allowNegative: 'false' }"
+                    placeholder="Digite o valor da viagem"  />
+            </div>
+            <div class="data_hora">
+                <div class="form-group">
+                    <label for="data_incio">Data inicio</label>
+                    <p-datepicker dateFormat="dd/mm/yy" formControlName="dataInicio" />
+                </div>
+                <div class="form-group">
+                    <label for="data_fim">Data Fim</label>
+                    <p-datepicker dateFormat="dd/mm/yy" formControlName="dataFim" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                <textarea rows="5" cols="30" name="descricao" pTextarea autoResize="none" 
+                    formControlName="descricao" placeholder="Digite algo..."></textarea>
+            </div>
+            <div class="btns">
+                <button *ngIf="editReport" (click)="reportUpdate()">Salvar</button>
+                <button *ngIf="editReport" (click)="delete($event, registro)">Excluir</button>
+                <button *ngIf="!editReport" (click)="toggleEdit()">Editar dados</button>
+            </div>
+        </form>
+    </ng-container>
+</p-dialog>

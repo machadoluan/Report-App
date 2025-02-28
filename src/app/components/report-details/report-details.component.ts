@@ -1,13 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { registro, viagem } from '../../types/models.type';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { DropdownModule } from 'primeng/dropdown';
+import { ConfirmationService } from 'primeng/api';
+import { ReportsService } from '../../service/reports.service';
+import { ToastrService } from '../../service/toastr.service';
+import { DialogModule } from 'primeng/dialog';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 
 
 
@@ -20,7 +26,10 @@ import { DropdownModule } from 'primeng/dropdown';
     FormsModule,
     SelectModule,
     RouterLink,
-    DropdownModule
+    DropdownModule,
+    DialogModule,
+    CurrencyMaskModule,
+    ReactiveFormsModule
   ],
   standalone: true,
   templateUrl: './report-details.component.html',
@@ -28,37 +37,66 @@ import { DropdownModule } from 'primeng/dropdown';
 })
 export class ReportDetailsComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute) { }
+
 
   viagens: viagem[] = [];
 
   registros: registro[] = [];
 
+  showDialog: boolean = false;
+  isMobile: boolean = window.innerWidth <= 750;
 
   registro: registro | undefined
   editReport: boolean = false;
   fullScreenImageUrl: string | null = null;
+  dadosUpdate: FormGroup
 
+
+  constructor(
+    private route: ActivatedRoute,
+    private reportService: ReportsService,
+    private confirmationService: ConfirmationService,
+    private toastrService: ToastrService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+      this.dadosUpdate =  this.fb.group({
+        
+      })
+   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    if (!this.isMobile) {
+      this.openDialog()
+    }
 
-    this.registros = this.registros.map(registro => ({
-      ...registro,
-      viagem_nome: this.getViagemNome(registro.viagem_id) // Adiciona o nome da viagem
-    }));
-
-    this.registro = this.registros.find(registro => registro.viagem_id === Number(id))
-
-    console.log(this.registro)
+    this.loadReports()
   }
 
-
-  getViagemNome(viagem_id: number): string {
-    const viagem = this.viagens.find(v => v.id === viagem_id);
-    return viagem ? `${viagem.origem} → ${viagem.destino}` : 'Desconhecido';
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.isMobile = window.innerWidth <= 750;
   }
 
+  openDialog() {
+    if (!this.isMobile) {
+      this.showDialog = true;
+    }
+  }
+
+  loadReports() {
+    this.reportService.getReports().subscribe({
+      next: (data: any) => {
+        this.registros = data.reports
+        const id = this.route.snapshot.paramMap.get('id');
+        this.registro = this.registros.find(registro => registro.id === Number(id))
+        console.table(data.reports)
+      },
+      error: (err) => {
+        console.error(err)
+      }
+    })
+  }
 
 
 
@@ -90,5 +128,78 @@ export class ReportDetailsComponent implements OnInit {
 
   closeFullScreenImage(): void {
     this.fullScreenImageUrl = null; // Fecha a imagem em tela cheia
+  }
+
+  redirecionar() {
+    this.router.navigate(['/trip'])
+  }
+
+  delete(event: Event, viagem: any) {
+
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Você deseja deletar permanente?`,
+      header: 'Deletar viagem',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
+
+      accept: () => {
+        this.reportService.deleteTripId(viagem.id).subscribe(
+          (res) => {
+            this.toastrService.showSucess(`Viagem apagada com sucesso!`)
+            this.router.navigate(['/trip'])
+
+          },
+          (err) => {
+            this.toastrService.showError(`Erro ao deletar viagem, tente novamente mais tarde!`)
+
+          }
+        )
+
+      },
+      reject: () => {
+      },
+    });
+  }
+
+  reportUpdate() {
+    // if (!this.viagem?.id) {
+    //   this.toastrService.showError('ID da viagem não encontrado.');
+    //   return;
+    // }
+
+    // if (!this.dadosUpdate.dirty) {
+    //   this.toggleEdit()
+    // }
+
+    // const dadosFormatados = {
+    //   ...this.dadosUpdate.value,
+    //   id: this.viagem.id, // Inclui o ID da viagem
+    //   dataInicio: this.formatarData(this.dadosUpdate.value.dataInicio), // Formatar data
+    //   dataFim: this.dadosUpdate.value.dataFim ? this.formatarData(this.dadosUpdate.value.dataFim) : '' // Formatar 
+    // };
+
+    // const dadosParaEnviar = this.filtrarDados(dadosFormatados);
+
+    // console.log("Update", dadosFormatados)
+
+    // this.tripService.updateTrip(dadosFormatados).subscribe(
+    //   (res) => {
+    //     this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} atualizada `);
+    //     this.toggleEdit(); // Desativa o modo de edição
+    //   },
+    //   (err) => {
+    //     this.toastrService.showError(`Erro ao atualizar a viagem, tente novamente mais tarde. `);
+    //     console.error(err);
+    //   }
+    // );
   }
 }

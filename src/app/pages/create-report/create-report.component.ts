@@ -7,10 +7,12 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { viagem } from '../../types/models.type';
 import { RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ViagensService } from '../../service/viagens.service';
 
 @Component({
   selector: 'app-create-report',
-  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, RouterLink],
+  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './create-report.component.html',
   styleUrl: './create-report.component.scss'
 })
@@ -21,6 +23,7 @@ export class CreateReportComponent {
 
 
   viagens: viagem[] = [];
+  dadosReport: FormGroup
 
   registroTipo: any[] = [
     { Tipo: 'Inicio de Jornada' },
@@ -32,23 +35,40 @@ export class CreateReportComponent {
     { Tipo: 'Inicio Espera' },
     { Tipo: 'Reinicio de viagem' },
   ]
-
-
   selectedFiles: File[] = [];
   imagePreviews: string[] = [];
   fullScreenImageUrl: string | null = null;
 
+
+  constructor(private fb: FormBuilder, private tripService: ViagensService) {
+    this.dadosReport = this.fb.group({
+
+    })
+  }
 
   viagem: any
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class
-    this.viagens = this.viagens.map(v => ({
-      ...v,
-      nomeFormatado: `${v.origem || "Origem desconhecida"} → ${v.destino || "Destino desconhecido"} | ${v.status || "Status desconhecido"}`
-    }));
 
+    this.loadTrips()
+  }
+
+  loadTrips() {
+    this.tripService.getTrips().subscribe(
+      (data) => {
+        this.viagens = data;
+        this.viagens = this.viagens.map(v => ({
+          ...v,
+          nomeFormatado: `${v.origem || "Origem desconhecida"} → ${v.destino || "Destino desconhecido"} | ${v.status || "Status desconhecido"}`
+        }));
+        console.log(data)
+      },
+      (err) => {
+        console.error("Deu error:", err)
+      }
+    )
   }
 
   showDialog() {

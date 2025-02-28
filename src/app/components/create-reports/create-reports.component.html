@@ -1,32 +1,31 @@
 <p-dialog [(visible)]="display" [modal]="true" [draggable]="false" [resizable]="false" header="Criar Registro" styleClass="meu_dialog1">
 
-    <form>
+    <form [formGroup]="dadosReport">
         <div class="form-group">
             <label for="cliente">Viagem</label>
             <p-select [options]="viagens" optionLabel="nomeFormatado" placeholder="Selecionar a viagem"
-                class="w-full md:w-56" />
+                class="w-full md:w-56" formControlName="viagem"/>
         </div>
         <div class="form-group">
             <label for="origem">Tipo</label>
             <p-select [options]="registroTipo" optionLabel="Tipo" placeholder="Selecione o tipo do registro"
-                class="w-full md:w-56" />
+                class="w-full md:w-56" formControlName="tipo"/>
 
         </div>
         <div class="data_hora">
             <div class="form-group">
                 <label for="data">Data</label>
-                <input pInputText id="data" mask="00/00/0000" aria-describedby="username-help"
-                    placeholder="Data de Inicio" />
+                <p-datepicker dateFormat="dd/mm/yy" formControlName="data" />
 
             </div>
             <div class="form-group">
                 <label for="hora">Hora</label>
-                <input pInputText id="hora" mask="00:00" aria-describedby="username-help" placeholder="Data de Fim" />
+                <input pInputText id="hora" mask="00:00" aria-describedby="username-help" placeholder="Data de Fim" formControlName="hora"/>
             </div>
         </div>
         <div class="form-group">
             <label for="descricao">Descrição</label>
-            <textarea rows="5" cols="30" pTextarea autoResize="none" placeholder="Digite algo..."></textarea>
+            <textarea rows="5" cols="30" pTextarea autoResize="none" placeholder="Digite algo..." formControlName="descricao"></textarea>
         </div>
         <div class="form-group file_photo">
             <label for="foto">Selecionar imagem</label>
@@ -52,7 +51,7 @@
     <ng-template #footer>
         <div class="btns">
             <button (click)="closeDialog()">Cancelar</button>
-            <button>Criar</button>
+            <button (click)="createReport()">Criar</button>
         </div>
     </ng-template>
 

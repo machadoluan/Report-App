@@ -1,5 +1,5 @@
 <div class="container_create">
-    <form>
+    <form [formGroup]="dadosReport">
         <div class="form-group">
             <label for="cliente">Viagem</label>
             <p-select [options]="viagens" optionLabel="nomeFormatado" placeholder="Selecionar a viagem"

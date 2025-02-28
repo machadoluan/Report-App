@@ -12,10 +12,16 @@ import * as XLSX from 'xlsx';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { CreateReportsComponent } from '../../components/create-reports/create-reports.component';
 import { Router } from '@angular/router';
+import { ReportsService } from '../../service/reports.service';
+import { ConfirmationService } from 'primeng/api';
+import { ToastrService } from '../../service/toastr.service';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+
+
 
 @Component({
   selector: 'app-reports',
-  imports: [InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule, OverlayBadgeModule, CreateReportsComponent],
+  imports: [InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule, OverlayBadgeModule, CreateReportsComponent, ConfirmDialog],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })
@@ -40,21 +46,33 @@ export class ReportsComponent implements OnInit {
   searchText: string = '';
 
   constructor(
-    private router: Router
+    private router: Router,
+    private reportService: ReportsService,
+    private confirmationService: ConfirmationService,
+    private toastrService: ToastrService,
+
   ) {
 
   }
 
   ngOnInit(): void {
-    this.registros = this.registros.map(registro => ({
-      ...registro,
-      viagem_nome: this.getViagemNome(registro.viagem_id) // Adiciona o nome da viagem
-    }));
-
-    this.filteredReports = this.registros;
 
 
-    console.log(this.filteredReports)
+    this.loadReports()
+  }
+
+  loadReports() {
+    this.reportService.getReports().subscribe({
+      next: (data: any) => {
+        this.registros = data.reports
+        this.filteredReports = data.reports
+
+        console.table(data.reports)
+      },
+      error: (err) => {
+        console.error(err)
+      }
+    })
   }
 
 
@@ -266,10 +284,52 @@ export class ReportsComponent implements OnInit {
   }
 
 
-  openReports(viagem: any) {
-    this.router.navigate(['/report', viagem.viagem_id])
+  openReports(report: any) {
+    console.log(report)
+
+    this.router.navigate(['/report', report[0].id])
+
   }
 
 
+  delete(event: Event, viagem: any[]) {
+
+    const ids = viagem.map(v => v.id)
+
+    console.log('viagem', ids)
+
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Você deseja deletar permanente?`,
+      header: 'Deletar viagem',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
+
+      accept: () => {
+        this.reportService.deleteTripMultiple(ids).subscribe(
+          (res) => {
+            this.toastrService.showSucess(`Viagem apagada com sucesso!`)
+            window.location.reload();
+
+          },
+          (err) => {
+            this.toastrService.showError(`Erro ao deletar viagem, tente novamente mais tarde!`)
+
+          }
+        )
+
+      },
+      reject: () => {
+      },
+    });
+  }
 }
 

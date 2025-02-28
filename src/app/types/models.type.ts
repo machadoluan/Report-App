@@ -11,6 +11,7 @@ export type viagem = {
 }
 
 export type registro = {
+    id: number;
     viagem_id: number;
     tipo: string;
     data: string;
