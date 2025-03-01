@@ -50,6 +50,12 @@ export class ReportsService {
     );
   }
 
+  updateTrip(dadosUpdate: Report): Observable<viagem> {
+    return this.http.put<viagem>(this.apiUrl, dadosUpdate).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Ocorreu um erro desconhecido!';
     if (error.error instanceof ErrorEvent) {

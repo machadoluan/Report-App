@@ -10,6 +10,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ViagensService } from '../../service/viagens.service';
 import { ReportsService } from '../../service/reports.service';
+import { ToastrService } from '../../service/toastr.service';
 
 
 @Component({
@@ -44,7 +45,8 @@ export class CreateReportsComponent implements OnInit {
   viagem: any
 
 
-  constructor(private fb: FormBuilder, private tripService: ViagensService, private repotService: ReportsService) {
+  constructor(private fb: FormBuilder, private tripService: ViagensService, private repotService: ReportsService, private toastrService: ToastrService
+  ) {
     this.dadosReport = this.fb.group({
       viagem: ["", Validators.required],
       tipo: ["", Validators.required],
@@ -144,9 +146,12 @@ export class CreateReportsComponent implements OnInit {
     this.repotService.createReport(id, dadosFormatados, this.selectedFiles).subscribe({
       next: (res) => {
         console.log(res)
+        this.toastrService.showSucess(`Registro de ${dadosFormatados.tipo} criado. `)
+        this.dadosReport.reset();
       },
       error: (err) => {
         console.error(err)
+        this.toastrService.showError(`Erro ao cadastrar o registro, tente novamente mais tarde. `)
       }
     })
 

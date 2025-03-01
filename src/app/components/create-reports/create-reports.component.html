@@ -4,7 +4,7 @@
         <div class="form-group">
             <label for="cliente">Viagem</label>
             <p-select [options]="viagens" optionLabel="nomeFormatado" placeholder="Selecionar a viagem"
-                class="w-full md:w-56" formControlName="viagem"/>
+                class="w-full md:w-56" formControlName="viagem" emptyMessage="Nenhuma viagem encontrada"/>
         </div>
         <div class="form-group">
             <label for="origem">Tipo</label>
@@ -15,12 +15,12 @@
         <div class="data_hora">
             <div class="form-group">
                 <label for="data">Data</label>
-                <p-datepicker dateFormat="dd/mm/yy" formControlName="data" />
+                <p-datepicker dateFormat="dd/mm/yy" formControlName="data" placeholder="Data"/>
 
             </div>
             <div class="form-group">
                 <label for="hora">Hora</label>
-                <input pInputText id="hora" mask="00:00" aria-describedby="username-help" placeholder="Data de Fim" formControlName="hora"/>
+                <input pInputText id="hora" mask="00:00" aria-describedby="username-help" placeholder="Horario" formControlName="hora"/>
             </div>
         </div>
         <div class="form-group">

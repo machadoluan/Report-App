@@ -7,12 +7,16 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { viagem } from '../../types/models.type';
 import { RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ViagensService } from '../../service/viagens.service';
+import { DatePickerModule } from 'primeng/datepicker';
+import { ReportsService } from '../../service/reports.service';
+import { ToastrService } from '../../service/toastr.service';
+
 
 @Component({
   selector: 'app-create-report',
-  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, RouterLink, ReactiveFormsModule, DatePickerModule],
   templateUrl: './create-report.component.html',
   styleUrl: './create-report.component.scss'
 })
@@ -40,9 +44,13 @@ export class CreateReportComponent {
   fullScreenImageUrl: string | null = null;
 
 
-  constructor(private fb: FormBuilder, private tripService: ViagensService) {
+  constructor(private fb: FormBuilder, private tripService: ViagensService, private repotService: ReportsService, private toastrService: ToastrService) {
     this.dadosReport = this.fb.group({
-
+      viagem: ["", Validators.required],
+      tipo: ["", Validators.required],
+      data: ["", Validators.required],
+      hora: ["", Validators.required],
+      descricao: [""]
     })
   }
 
@@ -116,6 +124,66 @@ export class CreateReportComponent {
 
     this.fileInput.nativeElement.value = '';
   }
+
+  createReport() {
+    console.log("Dados antes ", this.dadosReport.value)
+    const id = this.dadosReport.value.viagem.id
+    
+    const dadosFormatados = {
+      data: this.formatarData(this.dadosReport.value.data),
+      tipo: this.dadosReport.value.tipo.Tipo,
+      descricao: this.dadosReport.value.descricao,
+      hora: this.formatarHora(this.dadosReport.value.hora)
+    };
+
+    this.repotService.createReport(id, dadosFormatados, this.selectedFiles).subscribe({
+      next: (res) => {
+        console.log(res)
+        this.toastrService.showSucess(`Registro de ${dadosFormatados.tipo} criado. `)
+        this.dadosReport.reset();
+      },
+      error: (err) => {
+        console.error(err)
+        this.toastrService.showError(`Erro ao cadastrar o registro, tente novamente mais tarde. `)
+      }
+    })
+
+  }
+
+  private formatarHora(hora: string): string {
+    if (!hora) return ''; // Verifica se a string está vazia ou indefinida
+
+    // Caso a hora já esteja no formato "HH:mm:ss"
+    if (/^\d{2}:\d{2}:\d{2}$/.test(hora)) {
+      const partes = hora.split(':');
+      return partes[2] === '00' ? `${partes[0]}:${partes[1]}` : hora;
+    }
+
+    // Caso a hora seja enviada sem separadores e tenha 4 caracteres (ex: "1420")
+    if (/^\d{4}$/.test(hora)) {
+      return `${hora.slice(0, 2)}:${hora.slice(2, 4)}`;
+    }
+
+    return hora; // Se não atender nenhum caso, retorna como está
+  }
+
+  formatarData(data: Date | string): string {
+    if (!data) return ''; // Retorna string vazia se for nulo/indefinido
+
+    if (typeof data === 'string' && !/^\d{4}-\d{2}-\d{2}$/.test(data)) {
+      return data; // Se já estiver no formato dd/MM/yyyy, retorna como está
+    }
+
+    const dateObj = new Date(data);
+    if (isNaN(dateObj.getTime())) return ''; // Verifica se a data é inválida
+
+    const dia = String(dateObj.getDate()).padStart(2, '0');
+    const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const ano = dateObj.getFullYear();
+
+    return `${dia}/${mes}/${ano}`;
+  }
+
 
 
   removeFile(index: number): void {

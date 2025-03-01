@@ -1,4 +1,4 @@
-<div class="container_trip"  *ngIf="isMobile">
+<div class="container_trip" *ngIf="isMobile">
     <header>
         <div class="back" routerLink="/reports">
             <i class="fa-solid fa-angle-left"></i>
@@ -12,37 +12,32 @@
     </header>
 
     <div class="trip_content">
-        <form *ngIf="registro">
+        <form *ngIf="registro" [formGroup]="dadosUpdate">
             <div class="form-group">
-                <label for="cliente">Viagem atual</label>
-                <input pInputText id="cliente" name="cliente" aria-describedby="username-help"
-                    placeholder="Digite o nome do cliente" [(ngModel)]="registro.viagem_nome" disabled />
+                <label for="viagem">Viagem</label>
+                <input pInputText id="viagem_nome" name="viagem_nome" formControlName="viagem_nome"
+                    aria-describedby="username-help" placeholder="Data de Início" />
             </div>
             <div class="form-group">
-                <label for="origem">Tipo</label>
-                <input pInputText id="cliente" name="cliente" aria-describedby="username-help"
-                    placeholder="Digite o nome do cliente" [(ngModel)]="registro.tipo" [disabled]="!editReport" />
-
+                <label for="tipo">Tipo</label>
+                <p-select [options]="registroTipo" optionLabel="Tipo" placeholder="Selecione o tipo do registro"
+                    class="w-full md:w-56" formControlName="tipo" />
             </div>
             <div class="data_hora">
                 <div class="form-group">
-                    <label for="data_incio">Data</label>
-                    <input pInputText id="data_incio " name="data_incio" mask="00/00/0000"
-                        aria-describedby="username-help" [(ngModel)]="registro.data" [disabled]="!editReport"
-                        placeholder="Data de Inicio" />
-
+                    <label for="data_inicio">Data</label>
+                    <input pInputText id="data_inicio" name="data_inicio" mask="00/00/0000" formControlName="data"
+                        aria-describedby="username-help" placeholder="Data de Início" />
                 </div>
                 <div class="form-group">
                     <label for="data_fim">Hora</label>
                     <input pInputText id="data_fim" name="data_fim" aria-describedby="username-help"
-                        [(ngModel)]="registro.hora" [disabled]="!editReport" placeholder="Data de Fim" />
-
+                        formControlName="hora" placeholder="Hora de Fim" />
                 </div>
             </div>
-
             <div class="form-group">
                 <label for="descricao">Descrição</label>
-                <textarea rows="5" cols="30" name="descricao" pTextarea autoResize="none" [disabled]="!editReport"
+                <textarea rows="5" cols="30" name="descricao" formControlName="descricao" pTextarea autoResize="none"
                     placeholder="Digite algo..."></textarea>
             </div>
             <div class="form-group">
@@ -51,82 +46,71 @@
                     <div class="img">
                         <img src="https://t3.ftcdn.net/jpg/05/15/12/60/360_F_515126051_S5td5PvQQUkbeqaNHS6z8xW5rH7DEQ3K.jpg"
                             alt="">
-
                         <div class="delete" *ngIf="editReport">
                             <i class="fa-solid fa-trash"></i>
                         </div>
                     </div>
-
                 </div>
             </div>
-
             <div class="btns">
-                <button *ngIf="editReport" (click)="toggleEdit()">Salvar</button>
+                <button *ngIf="editReport" (click)="reportUpdate()">Salvar</button>
                 <button *ngIf="editReport">Excluir</button>
-                <button *ngIf="!editReport" (click)="toggleEdit()">Editar dados</button>
+                <button *ngIf="!editReport" (click)="editar()">Editar dados</button>
             </div>
         </form>
+
+
     </div>
 
 </div>
 
 
 
-<p-dialog [(visible)]="showDialog" [draggable]="false" (onHide)="redirecionar()" [resizable]="false" [modal]="true" [closable]="true"   [dismissableMask]="true" styleClass="meu_dialo3"
-    [style]="{width: '50vw'}">
+<p-dialog [(visible)]="showDialog" [draggable]="false" (onHide)="redirecionar()" [resizable]="false" [modal]="true"
+    [closable]="true" [dismissableMask]="true" styleClass="meu_dialo3">
 
     <ng-template #header>
         <div class="flex justify-between items-center w-full">
             <div class="viagem" *ngIf="registro">
-               Detalhes do registro
+                Detalhes do registro
             </div>
-          
+
         </div>
     </ng-template>
 
     <ng-container *ngIf="registro">
         <form [formGroup]="dadosUpdate" class="form-desk">
-            <div class="form-group" >
-                <label for="cliente">Cliente</label>
-                <input pInputText id="cliente" name="cliente" aria-describedby="username-help"
-                    placeholder="Digite o nome do cliente"  formControlName="cliente" />
+            <div class="form-group">
+                <label for="viagem">Viagem atual</label>
+                <input pInputText id="viagem_nome" name="viagem_nome" formControlName="viagem_nome"
+                    aria-describedby="username-help" />
             </div>
             <div class="form-group">
-                <label for="origem">Origem</label>
-                <input pInputText id="origem" name="origem" aria-describedby="username-help"
-                    placeholder="Digite a origem"  formControlName="origem" />
-            </div>
-            <div class="form-group">
-                <label for="destino">Destino</label>
-                <input pInputText id="destino" name="destino" aria-describedby="username-help"
-                    placeholder="Digite o destino"  formControlName="destino" />
-            </div>
-            <div class="form-group">
-                <label for="valor">Valor</label>
-                <input pInputText id="valor" name="valor" formControlName="valor" aria-describedby="username-help"
-                    currencyMask
-                    [options]="{prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left', allowNegative: 'false' }"
-                    placeholder="Digite o valor da viagem"  />
+                <label for="tipo">Tipo</label>
+                <p-select [options]="registroTipo" optionLabel="Tipo" placeholder="Selecione o tipo do registro"
+                    class="w-full md:w-56" formControlName="tipo" />
             </div>
             <div class="data_hora">
                 <div class="form-group">
-                    <label for="data_incio">Data inicio</label>
-                    <p-datepicker dateFormat="dd/mm/yy" formControlName="dataInicio" />
+                    <label for="data_inicio">Data</label>
+                    <input pInputText id="data_inicio" name="data_inicio" mask="00/00/0000" formControlName="data"
+                        aria-describedby="username-help" placeholder="Data de Início" />
                 </div>
                 <div class="form-group">
-                    <label for="data_fim">Data Fim</label>
-                    <p-datepicker dateFormat="dd/mm/yy" formControlName="dataFim" />
+                    <label for="data_fim">Hora</label>
+                    <input pInputText id="data_fim" name="data_fim" aria-describedby="username-help"
+                        formControlName="hora" placeholder="Hora de Fim" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="descricao">Descrição</label>
-                <textarea rows="5" cols="30" name="descricao" pTextarea autoResize="none" 
-                    formControlName="descricao" placeholder="Digite algo..."></textarea>
+                <textarea rows="5" cols="30" name="descricao" formControlName="descricao" pTextarea autoResize="none"
+                    placeholder="Digite algo..."></textarea>
             </div>
             <div class="btns">
                 <button *ngIf="editReport" (click)="reportUpdate()">Salvar</button>
                 <button *ngIf="editReport" (click)="delete($event, registro)">Excluir</button>
-                <button *ngIf="!editReport" (click)="toggleEdit()">Editar dados</button>
+                <button *ngIf="!editReport" (click)="editar()">Editar dados</button>
             </div>
         </form>
     </ng-container>

@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { DropdownModule } from 'primeng/dropdown';
 import { ConfirmationService } from 'primeng/api';
@@ -51,6 +51,17 @@ export class ReportDetailsComponent implements OnInit {
   fullScreenImageUrl: string | null = null;
   dadosUpdate: FormGroup
 
+  registroTipo: any[] = [
+    { Tipo: 'Inicio de Jornada' },
+    { Tipo: 'Fim de Jornada' },
+    { Tipo: 'Inicio Refeição' },
+    { Tipo: 'Fim Refeição' },
+    { Tipo: 'Inicio Pausa' },
+    { Tipo: 'Fim Pausa' },
+    { Tipo: 'Inicio Espera' },
+    { Tipo: 'Reinicio de viagem' },
+  ]
+
 
   constructor(
     private route: ActivatedRoute,
@@ -60,10 +71,15 @@ export class ReportDetailsComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder
   ) {
-      this.dadosUpdate =  this.fb.group({
-        
-      })
-   }
+    this.dadosUpdate = this.fb.group({
+      viagem_nome: [{ value: "", disabled: true }, Validators.required],
+      tipo: [{ value: '', disabled: true }, Validators.required],
+      data: [{ value: "", disabled: true }, Validators.required],
+      hora: [{ value: "", disabled: true }, Validators.required],
+      descricao: [{ value: "", disabled: true }]
+    });
+
+  }
 
   ngOnInit(): void {
     if (!this.isMobile) {
@@ -85,17 +101,31 @@ export class ReportDetailsComponent implements OnInit {
   }
 
   loadReports() {
-    this.reportService.getReports().subscribe({
-      next: (data: any) => {
-        this.registros = data.reports
-        const id = this.route.snapshot.paramMap.get('id');
-        this.registro = this.registros.find(registro => registro.id === Number(id))
-        console.table(data.reports)
-      },
-      error: (err) => {
-        console.error(err)
-      }
-    })
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      console.log(parseInt(id))
+      this.reportService.getReportById(parseInt(id)).subscribe(
+        (data: any) => {
+
+          const tipoSelecionado = this.registroTipo.find(tipo => tipo.Tipo === data.reportFormatado.tipo);
+
+
+          this.registro = data.reportFormatado;
+          this.dadosUpdate.patchValue({
+            ...data.reportFormatado,
+            tipo: tipoSelecionado || null // Certifica-se de passar um objeto válido
+          });
+          console.log(this.dadosUpdate.value)
+        },
+        (err) => {
+          console.error("Deu error:", err)
+        }
+      )
+
+    } else {
+      console.error("ID is null");
+    }
   }
 
 
@@ -118,8 +148,12 @@ export class ReportDetailsComponent implements OnInit {
   }
 
 
-  toggleEdit() {
-    this.editReport = !this.editReport
+  editar() {
+    this.dadosUpdate.get('tipo')?.enable();
+    this.dadosUpdate.get('data')?.enable();
+    this.dadosUpdate.get('hora')?.enable();
+    this.dadosUpdate.get('descricao')?.enable();
+    this.editReport = true
   }
 
   openFullScreenImage(imageUrl: string): void {
@@ -131,8 +165,9 @@ export class ReportDetailsComponent implements OnInit {
   }
 
   redirecionar() {
-    this.router.navigate(['/trip'])
+    this.router.navigate(['/reports'])
   }
+
 
   delete(event: Event, viagem: any) {
 
@@ -171,35 +206,93 @@ export class ReportDetailsComponent implements OnInit {
   }
 
   reportUpdate() {
-    // if (!this.viagem?.id) {
-    //   this.toastrService.showError('ID da viagem não encontrado.');
-    //   return;
-    // }
+    if (!this.registro?.id) {
+      this.toastrService.showError('ID da viagem não encontrado.');
+      return;
+    }
 
-    // if (!this.dadosUpdate.dirty) {
-    //   this.toggleEdit()
-    // }
+    if (!this.dadosUpdate.dirty) {
+      this.dadosUpdate.get('tipo')?.disable();
+      this.dadosUpdate.get('data')?.disable();
+      this.dadosUpdate.get('hora')?.disable();
+      this.dadosUpdate.get('descricao')?.disable();
+      this.editReport = false
+    }
 
-    // const dadosFormatados = {
-    //   ...this.dadosUpdate.value,
-    //   id: this.viagem.id, // Inclui o ID da viagem
-    //   dataInicio: this.formatarData(this.dadosUpdate.value.dataInicio), // Formatar data
-    //   dataFim: this.dadosUpdate.value.dataFim ? this.formatarData(this.dadosUpdate.value.dataFim) : '' // Formatar 
-    // };
+    const dadosFormatados = {
+      ...this.dadosUpdate.value,
+      id: this.registro.id, // Inclui o ID da viagem
+      data: this.formatarData(this.dadosUpdate.value.dataInicio), // Formatar data
+      hora: this.formatarHora(this.dadosUpdate.value.hora)
 
-    // const dadosParaEnviar = this.filtrarDados(dadosFormatados);
+    };
 
-    // console.log("Update", dadosFormatados)
+    const dadosParaEnviar = this.filtrarDados(dadosFormatados);
 
-    // this.tripService.updateTrip(dadosFormatados).subscribe(
-    //   (res) => {
-    //     this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} atualizada `);
-    //     this.toggleEdit(); // Desativa o modo de edição
-    //   },
-    //   (err) => {
-    //     this.toastrService.showError(`Erro ao atualizar a viagem, tente novamente mais tarde. `);
-    //     console.error(err);
-    //   }
-    // );
+    console.log("Update", dadosFormatados)
+
+    this.reportService.updateTrip(dadosFormatados).subscribe(
+      (res: any) => {
+        this.dadosUpdate.patchValue(res.report)
+        console.log(res)
+        this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} atualizada `);
+        this.dadosUpdate.get('tipo')?.disable();
+        this.dadosUpdate.get('data')?.disable();
+        this.dadosUpdate.get('hora')?.disable();
+        this.dadosUpdate.get('descricao')?.disable();
+        this.editReport = false
+      },
+      (err) => {
+        this.toastrService.showError(`Erro ao atualizar a viagem, tente novamente mais tarde. `);
+        console.error(err);
+      }
+    );
+  }
+
+  formatarData(data: Date | string): string {
+    if (!data) return ''; // Retorna string vazia se for nulo/indefinido
+
+    if (typeof data === 'string' && !/^\d{4}-\d{2}-\d{2}$/.test(data)) {
+      return data; // Se já estiver no formato dd/MM/yyyy, retorna como está
+    }
+
+    const dateObj = new Date(data);
+    if (isNaN(dateObj.getTime())) return ''; // Verifica se a data é inválida
+
+    const dia = String(dateObj.getDate()).padStart(2, '0');
+    const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const ano = dateObj.getFullYear();
+
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  filtrarDados(dados: any): any {
+    const dadosFiltrados: any = {};
+
+    for (const key in dados) {
+      if (dados[key] !== "" && dados[key] !== null && dados[key] !== undefined) {
+        // Adiciona apenas os campos que não estão vazios
+        dadosFiltrados[key] = dados[key];
+      }
+    }
+
+    return dadosFiltrados;
+  }
+
+  private formatarHora(hora: string): string {
+    if (!hora) return ''; // Verifica se a string está vazia ou indefinida
+
+    // Caso a hora já esteja no formato "HH:mm:ss"
+    if (/^\d{2}:\d{2}:\d{2}$/.test(hora)) {
+      const partes = hora.split(':');
+      return partes[2] === '00' ? `${partes[0]}:${partes[1]}` : hora;
+    }
+
+    // Caso a hora seja enviada sem separadores e tenha 4 caracteres (ex: "1420")
+    if (/^\d{4}$/.test(hora)) {
+      return `${hora.slice(0, 2)}:${hora.slice(2, 4)}`;
+    }
+
+    return hora; // Se não atender nenhum caso, retorna como está
   }
 }

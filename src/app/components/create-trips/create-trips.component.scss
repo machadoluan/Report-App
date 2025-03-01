@@ -5,13 +5,19 @@
     background-color: var(--background-color) !important;
     color: var(--color) !important;
 
+    textarea[pTextarea] {
+        min-height: 100px; // ou o valor que preferir
+    }
+
     .p-inputtext,
     .p-textarea {
+
+
         background-color: transparent !important;
         color: var(--color) !important;
-        font-size: 14px;w
+        font-size: 14px;
 
-        &:focus {
+        w &:focus {
             border-color: var(--primary) !important;
         }
     }

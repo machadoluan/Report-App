@@ -117,7 +117,7 @@
             <ng-template pTemplate="body" let-registro>
                 <tr>
                     <td><p-tableCheckbox [value]="registro" /></td>
-                    <td class="registros">Jornada</td>
+                    <td class="registros">{{registro.tipo_name}}</td>
                     <td class="sssssss">{{registro.viagem_nome}}</td>
                     <td class="colunm data">{{registro.tipo}}</td>
                     <td class="colunm data">{{registro.data}}</td>
@@ -137,7 +137,7 @@
 
 
     <div class="reports_mobile">
-        <div class="report" *ngFor="let report of filteredReports" (click)="openReports(report)">
+        <div class="report" *ngFor="let report of filteredReports" (click)="openReportsMobile(report)">
             <span class="cliente">{{report.tipo}}</span>
 
             <div class="report_dados">

@@ -248,6 +248,11 @@ export class TripsComponent implements OnInit {
     this.router.navigate(['/trip', viagem[0].id])
   }
 
+  openViagemMobile(viagem: any) {
+    console.log(viagem)
+    this.router.navigate(['/trip', viagem.id])
+  }
+
   openFilter() {
     this.filter = !this.filter
   }
@@ -255,6 +260,9 @@ export class TripsComponent implements OnInit {
   createTrip() {
     this.dialogCreateTrips.showDialog()
   }
+
+
+
 
 
   toggleFilter(filter: string) {

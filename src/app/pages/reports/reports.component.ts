@@ -56,18 +56,16 @@ export class ReportsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-
     this.loadReports()
   }
 
   loadReports() {
     this.reportService.getReports().subscribe({
       next: (data: any) => {
-        this.registros = data.reports
-        this.filteredReports = data.reports
+        this.registros = data.reportsFormatados
+        this.filteredReports = data.reportsFormatados
 
-        console.table(data.reports)
+        console.log(data.reportsFormatados)
       },
       error: (err) => {
         console.error(err)
@@ -291,12 +289,16 @@ export class ReportsComponent implements OnInit {
 
   }
 
+  openReportsMobile(report: any) {
+    this.router.navigate(['/report', report.id])
+  }
 
-  delete(event: Event, viagem: any[]) {
 
-    const ids = viagem.map(v => v.id)
+  delete(event: Event, report: any[]) {
 
-    console.log('viagem', ids)
+    const ids = report.map(r => r.id)
+
+    console.log('report', ids)
 
     this.confirmationService.confirm({
       target: event.target as EventTarget,
@@ -316,12 +318,12 @@ export class ReportsComponent implements OnInit {
       accept: () => {
         this.reportService.deleteTripMultiple(ids).subscribe(
           (res) => {
-            this.toastrService.showSucess(`Viagem apagada com sucesso!`)
+            this.toastrService.showSucess(`Registro apagado com sucesso!`)
             window.location.reload();
 
           },
           (err) => {
-            this.toastrService.showError(`Erro ao deletar viagem, tente novamente mais tarde!`)
+            this.toastrService.showError(`Erro ao deletar registro, tente novamente mais tarde!`)
 
           }
         )
