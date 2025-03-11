@@ -54,7 +54,7 @@
                 <div class="btns">
                     <button *ngIf="editTrip" (click)="tripsUpdate()">Salvar</button>
                     <button *ngIf="editTrip" (click)="delete($event, viagem)">Excluir</button>
-                    <button *ngIf="!editTrip" (click)="toggleEdit()">Editar dados</button>
+                    <button *ngIf="!editTrip" (click)="editar()">Editar dados</button>
                 </div>
             </form>
 
@@ -118,7 +118,7 @@
             <div class="btns">
                 <button *ngIf="editTrip" (click)="tripsUpdate()">Salvar</button>
                 <button *ngIf="editTrip" (click)="delete($event, viagem)">Excluir</button>
-                <button *ngIf="!editTrip" (click)="toggleEdit()">Editar dados</button>
+                <button *ngIf="!editTrip" (click)="editar()">Editar dados</button>
             </div>
         </form>
     </ng-container>

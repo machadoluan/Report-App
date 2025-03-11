@@ -13,6 +13,8 @@ import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
 import { DialogModule } from 'primeng/dialog';
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { DatePickerModule } from 'primeng/datepicker';
+
 
 
 
@@ -22,14 +24,15 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
   imports: [CommonModule,
     InputTextModule,
     TextareaModule,
-    NgxMaskDirective,
+    DatePickerModule,
     FormsModule,
     SelectModule,
     RouterLink,
     DropdownModule,
     DialogModule,
     CurrencyMaskModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMaskDirective
   ],
   standalone: true,
   templateUrl: './report-details.component.html',
@@ -45,7 +48,6 @@ export class ReportDetailsComponent implements OnInit {
 
   showDialog: boolean = false;
   isMobile: boolean = window.innerWidth <= 750;
-
   registro: registro | undefined
   editReport: boolean = false;
   fullScreenImageUrl: string | null = null;
@@ -100,6 +102,7 @@ export class ReportDetailsComponent implements OnInit {
     }
   }
 
+
   loadReports() {
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -116,7 +119,7 @@ export class ReportDetailsComponent implements OnInit {
             ...data.reportFormatado,
             tipo: tipoSelecionado || null // Certifica-se de passar um objeto válido
           });
-          console.log(this.dadosUpdate.value)
+          console.log(this.registro)
         },
         (err) => {
           console.error("Deu error:", err)
@@ -167,6 +170,18 @@ export class ReportDetailsComponent implements OnInit {
   redirecionar() {
     this.router.navigate(['/reports'])
   }
+
+   downloadImage(url: string) {
+    const link = document.createElement('a');
+    link.download = url.split('/').pop() || 'download.jpg'; // Nome do arquivo
+    document.body.appendChild(link);
+    link.click();
+
+    // Adiciona um pequeno atraso antes de remover o link
+    setTimeout(() => {
+        document.body.removeChild(link);
+    }, 100);
+}
 
 
   delete(event: Event, viagem: any) {
@@ -220,22 +235,19 @@ export class ReportDetailsComponent implements OnInit {
     }
 
     const dadosFormatados = {
-      ...this.dadosUpdate.value,
       id: this.registro.id, // Inclui o ID da viagem
-      data: this.formatarData(this.dadosUpdate.value.dataInicio), // Formatar data
-      hora: this.formatarHora(this.dadosUpdate.value.hora)
-
+      data: this.formatarData(this.dadosUpdate.value.data), // Formatar data
+      hora: this.formatarHora(this.dadosUpdate.value.hora),
+      tipo: this.dadosUpdate.value.tipo.Tipo,
+      descricao: this.dadosUpdate.value.descricao
     };
 
-    const dadosParaEnviar = this.filtrarDados(dadosFormatados);
 
     console.log("Update", dadosFormatados)
 
     this.reportService.updateTrip(dadosFormatados).subscribe(
       (res: any) => {
-        this.dadosUpdate.patchValue(res.report)
-        console.log(res)
-        this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} atualizada `);
+        this.toastrService.showSucess(`Registro ${dadosFormatados.tipo} atualizado `);
         this.dadosUpdate.get('tipo')?.disable();
         this.dadosUpdate.get('data')?.disable();
         this.dadosUpdate.get('hora')?.disable();

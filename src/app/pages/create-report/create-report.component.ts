@@ -140,7 +140,7 @@ export class CreateReportComponent {
       next: (res) => {
         console.log(res)
         this.toastrService.showSucess(`Registro de ${dadosFormatados.tipo} criado. `)
-        this.dadosReport.reset();
+        // this.dadosReport.reset();
       },
       error: (err) => {
         console.error(err)

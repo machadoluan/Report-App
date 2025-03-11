@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ViagensService } from '../../service/viagens.service';
 import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
+import Tesseract from 'tesseract.js';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class CreateReportsComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   display: boolean = false;
+  extractedText: string[] = [];
 
 
   viagens: viagem[] = [];
@@ -43,6 +45,7 @@ export class CreateReportsComponent implements OnInit {
   imagePreviews: string[] = [];
   fullScreenImageUrl: string | null = null;
   viagem: any
+  extractedRecords: any;
 
 
   constructor(private fb: FormBuilder, private tripService: ViagensService, private repotService: ReportsService, private toastrService: ToastrService
@@ -107,6 +110,7 @@ export class CreateReportsComponent implements OnInit {
       const files = Array.from(fileInput.files);
 
       console.log('Arquivos selecionados:', files);
+      
 
       files.forEach(file => {
         this.selectedFiles.push(file);
@@ -115,6 +119,7 @@ export class CreateReportsComponent implements OnInit {
         reader.onload = () => {
           const base64String = reader.result as string;
           this.imagePreviews.push(base64String);
+
         };
         reader.readAsDataURL(file);
       });
@@ -123,6 +128,8 @@ export class CreateReportsComponent implements OnInit {
     this.fileInput.nativeElement.value = '';
   }
 
+
+  
 
   removeFile(index: number): void {
     this.selectedFiles.splice(index, 1); // Remove o arquivo do array de arquivos selecionados
@@ -147,7 +154,6 @@ export class CreateReportsComponent implements OnInit {
       next: (res) => {
         console.log(res)
         this.toastrService.showSucess(`Registro de ${dadosFormatados.tipo} criado. `)
-        this.dadosReport.reset();
       },
       error: (err) => {
         console.error(err)

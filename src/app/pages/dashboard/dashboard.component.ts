@@ -19,6 +19,7 @@ import { ConfirmationService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ReportsService } from '../../service/reports.service';
 
 
 @Component({
@@ -39,7 +40,7 @@ export class DashboardComponent implements OnInit {
   viagemDetails: any;
   registros: registro[] = [];
   isMobile: boolean = window.innerWidth <= 750;
-  ultimoRelario: any = this.registros[this.registros.length - 1];
+  ultimoRegistro: any;
   user: any;
   faturamento: any;
   dadosUpdate: FormGroup;
@@ -50,8 +51,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private toastrService: ToastrService,
-    private confirmationService: ConfirmationService
-
+    private confirmationService: ConfirmationService,
+    private reportService: ReportsService
   ) {
     this.dadosUpdate = this.fb.group({
       cliente: [""],
@@ -66,6 +67,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrips()
+    this.loadReports()
   }
 
   loadTrips() {
@@ -77,7 +79,20 @@ export class DashboardComponent implements OnInit {
         console.log(data)
       },
       (err) => {
-        console.error("Deu error:", err)
+        console.error("Error ao buscar viagens:", err)
+      }
+    )
+  }
+
+  loadReports() {
+    this.reportService.getReports().subscribe(
+      (data: any) => {
+        this.registros = data.reportsFormatados
+
+        this.ultimoRegistro = this.registros[this.registros.length - 1]
+      },
+      (err) => {
+        console.error("Error ao buscar registros:", err)
       }
     )
   }

@@ -66,15 +66,27 @@ export class TripDetailsComponent implements OnInit {
 
   ) {
     this.dadosUpdate = this.fb.group({
-      cliente: [""],
-      origem: [""],
-      destino: [""],
-      valor: [0],
-      dataInicio: [""],
-      dataFim: [""],
-      descricao: [""]
+      cliente: [{ value: "", disabled: true }],
+      origem: [{ value: "", disabled: true }],
+      destino: [{ value: "", disabled: true }],
+      valor: [{ value: 0, disabled: true }],
+      dataInicio: [{ value: "", disabled: true }],
+      dataFim: [{ value: "", disabled: true }],
+      descricao: [{ value: "", disabled: true }]
     })
   }
+
+  editar() {
+    this.dadosUpdate.get('cliente')?.enable();
+    this.dadosUpdate.get('origem')?.enable();
+    this.dadosUpdate.get('destino')?.enable();
+    this.dadosUpdate.get('dataInicio')?.enable();
+    this.dadosUpdate.get('valor')?.enable();
+    this.dadosUpdate.get('dataFim')?.enable();
+    this.dadosUpdate.get('descricao')?.enable();
+    this.editTrip = true
+  }
+
 
 
   ngOnInit(): void {
@@ -139,9 +151,6 @@ export class TripDetailsComponent implements OnInit {
     }
   }
 
-  toggleEdit() {
-    this.editTrip = !this.editTrip
-  }
 
 
   tripsUpdate() {
@@ -151,7 +160,14 @@ export class TripDetailsComponent implements OnInit {
     }
 
     if (!this.dadosUpdate.dirty) {
-      this.toggleEdit()
+      this.dadosUpdate.get('cliente')?.disable();
+      this.dadosUpdate.get('origem')?.disable();
+      this.dadosUpdate.get('destino')?.disable();
+      this.dadosUpdate.get('dataInicio')?.disable();
+      this.dadosUpdate.get('valor')?.disable();
+      this.dadosUpdate.get('dataFim')?.disable();
+      this.dadosUpdate.get('descricao')?.disable();
+      this.editTrip = false
     }
 
     const dadosFormatados = {
@@ -168,7 +184,14 @@ export class TripDetailsComponent implements OnInit {
     this.tripService.updateTrip(dadosFormatados).subscribe(
       (res) => {
         this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} atualizada `);
-        this.toggleEdit(); // Desativa o modo de edição
+        this.dadosUpdate.get('cliente')?.disable();
+        this.dadosUpdate.get('origem')?.disable();
+        this.dadosUpdate.get('destino')?.disable();
+        this.dadosUpdate.get('dataInicio')?.disable();
+        this.dadosUpdate.get('valor')?.disable();
+        this.dadosUpdate.get('dataFim')?.disable();
+        this.dadosUpdate.get('descricao')?.disable();
+        this.editTrip = false
       },
       (err) => {
         this.toastrService.showError(`Erro ao atualizar a viagem, tente novamente mais tarde. `);

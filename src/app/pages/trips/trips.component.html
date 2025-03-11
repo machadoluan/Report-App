@@ -109,7 +109,8 @@
                 <i class="pi pi-file-export"></i>
                 Exportar
             </div>
-            <div class="atalho-btn details" *ngIf="selectedViagem.length > 0 && selectedViagem.length < 2" (click)="openViagem(selectedViagem)">
+            <div class="atalho-btn details" *ngIf="selectedViagem.length > 0 && selectedViagem.length < 2"
+                (click)="openViagem(selectedViagem)">
                 <i class="pi pi-info-circle
                 "></i>
                 Detalhes
@@ -184,8 +185,8 @@
     </div>
 </div>
 
-<p-dialog header="Selecione o Formato de Exportação" [(visible)]="displayDialog" [style]="{width: '400px'}" styleClass="meu_dialog"
-    [modal]="true" draggable="false">
+<p-dialog header="Selecione o Formato de Exportação" [(visible)]="displayDialog" [style]="{width: '400px'}"
+    styleClass="meu_dialog" [modal]="true" draggable="false">
     <div class="select">
         <p-selectButton [options]="exportOptions" [(ngModel)]="selectedFormat"></p-selectButton>
     </div>

@@ -1,31 +1,34 @@
-<p-dialog [(visible)]="display" [modal]="true" [draggable]="false" [resizable]="false" header="Criar Registro" styleClass="meu_dialog1">
+<p-dialog [(visible)]="display" [modal]="true" [draggable]="false" [resizable]="false" header="Criar Registro"
+    styleClass="meu_dialog1">
 
     <form [formGroup]="dadosReport">
         <div class="form-group">
             <label for="cliente">Viagem</label>
             <p-select [options]="viagens" optionLabel="nomeFormatado" placeholder="Selecionar a viagem"
-                class="w-full md:w-56" formControlName="viagem" emptyMessage="Nenhuma viagem encontrada"/>
+                class="w-full md:w-56" formControlName="viagem" emptyMessage="Nenhuma viagem encontrada" />
         </div>
         <div class="form-group">
             <label for="origem">Tipo</label>
             <p-select [options]="registroTipo" optionLabel="Tipo" placeholder="Selecione o tipo do registro"
-                class="w-full md:w-56" formControlName="tipo"/>
+                class="w-full md:w-56" formControlName="tipo" />
 
         </div>
         <div class="data_hora">
             <div class="form-group">
                 <label for="data">Data</label>
-                <p-datepicker dateFormat="dd/mm/yy" formControlName="data" placeholder="Data"/>
+                <p-datepicker dateFormat="dd/mm/yy" formControlName="data" placeholder="Data" />
 
             </div>
             <div class="form-group">
                 <label for="hora">Hora</label>
-                <input pInputText id="hora" mask="00:00" aria-describedby="username-help" placeholder="Horario" formControlName="hora"/>
+                <input pInputText id="hora" mask="00:00" aria-describedby="username-help" placeholder="Horario"
+                    formControlName="hora" />
             </div>
         </div>
         <div class="form-group">
             <label for="descricao">Descrição</label>
-            <textarea rows="5" cols="30" pTextarea autoResize="none" placeholder="Digite algo..." formControlName="descricao"></textarea>
+            <textarea rows="5" cols="30" pTextarea autoResize="none" placeholder="Digite algo..."
+                formControlName="descricao"></textarea>
         </div>
         <div class="form-group file_photo">
             <label for="foto">Selecionar imagem</label>
@@ -62,8 +65,7 @@
 <div class="full-screen-image" *ngIf="fullScreenImageUrl">
     <div class="excluir" (click)="closeFullScreenImage()" style="display: grid; top: 10px; right: 10px; width: 30px;
     height: 30px;">
-      <i class="fa-solid fa-x" style="color: white; font-size: 16px; "></i>
+        <i class="fa-solid fa-x" style="color: white; font-size: 16px; "></i>
     </div>
     <img [src]="fullScreenImageUrl" alt="Full screen image">
-  </div>
-  
+</div>

@@ -13,7 +13,7 @@
                 </p-iconfield>
             </div>
             <p-overlaybadge [value]="selectedFilters.length" *ngIf="selectedFilters.length">
-                <div class="filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}">
+                <div class="atalho-btn filter" (click)="openFilter()" [ngClass]="{'openFilter': filter}">
                     <i class="pi pi-filter"></i>
                     <span>Filtro</span>
                     <div class="filter_content" *ngIf="filter">

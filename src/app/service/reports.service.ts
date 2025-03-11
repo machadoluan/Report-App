@@ -16,8 +16,19 @@ export class ReportsService {
 
 
   createReport(viagemId: number, reportData: any, files: File[]) {
-    console.log(reportData)
-    return this.http.post(`${this.apiUrl}/${viagemId}`, reportData);
+
+    const formData = new FormData();
+
+    for (const key in reportData) {
+      formData.append(key, reportData[key])
+    }
+
+    for (const file of files) {
+      const sanitizedFileName = file.name.replace(/\s+/g, '-'); 
+      formData.append('files', file, sanitizedFileName)
+    }
+    console.log(formData)
+    return this.http.post(`${this.apiUrl}/${viagemId}`, formData);
   }
 
   getReports(): Observable<registro[]> {
@@ -50,7 +61,7 @@ export class ReportsService {
     );
   }
 
-  updateTrip(dadosUpdate: Report): Observable<viagem> {
+  updateTrip(dadosUpdate: any): Observable<viagem> {
     return this.http.put<viagem>(this.apiUrl, dadosUpdate).pipe(
       catchError(this.handleError)
     );
