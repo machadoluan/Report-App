@@ -16,7 +16,7 @@ export const routes: Routes = [
     {
         path: '',
         component: DashboardComponent,
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
     },
     {
         path: 'login',
@@ -27,7 +27,7 @@ export const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         data: { title: 'Dashboard' },
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
 
 
     },
@@ -35,50 +35,50 @@ export const routes: Routes = [
         path: 'reports',
         component: ReportsComponent,
         data: { title: 'Registros' },
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
 
     },
     {
         path: 'trip',
         component: TripsComponent,
         data: { title: 'Viagens' },
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
 
     },
     {
         path: 'trip/:id',
         component: TripDetailsComponent,
         data: { title: 'Viagens' },
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
     },
     {
         path: 'trip/:id',
         component: TripDetailsComponent,
         data: { title: 'Viagens' },
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
     },
     {
         path: 'report/:id',
         component: ReportDetailsComponent,
         data: { title: 'Registros' },
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
     },
     {
         path: 'createTrip',
         component: CreateTripComponent,
         data: { title: 'Criar viagem' },
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
     },
     {
         path: 'createReport',
         component: CreateReportComponent,
         data: { title: 'Criar Registro' },
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
     },
     {
         path: 'account',
         component: AccountComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
         data: { title: 'Perfil' }
 
     },
