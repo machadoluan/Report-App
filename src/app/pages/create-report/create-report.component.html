@@ -65,3 +65,9 @@
     </div>
     <img [src]="fullScreenImageUrl" alt="Full screen image">
 </div>
+<div class="background_criando" *ngIf="isLoading">
+    <div class="criando">
+        <p-progress-spinner ariaLabel="loading" />
+        Criando registro...
+    </div>
+</div>

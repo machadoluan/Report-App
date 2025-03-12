@@ -12,11 +12,13 @@ import { ViagensService } from '../../service/viagens.service';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
+import { ProgressSpinner } from 'primeng/progressspinner';
+
 
 
 @Component({
   selector: 'app-create-report',
-  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, RouterLink, ReactiveFormsModule, DatePickerModule],
+  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, RouterLink, ProgressSpinner, ReactiveFormsModule, DatePickerModule],
   templateUrl: './create-report.component.html',
   styleUrl: './create-report.component.scss'
 })
@@ -24,6 +26,7 @@ export class CreateReportComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   display: boolean = false;
+  isLoading = false;
 
 
   viagens: viagem[] = [];
@@ -128,7 +131,7 @@ export class CreateReportComponent {
   createReport() {
     console.log("Dados antes ", this.dadosReport.value)
     const id = this.dadosReport.value.viagem.id
-    
+
     const dadosFormatados = {
       data: this.formatarData(this.dadosReport.value.data),
       tipo: this.dadosReport.value.tipo.Tipo,
@@ -136,6 +139,7 @@ export class CreateReportComponent {
       hora: this.formatarHora(this.dadosReport.value.hora)
     };
 
+    this.isLoading = true
     this.repotService.createReport(id, dadosFormatados, this.selectedFiles).subscribe({
       next: (res) => {
         console.log(res)
@@ -146,6 +150,10 @@ export class CreateReportComponent {
       error: (err) => {
         console.error(err)
         this.toastrService.showError(`Erro ao cadastrar o registro, tente novamente mais tarde. `)
+        this.isLoading = false
+      },
+      complete: () => {
+        this.isLoading = false;
       }
     })
 

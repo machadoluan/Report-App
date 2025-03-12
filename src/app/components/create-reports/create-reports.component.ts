@@ -12,11 +12,12 @@ import { ViagensService } from '../../service/viagens.service';
 import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
 import Tesseract from 'tesseract.js';
+import { ProgressSpinner } from 'primeng/progressspinner';
 
 
 @Component({
   selector: 'app-create-reports',
-  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, DatePickerModule, ReactiveFormsModule],
+  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, DatePickerModule, ReactiveFormsModule, ProgressSpinner],
   templateUrl: './create-reports.component.html',
   styleUrl: './create-reports.component.scss'
 })
@@ -26,6 +27,7 @@ export class CreateReportsComponent implements OnInit {
   display: boolean = false;
   extractedText: string[] = [];
 
+  isLoading = false;
 
   viagens: viagem[] = [];
   dadosReport: FormGroup
@@ -110,7 +112,7 @@ export class CreateReportsComponent implements OnInit {
       const files = Array.from(fileInput.files);
 
       console.log('Arquivos selecionados:', files);
-      
+
 
       files.forEach(file => {
         this.selectedFiles.push(file);
@@ -129,7 +131,7 @@ export class CreateReportsComponent implements OnInit {
   }
 
 
-  
+
 
   removeFile(index: number): void {
     this.selectedFiles.splice(index, 1); // Remove o arquivo do array de arquivos selecionados
@@ -150,18 +152,25 @@ export class CreateReportsComponent implements OnInit {
       hora: this.formatarHora(this.dadosReport.value.hora)
     };
 
+    this.isLoading = true;
+
     this.repotService.createReport(id, dadosFormatados, this.selectedFiles).subscribe({
       next: (res) => {
         console.log(res)
         this.toastrService.showSucess(`Registro de ${dadosFormatados.tipo} criado. `)
         this.dadosReport.reset()
+        this.selectedFiles = []
       },
       error: (err) => {
         console.error(err)
         this.toastrService.showError(`Erro ao cadastrar o registro, tente novamente mais tarde. `)
+        this.isLoading = false;
+
+      },
+      complete: () => {
+        this.isLoading = false;
       }
     })
-
   }
 
   formatarData(data: Date | string): string {
