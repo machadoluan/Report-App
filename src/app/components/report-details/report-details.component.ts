@@ -14,6 +14,9 @@ import { ToastrService } from '../../service/toastr.service';
 import { DialogModule } from 'primeng/dialog';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { DatePickerModule } from 'primeng/datepicker';
+import { HttpClient } from '@angular/common/http';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+
 
 
 
@@ -32,7 +35,8 @@ import { DatePickerModule } from 'primeng/datepicker';
     DialogModule,
     CurrencyMaskModule,
     ReactiveFormsModule,
-    NgxMaskDirective
+    NgxMaskDirective,
+    ConfirmDialog
   ],
   standalone: true,
   templateUrl: './report-details.component.html',
@@ -71,7 +75,8 @@ export class ReportDetailsComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private toastrService: ToastrService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private http: HttpClient
   ) {
     this.dadosUpdate = this.fb.group({
       viagem_nome: [{ value: "", disabled: true }, Validators.required],
@@ -171,17 +176,23 @@ export class ReportDetailsComponent implements OnInit {
     this.router.navigate(['/reports'])
   }
 
-   downloadImage(url: string) {
-    const link = document.createElement('a');
-    link.download = url.split('/').pop() || 'download.jpg'; // Nome do arquivo
-    document.body.appendChild(link);
-    link.click();
+  downloadImage(url: string) {
+    this.http.get(url, { responseType: 'blob' }).subscribe((blob: Blob) => {
+      // Cria um link temporário
+      const link = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      link.href = url;
+      link.download = 'image.jpg'; // Nome do arquivo que será baixado
+      document.body.appendChild(link);
+      link.click(); // Simula o clique no link para iniciar o download
 
-    // Adiciona um pequeno atraso antes de remover o link
-    setTimeout(() => {
-        document.body.removeChild(link);
-    }, 100);
-}
+      // Limpa o objeto URL e remove o link do DOM
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(link);
+    }, error => {
+      console.error('Erro ao baixar a imagem:', error);
+    });
+  }
 
 
   delete(event: Event, viagem: any) {
@@ -205,7 +216,7 @@ export class ReportDetailsComponent implements OnInit {
         this.reportService.deleteTripId(viagem.id).subscribe(
           (res) => {
             this.toastrService.showSucess(`Viagem apagada com sucesso!`)
-            this.router.navigate(['/trip'])
+            this.router.navigate(['/reports'])
 
           },
           (err) => {

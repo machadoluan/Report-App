@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Checkbox } from 'primeng/checkbox';
 import { AuthService } from '../../service/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from '../../service/toastr.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,7 @@ export class LoginComponent {
   userLogin: FormGroup;
   @ViewChild('passwordInput') passwordInput!: ElementRef
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private route: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private route: Router, private toastrService: ToastrService) {
     this.userLogin = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -46,12 +47,13 @@ export class LoginComponent {
         if (res.accessToken) {
           localStorage.setItem('token', res.accessToken)
           this.route.navigate(['/dashboard'])
+          window.location.reload()
         }
         console.log(res)
       },
 
       error: (err) => {
-        console.error(err)
+        this.toastrService.showError(err.error.message)
       }
 
     })

@@ -3,5 +3,7 @@
         <div class="icon" (click)="onToggleSidebar()"><i class="fa-solid fa-bars"></i></div>
         <span>{{title}}</span>
     </div>
-    <i class="fa-solid fa-right-from-bracket"></i>
+    <i class="fa-solid fa-right-from-bracket" (click)="logout($event)"></i>
 </header>
+
+<p-confirmdialog />

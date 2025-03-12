@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Injectable } from '@angular/core';
 import { viagem } from '../types/models.type';
 import { catchError, Observable, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ViagensService {
     private http: HttpClient
   ) { }
 
-  private apiUrl = 'http://localhost:3000/trips'
+  private apiUrl = `${environment.apiUrl}/trips`
 
   createTrip(dadosTrip: viagem): Observable<viagem> {
     return this.http.post<viagem>(this.apiUrl, dadosTrip).pipe(

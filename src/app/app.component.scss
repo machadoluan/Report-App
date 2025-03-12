@@ -19,11 +19,30 @@
     .container.sidebar-open {
         margin-left: 0;
     }
-    
+
 }
 
 @media screen and (max-width: 750px) {
     .main {
-        padding: 5.5rem  0;
+        padding: 5.5rem 0;
     }
+}
+
+::ng-deep .p-toast {
+    width: 300px !important;
+}
+
+::ng-deep .p-toast-message {
+    color: white !important; // Cor do texto
+    font-size: 16px !important;
+}
+
+::ng-deep .p-toast-message-success {
+    background-color: #60cc64 !important; // Verde
+    color: white !important;
+}
+
+::ng-deep .p-toast-message-error {
+    background-color: #eb5c52 !important; // Vermelho
+    color: white !important;
 }

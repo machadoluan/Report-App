@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { registro, viagem } from '../types/models.type';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ReportsService {
     private http: HttpClient
   ) { }
 
-  private apiUrl = 'http://localhost:3000/reports'
+  private apiUrl = `${environment.apiUrl}/reports`
 
 
   createReport(viagemId: number, reportData: any, files: File[]) {

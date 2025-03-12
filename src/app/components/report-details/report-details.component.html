@@ -42,18 +42,17 @@
             <div class="form-group">
                 <label>Fotos</label>
                 <div class="photos">
-                    <div class="img">
-                        <img src="https://t3.ftcdn.net/jpg/05/15/12/60/360_F_515126051_S5td5PvQQUkbeqaNHS6z8xW5rH7DEQ3K.jpg"
-                            alt="">
-                        <div class="delete" *ngIf="editReport">
+                    <div class="img" *ngFor="let foto of registro.foto">
+                        <img [src]="foto" alt="" (click)="openFullScreenImage(foto)">
+                        <!-- <div class="delete" *ngIf="editReport">
                             <i class="fa-solid fa-trash"></i>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
             <div class="btns">
                 <button *ngIf="editReport" (click)="reportUpdate()">Salvar</button>
-                <button *ngIf="editReport">Excluir</button>
+                <button *ngIf="editReport" (click)="delete($event, registro)">Excluir</button>
                 <button *ngIf="!editReport" (click)="editar()">Editar dados</button>
             </div>
         </form>
@@ -139,3 +138,5 @@
     </div>
     <img [src]="fullScreenImageUrl" alt="Full screen image">
 </div>
+
+<p-confirmdialog />

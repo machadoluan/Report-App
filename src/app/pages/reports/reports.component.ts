@@ -110,11 +110,17 @@ export class ReportsComponent implements OnInit {
     // Verifica se selectedRelatorios está vazio e usa relatorios como fallback
     const dadosExportacao = this.selectedRegistros.length > 0 ? this.selectedRegistros : this.registros;
 
-    // Mapeia os dados para substituir viagem_id pelo nome da viagem
+    // Mapeia os dados para substituir viagem_id pelo nome da viagem e formata a data e hora
     const dadosComNomeViagem = dadosExportacao.map(registro => ({
-      ...registro,
-      viagem_nome: this.getViagemNome(registro.viagem_id) // Adiciona o nome da viagem
+      viagem_nome: registro.viagem_nome, // Adiciona o nome da viagem
+      tipo: registro.tipo,
+      data: this.formatarData(registro.data), // Formata a data
+      hora: this.formatarHora(registro.hora), // Formata a hora
+      descricao: registro.descricao,
+      foto: registro.foto,
     }));
+
+
 
     // Verifica os dados para exportação
     console.log('Dados para exportação:', dadosComNomeViagem);
@@ -126,11 +132,11 @@ export class ReportsComponent implements OnInit {
     XLSX.utils.sheet_add_aoa(worksheet, [['Relatório de Início de Jornada']], { origin: 'A1' });
 
     // Adiciona cabeçalhos personalizados
-    XLSX.utils.sheet_add_aoa(worksheet, [['Viagem', 'Tipo', 'Data', 'Hora', 'Descrição']], { origin: 'A2' });
+    XLSX.utils.sheet_add_aoa(worksheet, [['Viagem', 'Tipo', 'Data', 'Hora', 'Descrição', 'Foto']], { origin: 'A2' });
 
     // Adiciona os dados à planilha
     XLSX.utils.sheet_add_json(worksheet, dadosComNomeViagem, {
-      header: ['viagem_nome', 'tipo', 'data', 'hora', 'descricao'], // Usa viagem_nome no lugar de viagem_id
+      header: ['viagem_nome', 'tipo', 'data', 'hora', 'descricao', 'foto'], // Usa viagem_nome no lugar de viagem_id
       skipHeader: true, // Não adiciona o cabeçalho novamente
       origin: 'A3' // Começa a adicionar os dados a partir da linha 3
     });
@@ -208,6 +214,20 @@ export class ReportsComponent implements OnInit {
     // Gera o arquivo Excel e faz o download
     XLSX.writeFile(workbook, 'relatorio_inicio_jornada.xlsx');
   }
+
+  // Função para formatar a data
+  formatarData(data: string): string {
+    const date = new Date(data);
+    return date.toLocaleDateString('pt-BR'); // Formato brasileiro
+  }
+
+  // Função para formatar a hora
+  formatarHora(hora: string): string {
+    const date = new Date(`1970-01-01T${hora}Z`);
+    return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); // Formato brasileiro
+  }
+
+
 
   applyFilterGlobal(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();

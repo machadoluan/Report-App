@@ -46,7 +46,7 @@
         </div>
 
         <div class="btns" >
-            <button (click)="createReport()">Criar</button>
+            <button (click)="createReport()" [disabled]="selectedFiles.length === 0 || dadosReport.invalid">Criar</button>
             <button routerLink="/">Cancelar</button>
         </div>
 

@@ -44,7 +44,7 @@
             Ultimo registro
 
             <div class="registros">
-                <div class="registro" *ngIf="ultimoRegistro">
+                <div class="registro" *ngIf="ultimoRegistro" (click)="openRegistro(ultimoRegistro)">
                     <span class="cliente">{{ultimoRegistro.tipo}}</span>
                     <span class="origem_destino">{{ultimoRegistro.data}}</span>
                     <span class="valor">{{ultimoRegistro.hora}}</span>
@@ -61,7 +61,7 @@
             <span id="title_photo">Ultima foto</span>
 
             @if(ultimoRegistro){
-            <div class="foto"><img [src]="ultimoRegistro.foto[0]" alt=""></div>
+            <div class="foto"><img [src]="ultimoRegistro.foto[0]" alt="" (click)="openFullScreenImage(ultimoRegistro.foto[0])"></div>
             } @else {
             <span class="zero_inform">Nenhum registro foi encontrado</span>
 
@@ -147,6 +147,19 @@
     </ng-container>
 </p-dialog>
 
+
 <app-create-trips></app-create-trips>
 <app-create-reports></app-create-reports>
 <p-confirmdialog />
+
+<div class="full-screen-image" *ngIf="fullScreenImageUrl">
+    <div class="btn-atalho close" (click)="closeFullScreenImage()" style="display: grid; top: 20px; right: 10px; width: 30px;
+    height: 30px;">
+        <i class="fa-solid fa-x" style="color: white; font-size: 16px; "></i>
+    </div>
+    <div class="btn-atalho baixar" (click)="downloadImage(fullScreenImageUrl)" style="display: grid; top: 20px; right: 50px; width: 30px;
+    height: 30px;">
+        <i class="fa-solid fa-download" style="color: white; font-size: 16px; "></i>
+    </div>
+    <img [src]="fullScreenImageUrl" alt="Full screen image">
+</div>

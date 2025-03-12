@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
   }
 
 
-  isRouteLogin(): boolean {
+  isAuthRoute(): boolean {
     return this.router.url === '/login';
   }
 

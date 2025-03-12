@@ -20,6 +20,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ReportsService } from '../../service/reports.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild(CreateTripsComponent, { static: true }) dialogCreateTrips!: CreateTripsComponent;
   @ViewChild(CreateReportsComponent, { static: true }) dialogCreateReports!: CreateReportsComponent;
   showDialog: boolean = false;
+  showReportDialog: boolean = false;
 
 
   viagens: viagem[] = [];
@@ -45,6 +47,18 @@ export class DashboardComponent implements OnInit {
   faturamento: any;
   dadosUpdate: FormGroup;
   editTrip: boolean = false
+  fullScreenImageUrl: string | null = null;
+
+  registroTipo: any[] = [
+    { Tipo: 'Inicio de Jornada' },
+    { Tipo: 'Fim de Jornada' },
+    { Tipo: 'Inicio Refeição' },
+    { Tipo: 'Fim Refeição' },
+    { Tipo: 'Inicio Pausa' },
+    { Tipo: 'Fim Pausa' },
+    { Tipo: 'Inicio Espera' },
+    { Tipo: 'Reinicio de viagem' },
+  ]
 
   constructor(
     private tripService: ViagensService,
@@ -52,7 +66,9 @@ export class DashboardComponent implements OnInit {
     private fb: FormBuilder,
     private toastrService: ToastrService,
     private confirmationService: ConfirmationService,
-    private reportService: ReportsService
+    private reportService: ReportsService,
+    private http: HttpClient
+
   ) {
     this.dadosUpdate = this.fb.group({
       cliente: [""],
@@ -97,9 +113,13 @@ export class DashboardComponent implements OnInit {
     )
   }
 
-  formatarDinheiro(valor: number): string {
+  formatarDinheiro(valor: number | undefined): string {
+    if (valor === undefined || valor === null) {
+      return "Valor inválido"; // Ou qualquer fallback adequado
+    }
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
+
 
   criarViagem() {
     this.dialogCreateTrips.showDialog()
@@ -132,6 +152,10 @@ export class DashboardComponent implements OnInit {
       }
     }
 
+
+  }
+  openRegistro(registro: viagem) {
+    this.router.navigate(['/report', registro.id])
 
   }
 
@@ -241,5 +265,34 @@ export class DashboardComponent implements OnInit {
       reject: () => {
       },
     });
+  }
+
+
+
+
+  closeFullScreenImage(): void {
+    this.fullScreenImageUrl = null; // Fecha a imagem em tela cheia
+  }
+
+  downloadImage(url: string) {
+    this.http.get(url, { responseType: 'blob' }).subscribe((blob: Blob) => {
+      // Cria um link temporário
+      const link = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      link.href = url;
+      link.download = 'image.jpg'; // Nome do arquivo que será baixado
+      document.body.appendChild(link);
+      link.click(); // Simula o clique no link para iniciar o download
+
+      // Limpa o objeto URL e remove o link do DOM
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(link);
+    }, error => {
+      console.error('Erro ao baixar a imagem:', error);
+    });
+  }
+
+  openFullScreenImage(imageUrl: string): void {
+    this.fullScreenImageUrl = imageUrl;
   }
 }

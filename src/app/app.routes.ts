@@ -9,11 +9,14 @@ import { CreateTripComponent } from './pages/create-trip/create-trip.component';
 import { CreateReportComponent } from './pages/create-report/create-report.component';
 import { NoAuthGuard } from './guards/no-auth.guard';
 import { AuthGuard } from './guards/auth.guard';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { AccountComponent } from './pages/account/account.component';
 
 export const routes: Routes = [
     {
         path: '',
         component: DashboardComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'login',
@@ -45,12 +48,14 @@ export const routes: Routes = [
     {
         path: 'trip/:id',
         component: TripDetailsComponent,
-        data: { title: 'Viagens' }
+        data: { title: 'Viagens' },
+        canActivate: [AuthGuard]
     },
     {
         path: 'trip/:id',
         component: TripDetailsComponent,
-        data: { title: 'Viagens' }
+        data: { title: 'Viagens' },
+        canActivate: [AuthGuard]
     },
     {
         path: 'report/:id',
@@ -69,5 +74,17 @@ export const routes: Routes = [
         component: CreateReportComponent,
         data: { title: 'Criar Registro' },
         canActivate: [AuthGuard]
+    },
+    {
+        path: 'account',
+        component: AccountComponent,
+        canActivate: [AuthGuard],
+        data: { title: 'Perfil' }
+
+    },
+    {
+        path: '**',
+        component: NotFoundComponent,
     }
+
 ];

@@ -141,6 +141,14 @@ form {
         border-radius: 5px;
         cursor: pointer;
 
+        &:disabled {
+            background-color: rgba($color: #d1d1d1, $alpha: .5) !important;
+            color: rgba($color: #000000, $alpha: 0.5) !important;
+            border: none;
+            cursor: not-allowed;
+            border: none !important;
+        }
+
         &:nth-child(1) {
             border: 1px solid var(--color);
             background-color: transparent;
@@ -221,10 +229,10 @@ form {
     border-radius: 5px;
 }
 
-@media screen  and (max-width: 750px){
+@media screen and (max-width: 750px) {
     .item .excluir {
         display: grid;
         z-index: 1;
     }
-    
+
 }

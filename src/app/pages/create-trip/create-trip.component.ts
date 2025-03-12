@@ -55,7 +55,8 @@ export class CreateTripComponent {
     console.log(dadosParaEnviar)
     this.tripService.createTrip(dadosParaEnviar).subscribe(
       (res) => {
-        this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} `)
+        this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} criada.`)
+        this.dadosCadastroTrips.reset();
       },
       (err) => {
         this.toastrService.showError(`Erro ao cadastrar a viagem, tente novamente mais tarde. `)

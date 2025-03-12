@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class AuthService {
     private http: HttpClient
   ) { }
 
-  private apiUrl = 'http://localhost:3000/auth'
+  private apiUrl = `${environment.apiUrl}/auth`
 
 
   login(dadosLogin: any) {
@@ -36,5 +37,5 @@ export class AuthService {
     return null;
   }
 
- 
+
 }
