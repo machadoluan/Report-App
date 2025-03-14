@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CreateTripsComponent } from "../../components/create-trips/create-trips.component";
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { ViagensService } from '../../service/viagens.service';
@@ -36,7 +36,8 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
     OverlayBadgeModule,
     PopoverModule,
     ButtonModule,
-    ConfirmDialog
+    ConfirmDialog,
+    RouterLink
   ],
   templateUrl: './trips.component.html',
   styleUrl: './trips.component.scss'

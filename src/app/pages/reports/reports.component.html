@@ -149,6 +149,10 @@
             </div>
         </div>
 
+        <div class="link criar" routerLink="/createReport">
+            <i class="fa-solid fa-plus"></i>
+        </div>
+
         <div *ngIf="filteredReports.length === 0">
             Nenhum registro encontrado.
         </div>
@@ -160,6 +164,7 @@
     <div class="select">
         <p-selectButton [options]="exportOptions" [(ngModel)]="selectedFormat"></p-selectButton>
     </div>
+   
     <ng-template pTemplate="footer">
         <button id="cancel">Cancelar</button>
         <button id="exportar" (click)="export()">Exportar</button>

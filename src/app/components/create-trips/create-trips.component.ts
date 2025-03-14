@@ -8,6 +8,7 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
 import { ViagensService } from '../../service/viagens.service';
 import { ToastrService } from '../../service/toastr.service';
 import { DatePickerModule } from 'primeng/datepicker';
+import { AuthService } from '../../service/auth.service';
 
 
 @Component({
@@ -22,13 +23,15 @@ import { DatePickerModule } from 'primeng/datepicker';
 
 export class CreateTripsComponent implements OnInit {
   display: boolean = false;
+  user: any
 
   dadosCadastroTrips: FormGroup
 
   constructor(
     private fb: FormBuilder,
     private tripService: ViagensService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private authService: AuthService
   ) {
     this.dadosCadastroTrips = this.fb.group({
       cliente: ["", Validators.required],
@@ -42,7 +45,7 @@ export class CreateTripsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.user = this.authService.getUserFromToken()
 
   }
 
@@ -65,7 +68,7 @@ export class CreateTripsComponent implements OnInit {
     const dadosParaEnviar = this.filtrarDados(dadosFormatados)
 
     console.log(dadosParaEnviar)
-    this.tripService.createTrip(dadosParaEnviar).subscribe(
+    this.tripService.createTrip(dadosParaEnviar, this.user).subscribe(
       (res) => {
         this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} `)
         this.dadosCadastroTrips.reset()

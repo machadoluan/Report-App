@@ -213,7 +213,7 @@ export class ReportDetailsComponent implements OnInit {
       },
 
       accept: () => {
-        this.reportService.deleteTripId(viagem.id).subscribe(
+        this.reportService.deleteReportId(viagem.id).subscribe(
           (res) => {
             this.toastrService.showSucess(`Viagem apagada com sucesso!`)
             this.router.navigate(['/reports'])

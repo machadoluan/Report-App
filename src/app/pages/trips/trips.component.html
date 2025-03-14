@@ -123,7 +123,11 @@
                 <i class="pi pi-plus"></i>
                 Add Viagem
             </div>
+
+
         </div>
+
+    
     </div>
 
 
@@ -177,6 +181,10 @@
                     <p-tag [severity]="viagem.status === 'Concluída' ? 'success' : 'warn'" [value]="viagem.status" />
                 </span>
             </div>
+        </div>
+
+        <div class="link criar" routerLink="/createTrip">
+            <i class="fa-solid fa-plus"></i>
         </div>
 
         <div *ngIf="filteredViagens.length === 0">

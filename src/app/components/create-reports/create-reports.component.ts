@@ -13,6 +13,7 @@ import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
 import Tesseract from 'tesseract.js';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { AuthService } from '../../service/auth.service';
 
 
 @Component({
@@ -48,9 +49,10 @@ export class CreateReportsComponent implements OnInit {
   fullScreenImageUrl: string | null = null;
   viagem: any
   extractedRecords: any;
+  user: any
 
 
-  constructor(private fb: FormBuilder, private tripService: ViagensService, private repotService: ReportsService, private toastrService: ToastrService
+  constructor(private authService: AuthService, private fb: FormBuilder, private tripService: ViagensService, private repotService: ReportsService, private toastrService: ToastrService
   ) {
     this.dadosReport = this.fb.group({
       viagem: ["", Validators.required],
@@ -63,6 +65,7 @@ export class CreateReportsComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.user = this.authService.getUserFromToken()
     this.loadTrips()
   }
 
@@ -154,7 +157,7 @@ export class CreateReportsComponent implements OnInit {
 
     this.isLoading = true;
 
-    this.repotService.createReport(id, dadosFormatados, this.selectedFiles).subscribe({
+    this.repotService.createReport(id, dadosFormatados, this.selectedFiles, this.user).subscribe({
       next: (res) => {
         console.log(res)
         this.toastrService.showSucess(`Registro de ${dadosFormatados.tipo} criado. `)

@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { viagem } from '../../types/models.type';
 import { CommonModule } from '@angular/common';
 import { NgxMaskDirective } from 'ngx-mask';
@@ -7,11 +7,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ToastrService } from '../../service/toastr.service';
 import { ViagensService } from '../../service/viagens.service';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { AuthService } from '../../service/auth.service';
 
 
 
@@ -22,28 +23,63 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
   templateUrl: './create-trip.component.html',
   styleUrl: './create-trip.component.scss'
 })
-export class CreateTripComponent {
+export class CreateTripComponent implements AfterViewInit, OnInit {
   dadosCadastroTrips: FormGroup
+  user: any;
 
   constructor(
     private fb: FormBuilder,
     private tripService: ViagensService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private authService: AuthService
   ) {
     this.dadosCadastroTrips = this.fb.group({
       cliente: ["", Validators.required],
       origem: ["", Validators.required],
       destino: ["", Validators.required],
-      valor: [0, Validators.required],
+      valor: [0, [Validators.required, this.valorMinimo(0.01)]],
       dataInicio: ["", Validators.required],
       dataFim: [""],
       descricao: [""]
     })
   }
 
+  valorMinimo(min: number){
+    return(control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if(value === null || value === undefined || value < min){
+        return { valorInvalido: true};
+      }
+      return null;
+    }
+  }
+
+  ngOnInit(): void {
+    this.user = this.authService.getUserFromToken()
+  }
+
+
+  ngAfterViewInit(): void {
+    const inputs = ['dataInicioInput', 'dataFimInput'];
+
+    inputs.forEach((id) => {
+      const dateInput = document.getElementById(id) as HTMLInputElement;
+
+      if (dateInput) {
+        dateInput.addEventListener('input', () => {
+          let value = dateInput.value.replace(/\D/g, ''); // Remove não números
+
+          if (value.length > 2) value = value.replace(/^(\d{2})(\d)/, '$1/$2');
+          if (value.length > 4) value = value.replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3');
+
+          dateInput.value = value.substring(0, 10);
+        });
+      }
+    });
+  }
 
   createTrip() {
-
+    
     const dadosFormatados = {
       ...this.dadosCadastroTrips.value,
       dataInicio: this.formatarData(this.dadosCadastroTrips.value.dataInicio), // Formatar data
@@ -53,7 +89,7 @@ export class CreateTripComponent {
     const dadosParaEnviar = this.filtrarDados(dadosFormatados)
 
     console.log(dadosParaEnviar)
-    this.tripService.createTrip(dadosParaEnviar).subscribe(
+    this.tripService.createTrip(dadosParaEnviar, this.user).subscribe(
       (res) => {
         this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} criada.`)
         this.dadosCadastroTrips.reset();

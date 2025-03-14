@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { NgxMaskDirective } from 'ngx-mask';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -13,6 +13,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { AuthService } from '../../service/auth.service';
 
 
 
@@ -22,16 +23,13 @@ import { ProgressSpinner } from 'primeng/progressspinner';
   templateUrl: './create-report.component.html',
   styleUrl: './create-report.component.scss'
 })
-export class CreateReportComponent {
+export class CreateReportComponent implements AfterViewInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   display: boolean = false;
   isLoading = false;
-
-
   viagens: viagem[] = [];
   dadosReport: FormGroup
-
   registroTipo: any[] = [
     { Tipo: 'Inicio de Jornada' },
     { Tipo: 'Fim de Jornada' },
@@ -47,7 +45,8 @@ export class CreateReportComponent {
   fullScreenImageUrl: string | null = null;
 
 
-  constructor(private fb: FormBuilder, private tripService: ViagensService, private repotService: ReportsService, private toastrService: ToastrService) {
+
+  constructor(private fb: FormBuilder, private tripService: ViagensService, private repotService: ReportsService, private toastrService: ToastrService, private authService: AuthService) {
     this.dadosReport = this.fb.group({
       viagem: ["", Validators.required],
       tipo: ["", Validators.required],
@@ -58,12 +57,31 @@ export class CreateReportComponent {
   }
 
   viagem: any
+  user: any
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class
+    this.user = this.authService.getUserFromToken()
 
     this.loadTrips()
+  }
+
+  ngAfterViewInit(): void {
+    const inputs = ['data'];
+
+    inputs.forEach((id) => {
+      const dateInput = document.getElementById(id) as HTMLInputElement;
+
+      if (dateInput) {
+        dateInput.addEventListener('input', () => {
+          let value = dateInput.value.replace(/\D/g, ''); // Remove não números
+
+          if (value.length > 2) value = value.replace(/^(\d{2})(\d)/, '$1/$2');
+          if (value.length > 4) value = value.replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3');
+
+          dateInput.value = value.substring(0, 10);
+        });
+      }
+    });
   }
 
   loadTrips() {
@@ -140,7 +158,7 @@ export class CreateReportComponent {
     };
 
     this.isLoading = true
-    this.repotService.createReport(id, dadosFormatados, this.selectedFiles).subscribe({
+    this.repotService.createReport(id, dadosFormatados, this.selectedFiles, this.user).subscribe({
       next: (res) => {
         console.log(res)
         this.toastrService.showSucess(`Registro de ${dadosFormatados.tipo} criado. `)

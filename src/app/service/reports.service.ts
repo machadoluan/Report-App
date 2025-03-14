@@ -3,20 +3,25 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { registro, viagem } from '../types/models.type';
 import { environment } from '../../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportsService {
+  private user: any
 
   constructor(
-    private http: HttpClient
-  ) { }
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
+    this.user = this.authService.getUserFromToken()
+  }
 
   private apiUrl = `${environment.apiUrl}/reports`
 
 
-  createReport(viagemId: number, reportData: any, files: File[]) {
+  createReport(viagemId: number, reportData: any, files: File[], user: any) {
 
     const formData = new FormData();
 
@@ -24,8 +29,10 @@ export class ReportsService {
       formData.append(key, reportData[key])
     }
 
+    formData.append('user', JSON.stringify(user))
+
     for (const file of files) {
-      const sanitizedFileName = file.name.replace(/\s+/g, '-'); 
+      const sanitizedFileName = file.name.replace(/\s+/g, '-');
       formData.append('files', file, sanitizedFileName)
     }
     console.log(formData)
@@ -33,29 +40,28 @@ export class ReportsService {
   }
 
   getReports(): Observable<registro[]> {
-    return this.http.get<registro[]>(this.apiUrl).pipe(
+    return this.http.get<registro[]>(`${this.apiUrl}?userId=${this.user.id}`).pipe(
       catchError(this.handleError)
     );
   }
 
-  // Obtém uma viagem por ID
+  // Pega um report específico pelo ID
   getReportById(id: number): Observable<registro> {
-    console.log(id)
-    return this.http.get<registro>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<registro>(`${this.apiUrl}/${id}?userId=${this.user.id}`).pipe(
       catchError(this.handleError)
     );
   }
 
-  deleteTripId(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+  deleteReportId(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}?userId=${this.user.id}`).pipe(
       catchError(this.handleError)
     );
   }
 
-  deleteTripMultiple(ids: number[]) {
+  deleteReportMultiple(ids: number[]) {
     console.log(ids)
 
-    return this.http.request('DELETE', `${this.apiUrl}`, {
+    return this.http.request('DELETE', `${this.apiUrl}?userId=${this.user.id}`, {
       body: { ids }, // Aqui enviamos os IDs no corpo da requisição
     }).pipe(
       catchError(this.handleError)
@@ -63,7 +69,10 @@ export class ReportsService {
   }
 
   updateTrip(dadosUpdate: any): Observable<viagem> {
-    return this.http.put<viagem>(this.apiUrl, dadosUpdate).pipe(
+    return this.http.put<viagem>(this.apiUrl, {
+      ...dadosUpdate,
+      userId: this.user.id
+    }).pipe(
       catchError(this.handleError)
     );
   }

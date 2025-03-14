@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { viagem } from '../types/models.type';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +11,28 @@ import { environment } from '../../../environments/environment';
 export class ViagensService {
 
   constructor(
-    private http: HttpClient
-  ) { }
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
+    this.user = this.authService.getUserFromToken()
+  }
 
   private apiUrl = `${environment.apiUrl}/trips`
+  private user: any
 
-  createTrip(dadosTrip: viagem): Observable<viagem> {
-    return this.http.post<viagem>(this.apiUrl, dadosTrip).pipe(
+  createTrip(dadosTrip: viagem, user: any): Observable<viagem> {
+    const body = {
+      ...dadosTrip,
+      user: JSON.stringify(user)
+    }
+    return this.http.post<viagem>(this.apiUrl, body).pipe(
       catchError(this.handleError)
     );
   }
 
   // Obtém todas as viagens
   getTrips(): Observable<viagem[]> {
-    return this.http.get<viagem[]>(this.apiUrl).pipe(
+    return this.http.get<viagem[]>(`${this.apiUrl}?userId=${this.user.id}`).pipe(
       catchError(this.handleError)
     );
   }
@@ -31,7 +40,7 @@ export class ViagensService {
   // Obtém uma viagem por ID
   getTripById(id: number): Observable<viagem> {
     console.log(id)
-    return this.http.get<viagem>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<viagem>(`${this.apiUrl}/${id}?userId=${this.user.id}`).pipe(
       catchError(this.handleError)
     );
   }
@@ -44,20 +53,20 @@ export class ViagensService {
   }
 
   deleteTripId(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+    return this.http.delete(`${this.apiUrl}/${id}?userId=${this.user.id}`).pipe(
       catchError(this.handleError)
     );
-  }
+}
 
-  deleteTripMultiple(ids: number[]) {
-    console.log(ids)
+deleteTripMultiple(ids: number[]) {
+    console.log(ids);
 
     return this.http.request('DELETE', `${this.apiUrl}`, {
-      body: { ids }, // Aqui enviamos os IDs no corpo da requisição
+      body: { ids, userId: this.user.id }, // Mando tudo junto
     }).pipe(
       catchError(this.handleError)
     );
-  }
+}
 
   // Tratamento de erros
   private handleError(error: HttpErrorResponse) {

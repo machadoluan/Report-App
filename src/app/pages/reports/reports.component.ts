@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { CreateReportsComponent } from '../../components/create-reports/create-reports.component';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReportsService } from '../../service/reports.service';
 import { ConfirmationService } from 'primeng/api';
 import { ToastrService } from '../../service/toastr.service';
@@ -21,7 +21,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-reports',
-  imports: [InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule, OverlayBadgeModule, CreateReportsComponent, ConfirmDialog],
+  imports: [InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule, OverlayBadgeModule, CreateReportsComponent, ConfirmDialog, RouterLink],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })
@@ -38,7 +38,7 @@ export class ReportsComponent implements OnInit {
   registros: registro[] = [];
 
   viagens: viagem[] = [];
-
+  
   selectedRegistros: any[] = [];
   filteredReports: any[] = [];
   selectedFilters: string[] = [];
@@ -336,7 +336,7 @@ export class ReportsComponent implements OnInit {
       },
 
       accept: () => {
-        this.reportService.deleteTripMultiple(ids).subscribe(
+        this.reportService.deleteReportMultiple(ids).subscribe(
           (res) => {
             this.toastrService.showSucess(`Registro apagado com sucesso!`)
             window.location.reload();

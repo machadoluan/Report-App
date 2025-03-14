@@ -14,7 +14,8 @@
         <div class="data_hora">
             <div class="form-group">
                 <label for="data">Data</label>
-                <p-datepicker dateFormat="dd/mm/yy" formControlName="data" placeholder="Data"/>
+                <p-datepicker dateFormat="dd/mm/yy" formControlName="data" placeholder="00/00/0000"
+                inputId="data"></p-datepicker>
 
             </div>
             <div class="form-group">
@@ -47,7 +48,7 @@
 
         <div class="btns" >
             <button (click)="createReport()" [disabled]="selectedFiles.length === 0 || dadosReport.invalid">Criar</button>
-            <button routerLink="/">Cancelar</button>
+            <button routerLink="/reports">Cancelar</button>
         </div>
 
     </form>

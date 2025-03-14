@@ -24,13 +24,16 @@
         <div class="data_hora">
             <div class="form-group">
                 <label for="data">Data inicio</label>
-                <p-datepicker dateFormat="dd/mm/yy" formControlName="dataInicio" />
+                <p-datepicker dateFormat="dd/mm/yy" formControlName="dataInicio" placeholder="00/00/0000"
+                    inputId="dataInicioInput"></p-datepicker>
+
 
 
             </div>
             <div class="form-group">
-                <label for="data">Data Fim</label>
-                <p-datepicker dateFormat="dd/mm/yy" formControlName="dataFim" />
+                <label for="dataFim">Data Fim</label>
+                <p-datepicker dateFormat="dd/mm/yy" formControlName="dataFim" placeholder="00/00/0000"
+                    inputId="dataFimInput"></p-datepicker>
 
 
             </div>
@@ -40,8 +43,8 @@
             <textarea rows="5" cols="30" pTextarea autoResize="none" placeholder="Digite algo..."></textarea>
         </div>
         <div class="btns">
-            <button (click)="createTrip()">Criar</button>
-            <button routerLink="/">Cancelar</button>
+            <button (click)="createTrip()" [disabled]="dadosCadastroTrips.invalid">Criar</button>
+            <button routerLink="/trip">Cancelar</button>
         </div>
     </form>
 </div>
