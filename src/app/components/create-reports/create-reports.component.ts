@@ -11,7 +11,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ViagensService } from '../../service/viagens.service';
 import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
-import Tesseract from 'tesseract.js';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { AuthService } from '../../service/auth.service';
 
@@ -223,4 +222,7 @@ export class CreateReportsComponent implements OnInit {
     return hora; // Se não atender nenhum caso, retorna como está
   }
 
+  redirecionar(){
+    window.location.reload()
+  }
 }

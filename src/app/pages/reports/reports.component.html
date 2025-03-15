@@ -101,8 +101,7 @@
 
     <div class="registros_table">
         <p-table #dt1 [value]="filteredReports" [paginator]="true" [rows]="10" [(selection)]="selectedRegistros"
-            dataKey="id" [tableStyle]="{'min-width': '50rem'}"
-            [globalFilterFields]="['viagem_nome', 'tipo', 'data', 'hora', 'descricao']">
+            dataKey="id" [tableStyle]="{'min-width': '50rem'}">
             <ng-template pTemplate="header">
                 <tr>
                     <th class="checkbox"><p-tableHeaderCheckbox /></th>
@@ -172,4 +171,4 @@
 </p-dialog>
 
 <app-create-reports></app-create-reports>
-<p-confirmdialog />
+<p-confirmdialog  [draggable]="false" />

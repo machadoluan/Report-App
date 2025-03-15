@@ -33,11 +33,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-
-  isAuthRoute(): boolean {
-    return this.router.url === '/login';
-  }
-
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }

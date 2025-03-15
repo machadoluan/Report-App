@@ -12,7 +12,6 @@ import { ConfirmationService } from 'primeng/api';
 import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
 import { DialogModule } from 'primeng/dialog';
-import { CurrencyMaskModule } from "ng2-currency-mask";
 import { DatePickerModule } from 'primeng/datepicker';
 import { HttpClient } from '@angular/common/http';
 import { ConfirmDialog } from 'primeng/confirmdialog';
@@ -33,10 +32,8 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
     RouterLink,
     DropdownModule,
     DialogModule,
-    CurrencyMaskModule,
     ReactiveFormsModule,
-    NgxMaskDirective,
-    ConfirmDialog
+    NgxMaskDirective
   ],
   standalone: true,
   templateUrl: './report-details.component.html',

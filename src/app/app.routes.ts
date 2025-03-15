@@ -11,12 +11,16 @@ import { NoAuthGuard } from './guards/no-auth.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AccountComponent } from './pages/account/account.component';
+import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
     {
         path: '',
-        component: DashboardComponent,
-        canActivate: [AuthGuard]
+        component: HomeComponent
+    },
+    {
+        path: 'home',
+        component: HomeComponent
     },
     {
         path: 'login',

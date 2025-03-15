@@ -1,4 +1,4 @@
-<ng-container *ngIf="isAuthRoute(); else defaultLayout">
+<ng-container *ngIf="router.url === '/login' || router.url === '/home' || router.url === '/'; else defaultLayout">
     <router-outlet></router-outlet>
 </ng-container>
 

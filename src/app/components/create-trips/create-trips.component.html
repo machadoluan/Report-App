@@ -1,4 +1,5 @@
-<p-dialog [(visible)]="display" [modal]="true" [draggable]="false" [resizable]="false" header="Criar Viagem" styleClass="meu_dialo2">
+<p-dialog [(visible)]="display" [modal]="true" [draggable]="false" [resizable]="false" header="Criar Viagem" (onHide)="redirecionar()"
+    styleClass="meu_dialo2">
 
     <form [formGroup]="dadosCadastroTrips">
         <div class="form-group">
@@ -18,9 +19,9 @@
         </div>
         <div class="form-group">
             <label for="valor">Valor</label>
-            <input pInputText id="valor" currencyMask
-                [options]="{prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left', allowNegative: 'false' }"
-                aria-describedby="username-help" placeholder="Digite o valor da viagem" formControlName="valor" />
+            <p-inputNumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR" [minFractionDigits]="2"
+                [maxFractionDigits]="2" placeholder="Digite o valor" placeholder="R$: 00,00"></p-inputNumber>
+
         </div>
         <div class="data_hora">
             <div class="form-group">

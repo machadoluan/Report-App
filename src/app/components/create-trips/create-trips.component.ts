@@ -2,18 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CurrencyMaskModule } from "ng2-currency-mask";
 import { ViagensService } from '../../service/viagens.service';
 import { ToastrService } from '../../service/toastr.service';
 import { DatePickerModule } from 'primeng/datepicker';
 import { AuthService } from '../../service/auth.service';
+import { InputNumberModule } from 'primeng/inputnumber';
+
+
 
 
 @Component({
   selector: 'app-create-trips',
-  imports: [DialogModule, InputTextModule, TextareaModule, ReactiveFormsModule, CurrencyMaskModule, DatePickerModule],
+  imports: [DialogModule, InputTextModule, TextareaModule, ReactiveFormsModule, DatePickerModule, InputNumberModule],
   templateUrl: './create-trips.component.html',
   styleUrl: './create-trips.component.scss',
   providers: []
@@ -99,5 +100,9 @@ export class CreateTripsComponent implements OnInit {
     }
   
     return dadosFiltrados;
+  }
+
+  redirecionar(){
+    window.location.reload()
   }
 }

@@ -11,7 +11,7 @@
     }
 
     .p-select-option.p-select-option-selected {
-        background-color: rgba($color: #1B59F8, $alpha: 0.2) !important;
+        background-color: rgba($color: #4A76E6, $alpha: 0.2) !important;
         color: white !important;
     }
 
@@ -175,7 +175,14 @@ form {
     align-items: start;
     gap: 1rem;
     margin: 10px;
-    flex-grow: 1
+    flex-grow: 1;
+    img{
+        height: 100px;
+        width: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+    }
 }
 
 .item {

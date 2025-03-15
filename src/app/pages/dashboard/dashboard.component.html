@@ -61,7 +61,8 @@
             <span id="title_photo">Ultima foto</span>
 
             @if(ultimoRegistro){
-            <div class="foto"><img [src]="ultimoRegistro.foto[0]" alt="" (click)="openFullScreenImage(ultimoRegistro.foto[0])"></div>
+            <div class="foto"><img [src]="ultimoRegistro.foto[0]" alt=""
+                    (click)="openFullScreenImage(ultimoRegistro.foto[0])"></div>
             } @else {
             <span class="zero_inform">Nenhum registro foi encontrado</span>
 
@@ -88,7 +89,7 @@
 </div>
 
 <p-dialog [(visible)]="showDialog" [draggable]="false" [resizable]="false" [modal]="true" [closable]="true"
-    [dismissableMask]="true" styleClass="meu_dialo3" [style]="{width: '50vw'}">
+    [dismissableMask]="true" styleClass="meu_dialo3" [style]="{width: '50vw'}" (onHide)="redirecionar()">
 
     <ng-template #header>
         <div class="flex justify-between items-center w-full">
@@ -118,10 +119,9 @@
             </div>
             <div class="form-group">
                 <label for="valor">Valor</label>
-                <input pInputText id="valor" name="valor" formControlName="valor" aria-describedby="username-help"
-                    currencyMask
-                    [options]="{prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left', allowNegative: 'false' }"
-                    placeholder="Digite o valor da viagem" />
+                <p-inputNumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR"
+                [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="Digite o valor"
+                placeholder="R$: 00,00"></p-inputNumber>
             </div>
             <div class="data_hora">
                 <div class="form-group">
@@ -141,7 +141,7 @@
             <div class="btns">
                 <button *ngIf="editTrip" (click)="tripsUpdate()">Salvar</button>
                 <button *ngIf="editTrip" (click)="delete($event, viagemDetails)">Excluir</button>
-                <button *ngIf="!editTrip" (click)="toggleEdit()">Editar dados</button>
+                <button *ngIf="!editTrip" (click)="editar()">Editar dados</button>
             </div>
         </form>
     </ng-container>
@@ -150,7 +150,8 @@
 
 <app-create-trips></app-create-trips>
 <app-create-reports></app-create-reports>
-<p-confirmdialog />
+<p-confirmdialog  [draggable]="false" />
+
 
 <div class="full-screen-image" *ngIf="fullScreenImageUrl">
     <div class="btn-atalho close" (click)="closeFullScreenImage()" style="display: grid; top: 20px; right: 10px; width: 30px;

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { registro, viagem } from '../../types/models.type';
 import { Table, TableModule } from 'primeng/table';
 import { InputIcon } from 'primeng/inputicon';
@@ -38,7 +38,7 @@ export class ReportsComponent implements OnInit {
   registros: registro[] = [];
 
   viagens: viagem[] = [];
-  
+
   selectedRegistros: any[] = [];
   filteredReports: any[] = [];
   selectedFilters: string[] = [];
@@ -51,8 +51,14 @@ export class ReportsComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private toastrService: ToastrService,
 
-  ) {
+    private eRef: ElementRef
+  ) {}
 
+  @HostListener('document:click', ['$event'])
+  fecharFiltro(event: Event) {
+    if (this.filter && !this.eRef.nativeElement.contains(event.target)) {
+      this.filter = false;
+    }
   }
 
   ngOnInit(): void {

@@ -105,17 +105,17 @@
                 </div>
             </div>
 
-            <div class="atalho-btn exxport" *ngIf="selectedViagem.length > 0" (click)="showDialog()">
+            <div class="atalho-btn exxport" *ngIf="selectedTrips.length > 0" (click)="showDialog(selectedTrips)">
                 <i class="pi pi-file-export"></i>
                 Exportar
             </div>
-            <div class="atalho-btn details" *ngIf="selectedViagem.length > 0 && selectedViagem.length < 2"
-                (click)="openViagem(selectedViagem)">
+            <div class="atalho-btn details" *ngIf="selectedTrips.length > 0 && selectedTrips.length < 2"
+                (click)="openViagem(selectedTrips)">
                 <i class="pi pi-info-circle
                 "></i>
                 Detalhes
             </div>
-            <div class="atalho-btn delete" *ngIf="selectedViagem.length > 0" (click)="delete($event, selectedViagem)">
+            <div class="atalho-btn delete" *ngIf="selectedTrips.length > 0" (click)="delete($event, selectedTrips)">
                 <i class="pi pi-trash"></i>
                 Delete
             </div>
@@ -127,14 +127,14 @@
 
         </div>
 
-    
+
     </div>
 
 
     <div class="viagens_table">
         <p-table #dt1 [value]="filteredViagens" [paginator]="true" [totalRecords]="100" [rows]="10"
-            [(selection)]="selectedViagem" dataKey="id" [tableStyle]="{'min-width': '50rem'}"
-            [globalFilterFields]="['cliente', 'origem', 'destino', 'data_inicio', 'data_fim', 'status']">
+            [(selection)]="selectedTrips" dataKey="id" [tableStyle]="{'min-width': '50rem'}"
+            [globalFilterFields]="['cliente', 'origem', 'destino', 'data_inicio', 'data_fim', 'status']" id="table">
             <ng-template #header>
                 <tr>
                     <th class="checkbox"><p-tableHeaderCheckbox /></th>
@@ -209,4 +209,103 @@
 
 
 <app-create-trips></app-create-trips>
-<p-confirmdialog />
+<p-confirmdialog [draggable]="false" />
+
+
+<div id="contentToConvert">
+    <div class="header">
+        REGISTRO DA VIAGEM
+
+        <span class="export-date">
+            Exportado em <span>03/03/2025 16:40</span>
+        </span>
+    </div>
+
+    <div class="container">
+        <div class="trip">
+            Dados da viagem
+
+            <div class="container_dados" *ngIf="viagemSelecionada">
+                <div class="first_dados">
+                    <div class="cliente">
+                        <div id="title">Cliente</div>
+                        <span>{{viagemSelecionada.cliente}}</span>
+                    </div>
+                    <div class="origem">
+                        <span id="title">Origem</span>
+                        <span>{{viagemSelecionada.origem}}</span>
+                    </div>
+                    <div class="destino">
+                        <span id="title">Destino</span>
+                        <span>{{viagemSelecionada.destino}}</span>
+                    </div>
+                    <div class="dataInicio">
+                        <span id="title">Data Inicio</span>
+                        <span>{{viagemSelecionada.dataInicio}}</span>
+                    </div>
+                    <div class="dataFim">
+                        <span id="title">Data Fim</span>
+                        <span>{{viagemSelecionada.dataFim}}</span>
+                    </div>
+                    <div class="valor">
+                        <span id="title">Valor</span>
+                        <span>{{ formatarDinheiro(viagemSelecionada.valor) }}</span>
+
+
+
+                    </div>
+                </div>
+                <div class="second_dados">
+                    <div class="descricao">
+                        <span id="title">Descrição</span>
+                        <span>{{viagemSelecionada.descricao}}</span>
+
+                    </div>
+                    <div class="status_trip">
+                        <span id="title">Status</span>
+                        <span [ngClass]="{'concluido': viagemSelecionada.status === 'Concluída', 'andamento': viagemSelecionada.status === 'Em andamento'}">{{viagemSelecionada.status}}</span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="reports">
+            Registros
+
+            <div class="container_dados">
+                <p-table #dt1 [value]="reports" styleClass="p-table-pdf" dataKey="id">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="colunm data">Tipo</th>
+                            <th class="colunm data">Data</th>
+                            <th class="colunm data">Hora</th>
+                            <th class="colunm">Descrição</th>
+                            <th class="colunm status">Imagens</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-reports>
+                        <tr>
+                            <td class="colunm data">{{reports.tipo}}</td>
+                            <td class="colunm data">{{reports.data}}</td>
+                            <td class="colunm data">{{reports.hora}}</td>
+                            <td class="colunm">{{reports.descricao}}</td>
+                            <td class="colunm status"><a id="visualizar" [href]="reports.foto"
+                                    target="_blank">Visualizar</a></td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="4">Nenhum registro encontrado.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+
+
+        
+    </div>
+</div>

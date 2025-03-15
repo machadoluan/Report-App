@@ -11,14 +11,14 @@ import { AbstractControl, ControlContainer, FormBuilder, FormGroup, ReactiveForm
 import { ToastrService } from '../../service/toastr.service';
 import { ViagensService } from '../../service/viagens.service';
 import { DatePickerModule } from 'primeng/datepicker';
-import { CurrencyMaskModule } from "ng2-currency-mask";
+ import { InputNumberModule } from 'primeng/inputnumber';
 import { AuthService } from '../../service/auth.service';
 
 
 
 @Component({
   selector: 'app-create-trip',
-  imports: [DialogModule, InputTextModule, TextareaModule, SelectModule, CommonModule, RouterLink, DatePickerModule, ReactiveFormsModule, CurrencyMaskModule],
+  imports: [DialogModule, InputTextModule, TextareaModule, SelectModule, CommonModule, RouterLink, DatePickerModule, ReactiveFormsModule, InputNumberModule],
 
   templateUrl: './create-trip.component.html',
   styleUrl: './create-trip.component.scss'
@@ -44,11 +44,11 @@ export class CreateTripComponent implements AfterViewInit, OnInit {
     })
   }
 
-  valorMinimo(min: number){
-    return(control: AbstractControl): ValidationErrors | null => {
+  valorMinimo(min: number) {
+    return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
-      if(value === null || value === undefined || value < min){
-        return { valorInvalido: true};
+      if (value === null || value === undefined || value < min) {
+        return { valorInvalido: true };
       }
       return null;
     }
@@ -79,7 +79,7 @@ export class CreateTripComponent implements AfterViewInit, OnInit {
   }
 
   createTrip() {
-    
+
     const dadosFormatados = {
       ...this.dadosCadastroTrips.value,
       dataInicio: this.formatarData(this.dadosCadastroTrips.value.dataInicio), // Formatar data

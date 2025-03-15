@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { viagem } from '../../types/models.type';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { registro, viagem } from '../../types/models.type';
 import { InputIcon } from 'primeng/inputicon';
 import { IconField } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,6 +19,10 @@ import { ButtonModule } from 'primeng/button';
 import { ToastrService } from '../../service/toastr.service';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ReportsService } from '../../service/reports.service';
+import html2pdf from 'html2pdf.js';
+
+
 
 
 @Component({
@@ -56,20 +60,31 @@ export class TripsComponent implements OnInit {
   viagens: viagem[] = [];
   filteredViagens: any[] = [];
   filter: boolean = false
-  selectedViagem: viagem[] = []
+  selectedTrips: viagem[] = []
   selectedFilters: string[] = [];
   searchText: string = '';
+  reports: registro[] = [];
+  viagemSelecionada: any;
 
   constructor(
     private router: Router,
     private tripService: ViagensService,
     private toastrService: ToastrService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private reportService: ReportsService,
+    private eRef: ElementRef
   ) {
   }
 
+  @HostListener('document:click', ['$event'])
+  fecharFiltro(event: Event) {
+    if (this.filter && !this.eRef.nativeElement.contains(event.target)) {
+      this.filter = false;
+    }
+  }
+
   ngOnInit(): void {
-    console.log(this.selectedViagem)
+    console.log(this.selectedTrips)
     this.loadTrips()
   }
 
@@ -77,8 +92,11 @@ export class TripsComponent implements OnInit {
     console.log(viagem)
   }
 
-  showDialog() {
+  showDialog(viagem: any) {
     this.displayDialog = true;
+    this.loadReportsSpecific(viagem[0].id)
+    this.viagemSelecionada = this.selectedTrips[0]
+
   }
 
   hideDialog() {
@@ -96,17 +114,43 @@ export class TripsComponent implements OnInit {
 
   exportToPDF() {
     console.log('Exportando para PDF...');
-    // Lógica para exportar para PDF
-
-    console.log(this.selectedViagem)
-
+  
+    if (!this.selectedTrips || this.selectedTrips.length === 0) {
+      console.error('Nenhuma viagem selecionada!');
+      return;
+    }
+  
+    this.selectedTrips.forEach((trip: any) => {
+      this.loadReportsSpecific(trip.id);
+      this.viagemSelecionada = trip;
+  
+      setTimeout(() => {  // Delay para garantir que os dados carregaram
+        const element = document.getElementById('contentToConvert');
+        if (!element) {
+          console.error('Elemento não encontrado!');
+          return;
+        }
+  
+        console.log('Elemento encontrado:', element);
+  
+        const options = {
+          filename: `${trip.origem}-${trip.destino}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+  
+        html2pdf().from(element).set(options).save();
+      }, 500); // Dá um tempinho pra renderizar
+    });
   }
+  
 
   exportToExcel() {
     console.log('Exportando para Excel...');
 
-    // Verifica se selectedViagem está vazio e usa viagens como fallback
-    const dadosExportacao = this.selectedViagem.length > 0 ? this.selectedViagem : this.viagens;
+    // Verifica se selectedTrips está vazio e usa viagens como fallback
+    const dadosExportacao = this.selectedTrips.length > 0 ? this.selectedTrips : this.viagens;
 
     // Verifica os dados para exportação
     if (!dadosExportacao || dadosExportacao.length === 0) {
@@ -244,6 +288,16 @@ export class TripsComponent implements OnInit {
     )
   }
 
+  loadReportsSpecific(viagemId: number) {
+    this.reportService.getReports().subscribe({
+      next: (res: any) => {
+        this.reports = res.reportsFormatados.filter((r: any) => r.viagem_id === viagemId);
+        // this.reports = res.reportsFormatados
+        console.log("Registro da viagem:", this.reports);
+      }
+    })
+  }
+
   openViagem(viagem: any) {
     console.log(viagem)
     this.router.navigate(['/trip', viagem[0].id])
@@ -379,5 +433,13 @@ export class TripsComponent implements OnInit {
       reject: () => {
       },
     });
+  }
+
+
+  formatarDinheiro(valor: number | undefined): string {
+    if (valor === undefined || valor === null) {
+      return "Valor inválido"; // Ou qualquer fallback adequado
+    }
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 }

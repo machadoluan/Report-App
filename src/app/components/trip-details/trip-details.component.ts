@@ -9,11 +9,11 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { SelectModule } from 'primeng/select';
 import { ViagensService } from '../../service/viagens.service';
 import { ToastrService } from '../../service/toastr.service';
-import { CurrencyMaskModule } from "ng2-currency-mask";
 import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 
 
@@ -28,11 +28,10 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
     FormsModule,
     SelectModule,
     RouterLink,
-    CurrencyMaskModule,
     ReactiveFormsModule,
     DialogModule,
-    ConfirmDialog
-
+    ConfirmDialog,
+    InputNumberModule
   ],
   standalone: true,
   templateUrl: './trip-details.component.html',

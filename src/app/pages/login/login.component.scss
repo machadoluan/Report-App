@@ -89,13 +89,13 @@
              .login_btn {
                  padding: .5rem 0;
                  border-radius: 6px;
-                 background-color: #1B59F8;
+                 background-color: #4A76E6;
                  border: none;
                  cursor: pointer;
                  transition: background-color 0.3s ease;
 
                  &:disabled {
-                     background-color: rgba($color: #1B59F8, $alpha: 0.5);
+                     background-color: rgba($color: #4A76E6, $alpha: 0.5);
                  }
              }
          }

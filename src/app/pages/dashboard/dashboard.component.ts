@@ -4,13 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { CreateTripsComponent } from '../../components/create-trips/create-trips.component';
 import { CreateReportsComponent } from '../../components/create-reports/create-reports.component';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { SheetCreateComponent } from '../../components/sheet-create/sheet-create.component';
-import { AuthService } from '../../service/auth.service';
 import { ViagensService } from '../../service/viagens.service';
-import { CurrencyMaskModule } from "ng2-currency-mask";
-
-
 import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,11 +15,13 @@ import { TextareaModule } from 'primeng/textarea';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ReportsService } from '../../service/reports.service';
 import { HttpClient } from '@angular/common/http';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink, CreateTripsComponent, CreateReportsComponent, DatePickerModule, DialogModule, CurrencyMaskModule, ReactiveFormsModule, InputTextModule,
+  standalone: true,
+  imports: [CommonModule, RouterLink, CreateTripsComponent, CreateReportsComponent, DatePickerModule, DialogModule, InputNumberModule, ReactiveFormsModule, InputTextModule,
     TextareaModule, ConfirmDialog],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -71,14 +67,25 @@ export class DashboardComponent implements OnInit {
 
   ) {
     this.dadosUpdate = this.fb.group({
-      cliente: [""],
-      origem: [""],
-      destino: [""],
-      valor: [0],
-      dataInicio: [""],
-      dataFim: [""],
-      descricao: [""]
+      cliente: [{ value: "", disabled: true }],
+      origem: [{ value: "", disabled: true }],
+      destino: [{ value: "", disabled: true }],
+      valor: [{ value: 0, disabled: true }],
+      dataInicio: [{ value: "", disabled: true }],
+      dataFim: [{ value: "", disabled: true }],
+      descricao: [{ value: "", disabled: true }]
     })
+  }
+
+  editar() {
+    this.dadosUpdate.get('cliente')?.enable();
+    this.dadosUpdate.get('origem')?.enable();
+    this.dadosUpdate.get('destino')?.enable();
+    this.dadosUpdate.get('dataInicio')?.enable();
+    this.dadosUpdate.get('valor')?.enable();
+    this.dadosUpdate.get('dataFim')?.enable();
+    this.dadosUpdate.get('descricao')?.enable();
+    this.editTrip = true
   }
 
   ngOnInit(): void {
@@ -163,9 +170,6 @@ export class DashboardComponent implements OnInit {
     this.dialogCreateReports.showDialog()
   }
 
-  toggleEdit() {
-    this.editTrip = !this.editTrip
-  }
 
 
   tripsUpdate() {
@@ -175,7 +179,14 @@ export class DashboardComponent implements OnInit {
     }
 
     if (!this.dadosUpdate.dirty) {
-      this.toggleEdit()
+      this.dadosUpdate.get('cliente')?.disable();
+      this.dadosUpdate.get('origem')?.disable();
+      this.dadosUpdate.get('destino')?.disable();
+      this.dadosUpdate.get('dataInicio')?.disable();
+      this.dadosUpdate.get('valor')?.disable();
+      this.dadosUpdate.get('dataFim')?.disable();
+      this.dadosUpdate.get('descricao')?.disable();
+      this.editTrip = false
     }
 
     const dadosFormatados = {
@@ -192,7 +203,14 @@ export class DashboardComponent implements OnInit {
     this.tripService.updateTrip(dadosFormatados).subscribe(
       (res) => {
         this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} atualizada `);
-        this.toggleEdit(); // Desativa o modo de edição
+        this.dadosUpdate.get('cliente')?.disable();
+        this.dadosUpdate.get('origem')?.disable();
+        this.dadosUpdate.get('destino')?.disable();
+        this.dadosUpdate.get('dataInicio')?.disable();
+        this.dadosUpdate.get('valor')?.disable();
+        this.dadosUpdate.get('dataFim')?.disable();
+        this.dadosUpdate.get('descricao')?.disable();
+        this.editTrip = false
       },
       (err) => {
         this.toastrService.showError(`Erro ao atualizar a viagem, tente novamente mais tarde. `);
@@ -294,5 +312,8 @@ export class DashboardComponent implements OnInit {
 
   openFullScreenImage(imageUrl: string): void {
     this.fullScreenImageUrl = imageUrl;
+  }
+  redirecionar(){
+    window.location.reload()
   }
 }
