@@ -1,33 +1,51 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Checkbox } from 'primeng/checkbox';
 import { AuthService } from '../../service/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from '../../service/toastr.service';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+
+import { ButtonModule } from 'primeng/button';
+
 
 @Component({
   selector: 'app-login',
   imports: [
     Checkbox,
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DialogModule,
+    ButtonModule,
+    FormsModule,
+    InputTextModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
-
+export class LoginComponent implements OnInit {
+  display: boolean = false
   showPassword = false;
   rememberMe = false;
   userLogin: FormGroup;
+  formForgot: FormGroup
   @ViewChild('passwordInput') passwordInput!: ElementRef
 
   constructor(private fb: FormBuilder, private authService: AuthService, private route: Router, private toastrService: ToastrService) {
     this.userLogin = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
     });
+
+    this.formForgot = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    })
+  }
+
+  ngOnInit(): void {
+
   }
 
   toggleShowPassword() {
@@ -38,6 +56,10 @@ export class LoginComponent {
     if (this.userLogin.value.username) {
       this.passwordInput.nativeElement.focus();
     }
+  }
+
+  forgotPassword() {
+    this.display = true
   }
 
   login() {
@@ -57,7 +79,16 @@ export class LoginComponent {
       }
 
     })
+  }
 
-
+  onSubmit() {
+    this.authService.forgotPassword(this.formForgot.value.email).subscribe({
+      next: () => {
+        this.toastrService.showSucess('Email de recuperação enviado!')
+      },
+      error: (err) => {
+        this.toastrService.showError(err.error.message)
+      }
+    });
   }
 }

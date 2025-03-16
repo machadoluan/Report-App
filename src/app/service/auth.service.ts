@@ -38,4 +38,15 @@ export class AuthService {
   }
 
 
+  forgotPassword(email: string) {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
+  }
+
+  verifyToken(token: string){
+    return this.http.post(`${this.apiUrl}/verify-token`, { token });
+  }
 }

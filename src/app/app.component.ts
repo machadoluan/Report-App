@@ -15,6 +15,7 @@ import { ToastModule } from 'primeng/toast';
 export class AppComponent implements OnInit {
   isSidebarOpen = false;
   title = 'reportApp';
+  excludedRoutes = ['/login', '/home', '/reset-password', '/', ];
 
   constructor(public router: Router) { }
 
@@ -31,6 +32,11 @@ export class AppComponent implements OnInit {
     else {
       this.isSidebarOpen = true;
     }
+  }
+
+  showDefaultLayout(): boolean {
+    const currentRoute = this.router.url.split('?')[0].split('#')[0]; // Pega só o caminho puro, sem query e fragmentos
+    return this.excludedRoutes.includes(currentRoute);
   }
 
   toggleSidebar() {
