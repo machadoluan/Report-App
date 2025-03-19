@@ -13,6 +13,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AccountComponent } from './pages/account/account.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 export const routes: Routes = [
     {
@@ -26,6 +27,11 @@ export const routes: Routes = [
     {
         path: 'login',
         component: LoginComponent,
+        canActivate: [NoAuthGuard]
+    },
+    {
+        path: 'register',
+        component: RegisterComponent,
         canActivate: [NoAuthGuard]
     },
     {

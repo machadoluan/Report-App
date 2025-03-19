@@ -18,6 +18,10 @@ export class AuthService {
     return this.http.post<{ accessToken: string }>(`${this.apiUrl}/login`, dadosLogin)
   }
 
+  register(dadosRegistro: any) {
+    return this.http.post<{ accessToken: string }>(`${this.apiUrl}/register`, dadosRegistro)
+  }
+
   isAuthenticado(): boolean {
     const token = this.getToken();
     return !!token;

@@ -16,7 +16,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 export class AppComponent implements OnInit {
   isSidebarOpen = false;
   title = 'reportApp';
-  excludedRoutes = ['/login', '/home', '/reset-password', '/', ];
+  excludedRoutes = ['/login', '/home', '/reset-password', '/', '/register'];
 
   constructor(public router: Router) { }
 

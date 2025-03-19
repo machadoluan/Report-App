@@ -11,8 +11,8 @@
                     <i class="pi pi-envelope
 
                     "></i>
-                    <input type="email" class="form-control" id="email" placeholder="Email"
-                        formControlName="email" (keydown.enter)="focusPassword()">
+                    <input type="email" class="form-control" id="email" placeholder="Email" formControlName="email"
+                        (keydown.enter)="focusPassword()">
                 </div>
 
                 <div class="form-group">
@@ -25,9 +25,12 @@
             </form>
 
             <div class="user">
+
+
                 <div class="checkbox">
-                    <p-checkbox inputId="lembre" />
-                    <label for="lembre" class="ml-2">Lembre-me</label>
+                    <mat-checkbox>
+                        <span class="checkbox-label">Lembre-me</span>
+                    </mat-checkbox>
                 </div>
 
                 <span class="forgot" (click)="forgotPassword()">Esqueci minha senha</span>
@@ -35,6 +38,7 @@
 
             <button class="login_btn" (click)="login()" (keydown.enter)="login()" [disabled]="userLogin.invalid"> Entrar
             </button>
+            <span class="register">Não tem uma conta? <a routerLink="/register">Registre-se</a></span>
         </div>
     </div>
 </div>

@@ -67,14 +67,16 @@
              .user {
                  display: flex;
                  justify-content: space-between;
+                 align-items: center;
 
                  .checkbox {
                      display: flex;
                      gap: .5rem;
                      align-items: center;
 
-                     label {
+                     .checkbox-label {
                          font-size: 12px;
+                         color: var(--color);
                      }
                  }
 
@@ -98,28 +100,21 @@
                      background-color: rgba($color: #4A76E6, $alpha: 0.5);
                  }
              }
+
+             .register {
+                 text-align: center;
+                 font-size: 12px;
+
+                 a {
+                     color: var(--primary);
+                     cursor: pointer;
+                 }
+             }
          }
      }
  }
 
- ::ng-deep .p-checkbox-box {
-     background-color: transparent !important;
- }
 
- ::ng-deep .p-checkbox-checked .p-checkbox-box {
-     background-color: var(--primary) !important;
-     border-color: var(--primary) !important;
- }
-
- ::ng-deep .p-checkbox-checked .p-checkbox-icon {
-     color: white !important;
-     width: .7rem;
- }
-
- ::ng-deep .p-checkbox-input {
-     width: 1.1rem;
-     height: 1.1rem;
- }
 
  @media screen and (max-width: 430px) {
 

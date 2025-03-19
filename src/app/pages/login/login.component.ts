@@ -3,10 +3,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Checkbox } from 'primeng/checkbox';
 import { AuthService } from '../../service/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from '../../service/toastr.service';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ButtonModule } from 'primeng/button';
 
@@ -14,13 +15,14 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-login',
   imports: [
-    Checkbox,
+    MatCheckboxModule,
     CommonModule,
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,
     FormsModule,
-    InputTextModule
+    InputTextModule,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
