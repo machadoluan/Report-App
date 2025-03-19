@@ -1,18 +1,18 @@
 <div class="container-slide" >
     <div class="links">
-        <div class="link" routerLink="/dashboard">
+        <div class="link"  [ngClass]="{'active': isActive('/dashboard')}" routerLink="/dashboard">
             <i class="fas fa-home"></i>
             Inicio
         </div>
-        <div class="link" routerLink="/reports">
+        <div class="link" routerLink="/reports" [ngClass]="{'active': isActive('/reports')}"  >
             <i class="fa-solid fa-book"></i>
             Registros
         </div>
-        <div class="link" routerLink="/trip">
+        <div class="link" routerLink="/trip" [ngClass]="{'active': isActive('/trip')}" >
             <i class="fa-solid fa-road"></i>
             Viagens
         </div>
-        <div class="link" routerLink="/account">
+        <div class="link" routerLink="/account" [ngClass]="{'active': isActive('/account')}" >
             <i class="fa-solid fa-user"></i>
             Perfil
         </div>
