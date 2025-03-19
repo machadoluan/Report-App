@@ -19,7 +19,23 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       theme: {
         preset: Aura
-      }
+      },
+      translation: {
+        accept: 'Aceitar', // Tradução para "Aceitar"
+        reject: 'Rejeitar', // Tradução para "Rejeitar"
+        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+        dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
+        monthNames: [
+          'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
+          'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+        ],
+        monthNamesShort: [
+          'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',
+        ],
+        today: 'Hoje',
+        clear: 'Limpar',
+      },
     }),
     provideNgxMask(), provideAnimationsAsync(),
     MessageService,

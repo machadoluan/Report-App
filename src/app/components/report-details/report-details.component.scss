@@ -243,7 +243,7 @@
         width: 100% !important;
         background-color: transparent !important;
         color: var(--color) !important;
-        font-size: 14px;
+        font-size: 14px !important;
 
         &:disabled {
             background-color: rgba($color: #d1d1d1, $alpha: .5) !important;

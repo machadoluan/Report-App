@@ -156,7 +156,7 @@
         width: 100% !important;
         background-color: transparent !important;
         color: var(--color) !important;
-        font-size: 14px;
+        font-size: 14px !important;
 
         &:focus {
             border-color: var(--primary) !important;
@@ -461,3 +461,55 @@
     visibility: visible; /* Garante que o conteúdo seja renderizado */
     opacity: 1; /* Garante que o conteúdo não esteja transparente */
   }
+
+
+  ::ng-deep .p-datepicker {
+    position: static !important;
+
+    .p-datepicker-header {
+        background-color: white !important;
+        color: black !important;
+
+        .p-button-text {
+            color: var(--primary);
+        }
+
+        .p-datepicker-select-month,
+        .p-datepicker-select-year {
+            color: black !important;
+        }
+    }
+
+    .p-datepicker-panel {
+        // position: fixed !important;
+        min-width: 240px !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        background-color: white !important;
+        color: black !important;
+    }
+
+    .p-datepicker-day {
+        color: black !important;
+    }
+
+    .p-datepicker-month,
+    .p-datepicker-year {
+        color: black !important;
+    }
+
+    .p-datepicker-dropdown {
+        background-color: var(--primary) !important;
+        color: white !important;
+    }
+
+    .p-datepicker-day-selected {
+        background-color: var(--primary) !important;
+        color: white !important;
+    }
+
+    .p-datepicker-today > .p-datepicker-day{
+        background-color: #d1d1d1 !important;
+    }
+}
