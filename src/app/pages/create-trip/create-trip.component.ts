@@ -11,14 +11,14 @@ import { AbstractControl, ControlContainer, FormBuilder, FormGroup, ReactiveForm
 import { ToastrService } from '../../service/toastr.service';
 import { ViagensService } from '../../service/viagens.service';
 import { DatePickerModule } from 'primeng/datepicker';
- import { InputNumberModule } from 'primeng/inputnumber';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { AuthService } from '../../service/auth.service';
 
 
 
 @Component({
   selector: 'app-create-trip',
-  imports: [DialogModule, InputTextModule, TextareaModule, SelectModule, CommonModule, RouterLink, DatePickerModule, ReactiveFormsModule, InputNumberModule, NgxMaskDirective],
+  imports: [DialogModule, InputTextModule, TextareaModule, SelectModule, CommonModule, RouterLink, DatePickerModule, ReactiveFormsModule, InputNumberModule],
 
   templateUrl: './create-trip.component.html',
   styleUrl: './create-trip.component.scss'
@@ -37,12 +37,13 @@ export class CreateTripComponent implements AfterViewInit, OnInit {
       cliente: ["", Validators.required],
       origem: ["", Validators.required],
       destino: ["", Validators.required],
-      valor: [0, [Validators.required, this.valorMinimo(0.01)]],
+      valor: [null, [Validators.required, this.valorMinimo(0.01)]],
       dataInicio: ["", Validators.required],
       dataFim: [""],
       descricao: [""]
     })
   }
+
 
   valorMinimo(min: number) {
     return (control: AbstractControl): ValidationErrors | null => {

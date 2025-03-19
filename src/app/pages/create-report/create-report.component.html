@@ -8,13 +8,14 @@
         <div class="form-group">
             <label for="origem">Tipo</label>
             <p-select [options]="registroTipo" optionLabel="Tipo" placeholder="Selecione o tipo do registro"
-                class="w-full md:w-56" formControlName="tipo"/>
+                class="w-full md:w-56" formControlName="tipo" />
 
         </div>
         <div class="data_hora">
             <div class="form-group">
                 <label for="data">Data</label>
-                <p-datepicker dateFormat="dd/mm/yy" formControlName="data" placeholder="00/00/0000"
+                <p-datepicker dateFormat="dd/mm/yy" formControlName="data" placeholder="00/00/0000" showOnFocus="false"
+                showIcon="true"
                 inputId="data"></p-datepicker>
 
             </div>
