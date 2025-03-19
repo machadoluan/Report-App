@@ -176,7 +176,8 @@ form {
     gap: 1rem;
     margin: 10px;
     flex-grow: 1;
-    img{
+
+    img {
         height: 100px;
         width: 100px;
         object-fit: cover;
@@ -236,4 +237,34 @@ form {
     max-width: 90%;
     max-height: 90%;
     border-radius: 5px;
+}
+
+::ng-deep .p-datepicker {
+    position: static !important;
+
+    .p-datepicker-panel {
+        position: absolute !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        left: 50% !important;
+        min-width: 90% !important;
+        z-index: 999999 !important;
+
+        @media (max-width: 1200px) {
+            min-width: 50% !important;
+        }
+    
+        @media (max-width: 992px) {
+            min-width: 60% !important;
+        }
+    
+        @media (max-width: 768px) {
+            min-width: 70% !important;
+        }
+    
+        @media (max-width: 576px) {
+            min-width: 90% !important;
+            padding: 0 0.5rem;
+        }
+    }
 }

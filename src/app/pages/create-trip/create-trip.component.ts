@@ -18,7 +18,7 @@ import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-create-trip',
-  imports: [DialogModule, InputTextModule, TextareaModule, SelectModule, CommonModule, RouterLink, DatePickerModule, ReactiveFormsModule, InputNumberModule],
+  imports: [DialogModule, InputTextModule, TextareaModule, SelectModule, CommonModule, RouterLink, DatePickerModule, ReactiveFormsModule, InputNumberModule, NgxMaskDirective],
 
   templateUrl: './create-trip.component.html',
   styleUrl: './create-trip.component.scss'
