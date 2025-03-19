@@ -52,7 +52,8 @@ export class ReportDetailsComponent implements OnInit {
   registro: registro | undefined
   editReport: boolean = false;
   fullScreenImageUrl: string | null = null;
-  dadosUpdate: FormGroup
+  dadosUpdate: FormGroup;
+  dropdownMenu: boolean = false
 
   registroTipo: any[] = [
     { Tipo: 'Inicio de Jornada' },
@@ -91,6 +92,10 @@ export class ReportDetailsComponent implements OnInit {
     }
 
     this.loadReports()
+  }
+
+  openDropDown() {
+    this.dropdownMenu = !this.dropdownMenu
   }
 
   @HostListener('window:resize', ['$event'])
@@ -159,6 +164,8 @@ export class ReportDetailsComponent implements OnInit {
     this.dadosUpdate.get('hora')?.enable();
     this.dadosUpdate.get('descricao')?.enable();
     this.editReport = true
+    this.dropdownMenu = false
+
   }
 
   openFullScreenImage(imageUrl: string): void {
@@ -192,10 +199,10 @@ export class ReportDetailsComponent implements OnInit {
   }
 
 
-  delete(event: Event, viagem: any) {
+  delete(viagem: any) {
+    this.dropdownMenu = false
 
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
       message: `Você deseja deletar permanente?`,
       header: 'Deletar viagem',
       rejectLabel: 'Cancel',
@@ -253,7 +260,7 @@ export class ReportDetailsComponent implements OnInit {
 
     console.log("Update", dadosFormatados)
 
-    this.reportService.updateTrip(dadosFormatados).subscribe(
+    this.reportService.updateReport(dadosFormatados).subscribe(
       (res: any) => {
         this.toastrService.showSucess(`Registro ${dadosFormatados.tipo} atualizado `);
         this.dadosUpdate.get('tipo')?.disable();

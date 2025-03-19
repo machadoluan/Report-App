@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Injectable } from '@angular/core';
 import { viagem } from '../types/models.type';
 import { catchError, Observable, throwError } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -47,7 +47,10 @@ export class ViagensService {
 
   // Atualiza uma viagem existente
   updateTrip(dadosUpdate: viagem): Observable<viagem> {
-    return this.http.put<viagem>(this.apiUrl, dadosUpdate).pipe(
+    return this.http.put<viagem>(this.apiUrl, {
+      updateData: dadosUpdate,
+      userId: this.user.id
+    }).pipe(
       catchError(this.handleError)
     );
   }
@@ -56,9 +59,9 @@ export class ViagensService {
     return this.http.delete(`${this.apiUrl}/${id}?userId=${this.user.id}`).pipe(
       catchError(this.handleError)
     );
-}
+  }
 
-deleteTripMultiple(ids: number[]) {
+  deleteTripMultiple(ids: number[]) {
     console.log(ids);
 
     return this.http.request('DELETE', `${this.apiUrl}`, {
@@ -66,7 +69,7 @@ deleteTripMultiple(ids: number[]) {
     }).pipe(
       catchError(this.handleError)
     );
-}
+  }
 
   // Tratamento de erros
   private handleError(error: HttpErrorResponse) {

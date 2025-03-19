@@ -263,7 +263,8 @@
                     </div>
                     <div class="status_trip">
                         <span id="title">Status</span>
-                        <span [ngClass]="{'concluido': viagemSelecionada.status === 'Concluída', 'andamento': viagemSelecionada.status === 'Em andamento'}">{{viagemSelecionada.status}}</span>
+                        <span
+                            [ngClass]="{'concluido': viagemSelecionada.status === 'Concluída', 'andamento': viagemSelecionada.status === 'Em andamento'}">{{viagemSelecionada.status}}</span>
 
                     </div>
                 </div>
@@ -306,6 +307,6 @@
         </div>
 
 
-        
+
     </div>
 </div>

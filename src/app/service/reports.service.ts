@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { registro, viagem } from '../types/models.type';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -68,9 +68,11 @@ export class ReportsService {
     );
   }
 
-  updateTrip(dadosUpdate: any): Observable<viagem> {
-    return this.http.put<viagem>(this.apiUrl, {
-      ...dadosUpdate,
+  updateReport(dadosUpdate: any): Observable<registro> {
+    console.log(dadosUpdate)
+    console.log(this.user.id)
+    return this.http.put<registro>(this.apiUrl, {
+      updateData: dadosUpdate,
       userId: this.user.id
     }).pipe(
       catchError(this.handleError)

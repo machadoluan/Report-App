@@ -538,7 +538,7 @@
 
  #contentToConvert {
      width: 210mm;
-    //  height: 297mm;
+     //  height: 297mm;
      box-sizing: border-box;
      page-break-inside: avoid;
      /* Evita quebra no meio do conteúdo */
@@ -546,6 +546,7 @@
      page-break-after: auto;
      overflow: hidden;
      /* Garante que nada vaze pra outra página */
+     display: none;
 
      .header {
          text-align: center;
@@ -674,13 +675,15 @@
                  background-color: rgba($color: #d1d1d1, $alpha: .1);
                  border-radius: 5px;
                  padding: 10px 2rem;
-                 &::ng-deep .p-table-pdf{
-                    page-break-inside: avoid;
+
+                 &::ng-deep .p-table-pdf {
+                     page-break-inside: avoid;
                  }
+
                  &::ng-deep .p-table-pdf .p-datatable-thead>tr>th {
                      background-color: transparent !important;
                      color: black !important;
-                     font-size: 14px;
+                     font-size: 14px !important;
                      font-weight: 400;
                      border-style: none !important;
                  }

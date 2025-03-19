@@ -6,8 +6,18 @@
         <div class="viagem" *ngIf="registro">
             {{registro.tipo}}
         </div>
-        <div class="share" (click)="shareTrip()">
-            <i class="fa-solid fa-share-from-square"></i>
+        <div class="menu">
+            <i class="fa-solid" [ngClass]="{'fa-bars': !dropdownMenu, 'fa-close': dropdownMenu}"
+                (click)="openDropDown()"></i>
+
+
+            <div class="dropItens" *ngIf="dropdownMenu">
+                <span (click)="editar()"><i class="fa-solid fa-edit"></i> Editar</span>
+                <!-- <span (click)="exportToPDF()"><i class="fa-solid fa-file-pdf"></i> Exportar como pdf</span>
+                <span><i class="fa-solid fa-file-excel"></i> Exportar como excel</span> -->
+                <span (click)="shareTrip()"><i class="fa-solid fa-share"></i> Compartilhar</span>
+                <span (click)="delete(registro)"><i class="fa-solid fa-trash"></i> Excluir</span>
+            </div>
         </div>
     </header>
 
@@ -52,8 +62,6 @@
             </div>
             <div class="btns">
                 <button *ngIf="editReport" (click)="reportUpdate()">Salvar</button>
-                <button *ngIf="editReport" (click)="delete($event, registro)">Excluir</button>
-                <button *ngIf="!editReport" (click)="editar()">Editar dados</button>
             </div>
         </form>
 
@@ -118,7 +126,7 @@
             </div>
             <div class="btns">
                 <button *ngIf="editReport" (click)="reportUpdate()">Salvar</button>
-                <button *ngIf="editReport" (click)="delete($event, registro)">Excluir</button>
+                <button *ngIf="editReport" (click)="delete(registro)">Excluir</button>
                 <button *ngIf="!editReport" (click)="editar()">Editar dados</button>
             </div>
         </form>
@@ -138,4 +146,3 @@
     </div>
     <img [src]="fullScreenImageUrl" alt="Full screen image">
 </div>
-

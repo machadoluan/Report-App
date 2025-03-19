@@ -7,8 +7,17 @@
             <div class="viagem" *ngIf="viagem">
                 {{viagem.origem}} → {{viagem.destino}}
             </div>
-            <div class="share" (click)="shareTrip()">
-                <i class="fa-solid fa-share-from-square"></i>
+            <div class="menu">
+                <i class="fa-solid" [ngClass]="{'fa-bars': !dropdownMenu, 'fa-close': dropdownMenu}" (click)="openDropDown()"></i>
+
+
+                <div class="dropItens" *ngIf="dropdownMenu">
+                    <span (click)="editar()"><i class="fa-solid fa-edit"></i> Editar</span>
+                    <!-- <span (click)="exportToPDF()"><i class="fa-solid fa-file-pdf"></i> Exportar como pdf</span>
+                    <span><i class="fa-solid fa-file-excel"></i> Exportar como excel</span> -->
+                    <span  (click)="shareTrip()"><i class="fa-solid fa-share" ></i> Compartilhar</span>
+                    <span (click)="delete( viagem)"><i class="fa-solid fa-trash"></i> Excluir</span>
+                </div>
             </div>
         </header>
 
@@ -52,9 +61,7 @@
                         formControlName="descricao" placeholder="Digite algo..."></textarea>
                 </div>
                 <div class="btns">
-                    <button *ngIf="editTrip" (click)="tripsUpdate()">Salvar</button>
-                    <button *ngIf="editTrip" (click)="delete($event, viagem)">Excluir</button>
-                    <button *ngIf="!editTrip" (click)="editar()">Editar dados</button>
+                    <button *ngIf="editTrip" (click)="tripsUpdate()" id="salvar">Salvar</button>
                 </div>
             </form>
 
@@ -96,8 +103,8 @@
             <div class="form-group">
                 <label for="valor">Valor</label>
                 <p-inputNumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR"
-                [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="Digite o valor"
-                placeholder="R$: 00,00"></p-inputNumber>
+                    [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="Digite o valor"
+                    placeholder="R$: 00,00"></p-inputNumber>
 
             </div>
             <div class="data_hora">
@@ -117,11 +124,110 @@
             </div>
             <div class="btns">
                 <button *ngIf="editTrip" (click)="tripsUpdate()">Salvar</button>
-                <button *ngIf="editTrip" (click)="delete($event, viagem)">Excluir</button>
+                <button *ngIf="editTrip" (click)="delete(viagem)">Excluir</button>
                 <button *ngIf="!editTrip" (click)="editar()">Editar dados</button>
             </div>
         </form>
     </ng-container>
 </p-dialog>
 
-<p-confirmdialog  [draggable]="false" />
+<p-confirmdialog [draggable]="false" />
+
+<!-- <div id="contentToConvert" >
+    <div class="header">
+        REGISTRO DA VIAGEM
+
+        <span class="export-date">
+            Exportado em <span>03/03/2025 16:40</span>
+        </span>
+    </div>
+
+    <div class="container">
+        <div class="trip">
+            Dados da viagem
+
+            <div class="container_dados" *ngIf="viagem">
+                <div class="first_dados">
+                    <div class="cliente">
+                        <div id="title">Cliente</div>
+                        <span>{{viagem.cliente}}</span>
+                    </div>
+                    <div class="origem">
+                        <span id="title">Origem</span>
+                        <span>{{viagem.origem}}</span>
+                    </div>
+                    <div class="destino">
+                        <span id="title">Destino</span>
+                        <span>{{viagem.destino}}</span>
+                    </div>
+                    <div class="dataInicio">
+                        <span id="title">Data Inicio</span>
+                        <span>{{viagem.dataInicio}}</span>
+                    </div>
+                    <div class="dataFim">
+                        <span id="title">Data Fim</span>
+                        <span>{{viagem.dataFim}}</span>
+                    </div>
+                    <div class="valor">
+                        <span id="title">Valor</span>
+                        <span>{{ formatarDinheiro(viagem.valor) }}</span>
+
+
+
+                    </div>
+                </div>
+                <div class="second_dados">
+                    <div class="descricao">
+                        <span id="title">Descrição</span>
+                        <span>{{viagem.descricao}}</span>
+
+                    </div>
+                    <div class="status_trip">
+                        <span id="title">Status</span>
+                        <span
+                            [ngClass]="{'concluido': viagem.status === 'Concluída', 'andamento': viagem.status === 'Em andamento'}">{{viagem.status}}</span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="reports">
+            Registros
+
+            <div class="container_dados">
+                <p-table #dt1 [value]="reports" styleClass="p-table-pdf" dataKey="id">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="colunm data">Tipo</th>
+                            <th class="colunm data">Data</th>
+                            <th class="colunm data">Hora</th>
+                            <th class="colunm">Descrição</th>
+                            <th class="colunm status">Imagens</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-reports>
+                        <tr>
+                            <td class="colunm data">{{reports.tipo}}</td>
+                            <td class="colunm data">{{reports.data}}</td>
+                            <td class="colunm data">{{reports.hora}}</td>
+                            <td class="colunm">{{reports.descricao}}</td>
+                            <td class="colunm status"><a id="visualizar" [href]="reports.foto"
+                                    target="_blank">Visualizar</a></td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="4">Nenhum registro encontrado.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+
+
+
+    </div>
+</div> -->

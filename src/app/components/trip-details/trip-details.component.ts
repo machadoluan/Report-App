@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { viagem } from '../../types/models.type';
+import { registro, viagem } from '../../types/models.type';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,6 +14,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
+import html2pdf from 'html2pdf.js';
+import { Table, TableModule } from 'primeng/table';
+import { ReportsService } from '../../service/reports.service';
 
 
 
@@ -31,7 +34,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     ReactiveFormsModule,
     DialogModule,
     ConfirmDialog,
-    InputNumberModule
+    InputNumberModule,
+    TableModule
   ],
   standalone: true,
   templateUrl: './trip-details.component.html',
@@ -40,13 +44,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 export class TripDetailsComponent implements OnInit {
   showDialog: boolean = false;
   isMobile: boolean = window.innerWidth <= 750;
-
-
   viagem: viagem | undefined
   editTrip: boolean = false;
   dataInicioFormatada: string = '';
   dataFimFormatada: string = '';
   dadosUpdate: FormGroup
+  reports: registro[] = [];
+  dropdownMenu: boolean = false;
+
 
 
   statusOptions = [
@@ -61,7 +66,8 @@ export class TripDetailsComponent implements OnInit {
     private toastrService: ToastrService,
     private route: ActivatedRoute,
     private router: Router,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private reportService: ReportsService
 
   ) {
     this.dadosUpdate = this.fb.group({
@@ -84,6 +90,7 @@ export class TripDetailsComponent implements OnInit {
     this.dadosUpdate.get('dataFim')?.enable();
     this.dadosUpdate.get('descricao')?.enable();
     this.editTrip = true
+    this.dropdownMenu = false
   }
 
 
@@ -98,6 +105,10 @@ export class TripDetailsComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     this.isMobile = window.innerWidth <= 750;
+  }
+
+  openDropDown() {
+    this.dropdownMenu = !this.dropdownMenu
   }
 
   openDialog() {
@@ -127,9 +138,20 @@ export class TripDetailsComponent implements OnInit {
 
   }
 
+  loadReportsSpecific(viagemId: number) {
+    this.reportService.getReports().subscribe({
+      next: (res: any) => {
+        this.reports = res.reportsFormatados.filter((r: any) => r.viagem_id === viagemId);
+        console.log("Registro da viagem:", this.reports);
+      }
+    })
+  }
+
   loadTrips() {
     const id = this.route.snapshot.paramMap.get('id');
-
+    if (id) {
+      this.loadReportsSpecific(parseInt(id))
+    }
     if (id) {
       console.log(parseInt(id))
       this.tripService.getTripById(parseInt(id)).subscribe(
@@ -138,6 +160,7 @@ export class TripDetailsComponent implements OnInit {
           this.dadosUpdate.patchValue(data)
           console.log("dados", this.dadosUpdate.value)
           console.log('data formata', this.formatarData(this.dadosUpdate.value.dataInicio))
+
 
         },
         (err) => {
@@ -230,10 +253,9 @@ export class TripDetailsComponent implements OnInit {
   }
 
 
-  delete(event: Event, viagem: any) {
-
+  delete(viagem: any) {
+    this.dropdownMenu = false
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
       message: `Você deseja deletar permanente?`,
       header: 'Deletar viagem',
       rejectLabel: 'Cancel',
@@ -269,5 +291,45 @@ export class TripDetailsComponent implements OnInit {
   redirecionar() {
     this.router.navigate(['/trip'])
   }
+
+  formatarDinheiro(valor: number | undefined): string {
+    if (valor === undefined || valor === null) {
+      return "Valor inválido"; // Ou qualquer fallback adequado
+    }
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  // exportToPDF() {
+  //   console.log('Exportando para PDF...');
+  
+  //   const element = document.getElementById('contentToConvert');
+  //   if (!element) {
+  //     console.error('Elemento não encontrado!');
+  //     return;
+  //   }
+  
+  //   // Temporariamente mostra o conteúdo só pra exportar, mas invisível
+  //   element.style.visibility = 'visible';
+  //   element.style.position = 'fixed';
+  //   element.style.top = '0';
+  //   element.style.left = '0';
+  //   element.style.width = '100%';
+  
+  //   const options = {
+  //     filename: `${this.viagem?.origem}-${this.viagem?.destino}.pdf`,
+  //     image: { type: 'jpeg', quality: 0.98 },
+  //     html2canvas: { scale: 2 },
+  //     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  //   };
+  
+  //   // Exporta o conteúdo
+  //   html2pdf().from(element).set(options).save().then(() => {
+  //     // Esconde de novo depois de exportar
+  //     element.style.visibility = 'hidden';
+  //     element.style.position = 'static';
+  //   });
+  // }
+  
+  
 
 }
