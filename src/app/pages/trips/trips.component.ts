@@ -40,7 +40,6 @@ import html2pdf from 'html2pdf.js';
     OverlayBadgeModule,
     PopoverModule,
     ButtonModule,
-    ConfirmDialog,
     RouterLink
   ],
   templateUrl: './trips.component.html',

@@ -26,7 +26,7 @@
             <div class="faturamento">
                 <div class="circle">
                     <div class="text">
-                        <span>Referente: 03/23</span>
+                        <span>Referente: {{ mesAtual.toString().padStart(2, '0') }}/{{ anoAtual }}</span>
                         <span class="valor">{{formatarDinheiro(faturamento)}}</span>
                     </div>
                 </div>
@@ -152,7 +152,6 @@
 
 <app-create-trips></app-create-trips>
 <app-create-reports></app-create-reports>
-<p-confirmdialog  [draggable]="false" />
 
 
 <div class="full-screen-image" *ngIf="fullScreenImageUrl">

@@ -33,7 +33,6 @@ import { ReportsService } from '../../service/reports.service';
     RouterLink,
     ReactiveFormsModule,
     DialogModule,
-    ConfirmDialog,
     InputNumberModule,
     TableModule
   ],
@@ -254,6 +253,7 @@ export class TripDetailsComponent implements OnInit {
 
 
   delete(viagem: any) {
+    console.log('Método delete chamado');
     this.dropdownMenu = false
     this.confirmationService.confirm({
       message: `Você deseja deletar permanente?`,

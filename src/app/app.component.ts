@@ -5,10 +5,11 @@ import { HeaderComponent } from "./components/header/header.component";
 import { CommonModule } from '@angular/common';
 import { SlidebarMobileComponent } from "./components/slidebar-mobile/slidebar-mobile.component";
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SlidebarComponent, HeaderComponent, CommonModule, SlidebarMobileComponent, ToastModule],
+  imports: [RouterOutlet, SlidebarComponent, HeaderComponent, CommonModule, SlidebarMobileComponent, ToastModule, ConfirmDialog],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

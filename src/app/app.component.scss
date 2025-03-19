@@ -46,3 +46,7 @@
     background-color: #eb5c52 !important; // Vermelho
     color: white !important;
 }
+::ng-deep .p-dialog{
+    background-color: white !important;
+    color: black;
+}

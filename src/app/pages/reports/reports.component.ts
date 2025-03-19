@@ -21,7 +21,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-reports',
-  imports: [InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule, OverlayBadgeModule, CreateReportsComponent, ConfirmDialog, RouterLink],
+  imports: [InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule, OverlayBadgeModule, CreateReportsComponent, RouterLink],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })

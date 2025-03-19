@@ -7,7 +7,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-header',
-  imports: [ConfirmDialog],
+  imports: [ ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -59,7 +59,27 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(event: Event) {
-    localStorage.removeItem('token')
-    this.router.navigate(['/login'])
+
+    this.confirmationService.confirm({
+      message: `Deseja sair do sistema?`,
+      header: 'Sair',
+      rejectLabel: 'Cancelar',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Sair',
+        severity: 'danger',
+      },
+
+      accept: () => {
+        localStorage.removeItem('token')
+        this.router.navigate(['/login'])
+      },
+      reject: () => {
+      },
+    });
   }
 }  
