@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
   }
 
   toggleShowPassword() {
@@ -63,8 +63,7 @@ export class RegisterComponent implements OnInit {
         }
       },
       error: (err: any) => {
-        console.log(err);
-        this.toastrService.showError('Erro tente novamente mais tarde');
+        this.toastrService.showError(err.error.message)
       }
     });
   }

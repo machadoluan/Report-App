@@ -95,6 +95,7 @@
                  border: none;
                  cursor: pointer;
                  transition: background-color 0.3s ease;
+                 color: white !important;
 
                  &:disabled {
                      background-color: rgba($color: #4A76E6, $alpha: 0.5);
