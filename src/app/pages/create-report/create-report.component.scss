@@ -118,6 +118,36 @@ form {
         .form-group {
             flex: 1;
 
+            .input-icon-wrapper {
+                position: relative;
+                // display: flex;
+                // align-items: center;
+              }
+              
+              .input-icon-wrapper input {
+                flex: 1;
+              }
+              
+              .icon-button {
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 100%;
+                width: 40px;
+                background-color: var(--primary);
+                border-radius: 0 6px 6px 0 !important;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                border: 1px solid var(--p-inputtext-border-color);
+              }
+              
+              .icon-button i {
+                color: #fff;
+                font-size: 14px;
+              }
+
             input {
                 width: 100%;
             }
@@ -277,6 +307,7 @@ form {
 
 ::ng-deep .p-datepicker {
     position: static !important;
+    width: 100% !important;
 
     .p-datepicker-header {
         background-color: white !important;

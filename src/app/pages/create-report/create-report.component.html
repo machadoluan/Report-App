@@ -14,19 +14,27 @@
         <div class="data_hora">
             <div class="form-group">
                 <label for="data">Data</label>
-                <p-datepicker forceNumericKeyboard  dateFormat="dd/mm/yy" formControlName="data" placeholder="00/00/0000" showOnFocus="false"
-                showIcon="true"
-                inputId="data"></p-datepicker>
+                <p-datepicker forceNumericKeyboard dateFormat="dd/mm/yy" formControlName="data" placeholder="00/00/0000"
+                    showOnFocus="false" showIcon="true" inputId="data"></p-datepicker>
 
             </div>
             <div class="form-group">
                 <label for="hora">Hora</label>
-                <input pInputText id="hora" mask="00:00" aria-describedby="username-help" placeholder="Horario" formControlName="hora"/>
+
+                <div class="input-icon-wrapper">
+                    <input mask="00:00" pInputText id="hora" placeholder="00:00" formControlName="hora" inputmode="numeric" />
+
+                    <div class="icon-button" (click)="timepicker.open()">
+                        <i class="pi pi-clock"></i>
+                    </div>
+                </div>
             </div>
+
         </div>
         <div class="form-group">
             <label for="descricao">Descrição</label>
-            <textarea rows="5" cols="30" pTextarea autoResize="none" placeholder="Digite algo..." formControlName="descricao"> </textarea>
+            <textarea rows="5" cols="30" pTextarea autoResize="none" placeholder="Digite algo..."
+                formControlName="descricao"> </textarea>
         </div>
         <div class="form-group file_photo">
 
@@ -47,8 +55,9 @@
             </div>
         </div>
 
-        <div class="btns" >
-            <button (click)="createReport()" [disabled]="selectedFiles.length === 0 || dadosReport.invalid">Criar</button>
+        <div class="btns">
+            <button (click)="createReport()"
+                [disabled]="selectedFiles.length === 0 || dadosReport.invalid">Criar</button>
             <button routerLink="/reports">Cancelar</button>
         </div>
 
@@ -73,3 +82,6 @@
         Criando registro...
     </div>
 </div>
+
+
+<ngx-mat-timepicker #timepicker (timeSet)="onTimeSelected($event)" [format]="24"></ngx-mat-timepicker>

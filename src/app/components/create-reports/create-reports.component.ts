@@ -13,11 +13,13 @@ import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { AuthService } from '../../service/auth.service';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+
 
 
 @Component({
   selector: 'app-create-reports',
-  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, DatePickerModule, ReactiveFormsModule, ProgressSpinner],
+  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, DatePickerModule, ReactiveFormsModule, ProgressSpinner, NgxMatTimepickerModule],
   templateUrl: './create-reports.component.html',
   styleUrl: './create-reports.component.scss'
 })
@@ -225,4 +227,11 @@ export class CreateReportsComponent implements OnInit {
   redirecionar(){
     window.location.reload()
   }
+
+  onTimeSelected(time: string) {
+    const [hours, minutes] = time.split(':');
+    const formattedTime = `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+    this.dadosReport.patchValue({ hora: formattedTime });
+  }
+  
 }

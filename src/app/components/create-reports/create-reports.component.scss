@@ -140,6 +140,36 @@ form {
         justify-content: space-between;
         gap: 1rem;
 
+        .input-icon-wrapper {
+            position: relative;
+            // display: flex;
+            // align-items: center;
+          }
+          
+          .input-icon-wrapper input {
+            flex: 1;
+          }
+          
+          .icon-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 40px;
+            background-color: var(--primary);
+            border-radius: 0 6px 6px 0 !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid var(--p-inputtext-border-color);
+          }
+          
+          .icon-button i {
+            color: #fff;
+            font-size: 14px;
+          }
+
         .form-group {
             flex: 1;
 
@@ -338,4 +368,8 @@ form {
     .p-datepicker-today > .p-datepicker-day{
         background-color: #d1d1d1 !important;
     }
+}
+
+::ng-deep .cdk-overlay-container{
+    z-index: 99999 !important;
 }

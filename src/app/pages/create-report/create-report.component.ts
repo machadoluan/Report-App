@@ -13,18 +13,18 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ReportsService } from '../../service/reports.service';
 import { ToastrService } from '../../service/toastr.service';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { AuthService } from '../../service/auth.service';
-
-
 
 @Component({
   selector: 'app-create-report',
-  imports: [DialogModule, InputTextModule, NgxMaskDirective, TextareaModule, SelectModule, CommonModule, RouterLink, ProgressSpinner, ReactiveFormsModule, DatePickerModule],
+  imports: [DialogModule, InputTextModule, TextareaModule, SelectModule, CommonModule, RouterLink, ProgressSpinner, ReactiveFormsModule, DatePickerModule, NgxMatTimepickerModule, NgxMaskDirective],
   templateUrl: './create-report.component.html',
   styleUrl: './create-report.component.scss'
 })
 export class CreateReportComponent implements AfterViewInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('timepicker') timepicker: any;
 
   display: boolean = false;
   isLoading = false;
@@ -221,4 +221,11 @@ export class CreateReportComponent implements AfterViewInit {
 
     console.log(this.selectedFiles.length)
   }
+
+  onTimeSelected(time: string) {
+    const [hours, minutes] = time.split(':');
+    const formattedTime = `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+    this.dadosReport.patchValue({ hora: formattedTime });
+  }
+  
 }

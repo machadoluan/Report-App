@@ -16,14 +16,19 @@
         <div class="data_hora">
             <div class="form-group">
                 <label for="data">Data</label>
-                <p-datepicker forceNumericKeyboard  dateFormat="dd/mm/yy" formControlName="data" placeholder="Data" showOnFocus="false"
+                <p-datepicker forceNumericKeyboard  dateFormat="dd/mm/yy" formControlName="data" placeholder="00/00/0000" showOnFocus="false"
                 showIcon="true"/>
 
             </div>
             <div class="form-group">
                 <label for="hora">Hora</label>
-                <input pInputText id="hora" mask="00:00" aria-describedby="username-help" placeholder="Horario"
-                    formControlName="hora" />
+                <div class="input-icon-wrapper">
+                    <input mask="00:00" pInputText id="hora" placeholder="00:00" formControlName="hora" inputmode="numeric" />
+
+                    <div class="icon-button" (click)="timepicker.open()">
+                        <i class="pi pi-clock"></i>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -81,3 +86,5 @@
         Criando registro...
     </div>
 </div>
+
+<ngx-mat-timepicker #timepicker (timeSet)="onTimeSelected($event)" [format]="24"></ngx-mat-timepicker>
