@@ -16,12 +16,13 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ReportsService } from '../../service/reports.service';
 import { HttpClient } from '@angular/common/http';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { FaturamentosComponent } from '../../components/faturamentos/faturamentos.component';
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, CreateTripsComponent, CreateReportsComponent, DatePickerModule, DialogModule, InputNumberModule, ReactiveFormsModule, InputTextModule,
+  imports: [CommonModule, RouterLink, CreateTripsComponent, CreateReportsComponent, DatePickerModule, DialogModule, InputNumberModule, ReactiveFormsModule, InputTextModule, FaturamentosComponent,
     TextareaModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -30,6 +31,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 export class DashboardComponent implements OnInit {
   @ViewChild(CreateTripsComponent, { static: true }) dialogCreateTrips!: CreateTripsComponent;
   @ViewChild(CreateReportsComponent, { static: true }) dialogCreateReports!: CreateReportsComponent;
+  @ViewChild(FaturamentosComponent, { static: true }) faturamentosComponent!: FaturamentosComponent;
   showDialog: boolean = false;
   showReportDialog: boolean = false;
 
@@ -44,7 +46,7 @@ export class DashboardComponent implements OnInit {
   dadosUpdate: FormGroup;
   editTrip: boolean = false
   fullScreenImageUrl: string | null = null;
-  mesAtual: number = 0;
+  mesReferente: number = 0;
   anoAtual: number = 0;
 
   registroTipo: any[] = [
@@ -68,6 +70,7 @@ export class DashboardComponent implements OnInit {
     private http: HttpClient
 
   ) {
+
     this.dadosUpdate = this.fb.group({
       cliente: [{ value: "", disabled: true }],
       origem: [{ value: "", disabled: true }],
@@ -93,10 +96,28 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadTrips()
     this.loadReports()
-
+    this.calcularMesReferente()
     const dataAtual = new Date();
-    this.mesAtual = dataAtual.getMonth() + 1;
     this.anoAtual = dataAtual.getFullYear();
+  }
+
+  calcularMesReferente(): void {
+    const dataAtual = new Date(); // Data atual
+    const diaAtual = dataAtual.getDate(); // Dia do mês atual
+    const mesAtual = dataAtual.getMonth() + 1; // Mês atual (1 a 12)
+
+    // Lógica para determinar o mês referente
+    if (diaAtual >= 26) {
+      // Se o dia atual for 26 ou posterior, o mês referente é o próximo mês
+      this.mesReferente = mesAtual + 1;
+      if (this.mesReferente > 12) {
+        // Se passar de dezembro, volta para janeiro do próximo ano
+        this.mesReferente = 1;
+      }
+    } else {
+      // Se o dia atual for anterior a 26, o mês referente é o mês atual
+      this.mesReferente = mesAtual;
+    }
   }
 
   loadTrips() {
@@ -107,10 +128,20 @@ export class DashboardComponent implements OnInit {
         // Define o mês e ano atual
         const dataAtual = new Date();
         const mesAtual = dataAtual.getMonth() + 1; // getMonth() retorna 0-11
+
         const anoAtual = dataAtual.getFullYear();
 
         // Calcula o faturamento do mês atual
-        this.faturamento = this.calcularFaturamento(this.viagens, mesAtual, anoAtual);
+        // this.faturamento = this.calcularFaturamento(this.viagens, mesAtual, anoAtual);
+        this.tripService.faturamento(this.mesReferente, this.anoAtual).subscribe({
+          next: (data) => {
+            this.faturamento = data.total
+          },
+          error: (err) => {
+            console.error(err)
+          }
+        })
+        console.log(this.faturamento)
       },
       (err) => {
         console.error("Error ao buscar viagens:", err)
@@ -326,46 +357,5 @@ export class DashboardComponent implements OnInit {
   }
   redirecionar() {
     window.location.reload()
-  }
-
-  filtrarViagensPorMes(viagens: viagem[], mes: number, ano: number): viagem[] {
-    return viagens.filter(viagem => {
-      // Converte as datas de início e fim para objetos Date
-      const dataInicio = this.converterDataBrasileiraParaDate(viagem.dataInicio);
-      const dataFim = this.converterDataBrasileiraParaDate(viagem.dataFim);
-
-      // Verifica se a viagem foi iniciada e finalizada no mês e ano especificados
-      const inicioNoMes = dataInicio.getMonth() + 1 === mes && dataInicio.getFullYear() === ano;
-      const fimNoMes = dataFim.getMonth() + 1 === mes && dataFim.getFullYear() === ano;
-
-      // Verifica se a viagem foi finalizada após o dia 20
-      const finalizadaAposDia20 = dataFim.getDate() > 20;
-
-      // Se a viagem foi finalizada após o dia 20, ela deve ser contabilizada no próximo mês
-      if (finalizadaAposDia20) {
-        return false;
-      }
-
-      return inicioNoMes && fimNoMes;
-    });
-  }
-
-  calcularFaturamento(viagens: viagem[], mes: number, ano: number): number {
-    const viagensFiltradas = this.filtrarViagensPorMes(viagens, mes, ano);
-    return viagensFiltradas.reduce((acc, viagem) => acc + viagem.valor, 0);
-  }
-
-  // Função para converter datas no formato brasileiro (dd/MM/yyyy ou dd.MM.yyyy) para Date
-  converterDataBrasileiraParaDate(dataString: string): Date {
-    if (!dataString) return new Date(); // Retorna a data atual se a string for inválida
-
-    // Substitui pontos por barras, caso a data esteja no formato dd.MM.yyyy
-    const dataFormatada = dataString.replace(/\./g, '/');
-
-    // Divide a string em dia, mês e ano
-    const [dia, mes, ano] = dataFormatada.split('/');
-
-    // Cria um objeto Date (lembrando que o mês no JavaScript é 0-based)
-    return new Date(Number(ano), Number(mes) - 1, Number(dia));
   }
 }

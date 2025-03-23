@@ -85,4 +85,20 @@ export class ViagensService {
     return throwError(errorMessage);
   }
 
+
+  faturamento(mesReferente?: number, anoReferente?: number): Observable<any> {
+    let params = new HttpParams().set('userId', this.user.id);
+
+    if (mesReferente !== undefined) {
+      params = params.set('mesReferente', mesReferente.toString());
+    }
+    if (anoReferente !== undefined) {
+      params = params.set('anoReferente', anoReferente.toString());
+    }
+
+    return this.http.get(`${this.apiUrl}/invoicing/history`, { params }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }

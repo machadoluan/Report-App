@@ -26,10 +26,15 @@
             <div class="faturamento">
                 <div class="circle">
                     <div class="text">
-                        <span>Referente: {{ mesAtual.toString().padStart(2, '0') }}/{{ anoAtual }}</span>
+                        <span>Referente: {{ mesReferente.toString().padStart(2, '0') }}/{{ anoAtual }}</span>
                         <span class="valor">{{formatarDinheiro(faturamento)}}</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="see-more">
+                <span (click)="faturamentosComponent.display = true">Ver tudo <i
+                        class="fa-solid fa-chevron-right"></i></span>
             </div>
         </div>
     </div>
@@ -120,19 +125,19 @@
             <div class="form-group">
                 <label for="valor">Valor</label>
                 <p-inputNumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR"
-                [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="Digite o valor"
-                placeholder="R$: 00,00"></p-inputNumber>
+                    [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="Digite o valor"
+                    placeholder="R$: 00,00"></p-inputNumber>
             </div>
             <div class="data_hora">
                 <div class="form-group">
                     <label for="data_incio">Data inicio</label>
-                    <p-datepicker forceNumericKeyboard  dateFormat="dd/mm/yy" formControlName="dataInicio" showOnFocus="false"
-                    showIcon="true"/>
+                    <p-datepicker forceNumericKeyboard dateFormat="dd/mm/yy" formControlName="dataInicio"
+                        showOnFocus="false" showIcon="true" />
                 </div>
                 <div class="form-group">
                     <label for="data_fim">Data Fim</label>
-                    <p-datepicker forceNumericKeyboard  dateFormat="dd/mm/yy" formControlName="dataFim" showOnFocus="false"
-                    showIcon="true"/>
+                    <p-datepicker forceNumericKeyboard dateFormat="dd/mm/yy" formControlName="dataFim"
+                        showOnFocus="false" showIcon="true" />
                 </div>
             </div>
             <div class="form-group">
@@ -152,6 +157,7 @@
 
 <app-create-trips></app-create-trips>
 <app-create-reports></app-create-reports>
+<app-faturamentos></app-faturamentos>
 
 
 <div class="full-screen-image" *ngIf="fullScreenImageUrl">

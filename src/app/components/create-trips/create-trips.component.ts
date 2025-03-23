@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ViagensService } from '../../service/viagens.service';
 import { ToastrService } from '../../service/toastr.service';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -38,7 +38,7 @@ export class CreateTripsComponent implements OnInit {
       cliente: ["", Validators.required],
       origem: ["", Validators.required],
       destino: ["", Validators.required],
-      valor: [0, Validators.required],
+      valor: [null, Validators.required, this.valorMinimo(0.01)],
       dataInicio: ["", Validators.required],
       dataFim: [""],
       descricao: [""]
@@ -48,6 +48,16 @@ export class CreateTripsComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.authService.getUserFromToken()
 
+  }
+
+  valorMinimo(min: number) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (value === null || value === undefined || value < min) {
+        return { valorInvalido: true };
+      }
+      return null;
+    }
   }
 
   showDialog() {
@@ -71,7 +81,7 @@ export class CreateTripsComponent implements OnInit {
     console.log(dadosParaEnviar)
     this.tripService.createTrip(dadosParaEnviar, this.user).subscribe(
       (res) => {
-        this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} `)
+        this.toastrService.showSucess(`Viagem para ${dadosParaEnviar.destino} cadastrada`)
         this.dadosCadastroTrips.reset()
       },
       (err) => {

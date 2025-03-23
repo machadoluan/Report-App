@@ -99,6 +99,8 @@ export class TripDetailsComponent implements OnInit {
     if (!this.isMobile) {
       this.openDialog()
     }
+
+
   }
 
   @HostListener('window:resize', ['$event'])

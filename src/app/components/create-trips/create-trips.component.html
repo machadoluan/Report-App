@@ -1,5 +1,5 @@
-<p-dialog [(visible)]="display" [modal]="true" [draggable]="false" [resizable]="false" header="Criar Viagem" (onHide)="redirecionar()"
-    styleClass="meu_dialo2">
+<p-dialog [(visible)]="display" [modal]="true" [draggable]="false" [resizable]="false" header="Criar Viagem"
+    (onHide)="redirecionar()" styleClass="meu_dialo2">
 
     <form [formGroup]="dadosCadastroTrips">
         <div class="form-group">
@@ -19,21 +19,22 @@
         </div>
         <div class="form-group">
             <label for="valor">Valor</label>
-            <p-inputNumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR" [minFractionDigits]="2"
-                [maxFractionDigits]="2" placeholder="Digite o valor" placeholder="R$: 00,00"></p-inputNumber>
+            <p-inputNumber forceNumericKeyboard formControlName="valor" mode="currency" currency="BRL" locale="pt-BR"
+                [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="Digite o valor"
+                placeholder="R$: 0,00"></p-inputNumber>
 
         </div>
         <div class="data_hora">
             <div class="form-group">
                 <label for="data">Data inicio</label>
-                <p-datepicker forceNumericKeyboard  dateFormat="dd/mm/yy" formControlName="dataInicio" showOnFocus="false"
-                showIcon="true"/>
+                <p-datepicker forceNumericKeyboard dateFormat="dd/mm/yy" formControlName="dataInicio"
+                    showOnFocus="false" showIcon="true" />
 
             </div>
             <div class="form-group">
                 <label for="data">Data Fim</label>
-                <p-datepicker forceNumericKeyboard  dateFormat="dd/mm/yy" formControlName="dataFim" showOnFocus="false"
-                showIcon="true"/>
+                <p-datepicker forceNumericKeyboard dateFormat="dd/mm/yy" formControlName="dataFim" showOnFocus="false"
+                    showIcon="true" />
 
 
             </div>

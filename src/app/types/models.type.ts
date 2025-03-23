@@ -20,3 +20,9 @@ export type registro = {
     foto: string;
     viagem_nome: string;
 }
+
+export type faturamentos = {
+    mesReferente: string;
+    anoReferente: string;
+    total: string
+}
