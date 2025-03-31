@@ -123,20 +123,43 @@ export class TripDetailsComponent implements OnInit {
   }
 
   shareTrip() {
-    if (this.viagem) {
-      if (navigator.share) {
-        navigator.share({
-          title: `Viagem para ${this.viagem.destino}`,
-          text: `Confira os detalhes da viagem para ${this.viagem.destino}.`,
-          url: window.location.href
-        })
-          .then(() => console.log('Viagem compartilhada com sucesso!'))
-          .catch((error) => console.log('Erro ao compartilhar:', error));
-      } else {
-        console.log('API de compartilhamento não suportada neste navegador.');
-      }
-    }
+    if (!this.viagem) return;
 
+    if (navigator.share) {
+      // Usa a Web Share API se estiver disponível
+      navigator.share({
+        title: `Viagem de ${this.viagem.origem} para ${this.viagem.destino}`,
+        text: `Confira os detalhes do registro.`,
+        url: window.location.href
+      })
+        .then(() => console.log('Registro compartilhado com sucesso!'))
+        .catch(error => console.error('Erro ao compartilhar:', error));
+    } else {
+      // Fallback para outro método de compartilhamento, ex.: copiar link
+      console.log('API de compartilhamento não suportada neste navegador.');
+      this.copiarLink();
+    }
+  }
+
+  copiarLink(): void {
+    const url = window.location.href;
+
+    // Verifica se o navegador possui a API mais moderna de clipboard
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url)
+        .then(() => console.log("Link copiado com sucesso!"))
+        .catch(error => console.error("Erro ao copiar link:", error));
+    } else {
+      // Fallback para navegadores que não suportam navigator.clipboard
+      // Exemplo usando um input temporário
+      const input = document.createElement('input');
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      console.log("Link copiado (método alternativo)!");
+    }
   }
 
   loadReportsSpecific(viagemId: number) {

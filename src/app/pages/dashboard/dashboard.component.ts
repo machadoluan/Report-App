@@ -17,6 +17,7 @@ import { ReportsService } from '../../service/reports.service';
 import { HttpClient } from '@angular/common/http';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FaturamentosComponent } from '../../components/faturamentos/faturamentos.component';
+import { saveAs } from 'file-saver';
 
 
 @Component({
@@ -335,21 +336,12 @@ export class DashboardComponent implements OnInit {
   }
 
   downloadImage(url: string) {
-    this.http.get(url, { responseType: 'blob' }).subscribe((blob: Blob) => {
-      // Cria um link temporário
-      const link = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      link.href = url;
-      link.download = 'image.jpg'; // Nome do arquivo que será baixado
-      document.body.appendChild(link);
-      link.click(); // Simula o clique no link para iniciar o download
-
-      // Limpa o objeto URL e remove o link do DOM
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(link);
-    }, error => {
-      console.error('Erro ao baixar a imagem:', error);
-    });
+    this.http.get(url, { responseType: 'blob' })
+      .subscribe((blob: Blob) => {
+        saveAs(blob, 'image.jpg'); // Ele mesmo faz o fallback interno
+      }, error => {
+        console.error('Erro ao baixar a imagem:', error);
+      });
   }
 
   openFullScreenImage(imageUrl: string): void {

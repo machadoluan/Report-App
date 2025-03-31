@@ -15,7 +15,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DatePickerModule } from 'primeng/datepicker';
 import { HttpClient } from '@angular/common/http';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-
+import { saveAs } from 'file-saver';
 
 
 
@@ -141,21 +141,46 @@ export class ReportDetailsComponent implements OnInit {
 
 
   shareTrip() {
-    if (this.registro) {
-      if (navigator.share) {
-        navigator.share({
-          title: `Registro ${this.registro.tipo} da viagem ${this.registro.viagem_nome}`,
-          text: `Confira os detalhes do registro.`,
-          url: window.location.href
-        })
-          .then(() => console.log('Registro compartilhada com sucesso!'))
-          .catch((error) => console.log('Erro ao compartilhar:', error));
-      } else {
-        console.log('API de compartilhamento não suportada neste navegador.');
-      }
-    }
+    if (!this.registro) return;
 
+    if (navigator.share) {
+      // Usa a Web Share API se estiver disponível
+      navigator.share({
+        title: `Registro ${this.registro.tipo} da viagem ${this.registro.viagem_nome}`,
+        text: `Confira os detalhes do registro.`,
+        url: window.location.href
+      })
+        .then(() => console.log('Registro compartilhado com sucesso!'))
+        .catch(error => console.error('Erro ao compartilhar:', error));
+    } else {
+      // Fallback para outro método de compartilhamento, ex.: copiar link
+      console.log('API de compartilhamento não suportada neste navegador.');
+      this.copiarLink();
+    }
   }
+
+  copiarLink(): void {
+    const url = window.location.href;
+
+    // Verifica se o navegador possui a API mais moderna de clipboard
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url)
+        .then(() => console.log("Link copiado com sucesso!"))
+        .catch(error => console.error("Erro ao copiar link:", error));
+    } else {
+      // Fallback para navegadores que não suportam navigator.clipboard
+      // Exemplo usando um input temporário
+      const input = document.createElement('input');
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      console.log("Link copiado (método alternativo)!");
+    }
+  }
+
+
 
 
   editar() {
@@ -181,21 +206,12 @@ export class ReportDetailsComponent implements OnInit {
   }
 
   downloadImage(url: string) {
-    this.http.get(url, { responseType: 'blob' }).subscribe((blob: Blob) => {
-      // Cria um link temporário
-      const link = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      link.href = url;
-      link.download = 'image.jpg'; // Nome do arquivo que será baixado
-      document.body.appendChild(link);
-      link.click(); // Simula o clique no link para iniciar o download
-
-      // Limpa o objeto URL e remove o link do DOM
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(link);
-    }, error => {
-      console.error('Erro ao baixar a imagem:', error);
-    });
+    this.http.get(url, { responseType: 'blob' })
+      .subscribe((blob: Blob) => {
+        saveAs(blob, 'image.jpg'); // Ele mesmo faz o fallback interno
+      }, error => {
+        console.error('Erro ao baixar a imagem:', error);
+      });
   }
 
 
