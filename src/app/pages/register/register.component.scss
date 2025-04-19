@@ -18,8 +18,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 6rem;
+            gap: 5rem;
             flex: .5;
+
+            @media screen and (max-width: 768px) {
+
+                flex: 1 !important;
+            }
 
             .title {
 
@@ -48,7 +53,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 1.5rem;
+                gap: 1rem;
 
                 form {
                     width: 75%;
@@ -129,11 +134,12 @@
                         cursor: pointer;
                     }
 
+
                 }
 
                 .register_btn {
                     width: 75%;
-                    padding: .5rem 0;
+                    padding: .7rem 0;
                     border-radius: 6px;
                     background-color: #4A76E6;
                     border: none;
@@ -157,6 +163,11 @@
                     cursor: pointer;
 
                 }
+
+                @media screen and (max-width: 768px) {
+                    width: 100%;
+                    text-align: center;
+                }
             }
 
         }
@@ -168,6 +179,21 @@
             background-repeat: no-repeat;
 
             height: 100%;
+
+            @media screen and (max-width: 768px) {
+                //  display: none;
+                //  height: 50%;
+                background-position: center center;
+                flex: 1;
+            }
+
+            @media screen and (max-width: 678px) {
+                display: none;
+            }
+
+            @media screen and (max-width: 576px) {
+                height: 40%;
+            }
         }
     }
 }
@@ -212,34 +238,7 @@
     height: 1.1rem;
 }
 
-@media screen and (max-width: 430px) {
 
-    .register {
-        width: 90%;
-        gap: 4rem 2rem !important;
-
-        .register_content {
-            gap: 2rem !important;
-
-            form {
-                width: 100% !important;
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 330px) {
-    .register {
-        padding: 2rem 1rem !important;
-        width: 90%;
-
-        .register_content {
-            form {
-                width: 100% !important;
-            }
-        }
-    }
-}
 
 ::ng-deep .forgotPassword {
     width: 30%;

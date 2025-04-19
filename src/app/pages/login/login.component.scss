@@ -21,6 +21,11 @@
              gap: 6rem;
              flex: .5;
 
+             @media screen and (max-width: 768px) {
+
+                 flex: 1 !important;
+             }
+
              .title {
 
                  h1 {
@@ -70,7 +75,7 @@
                          gap: .5rem;
                          position: relative;
 
-             
+
 
 
                          input {
@@ -121,6 +126,28 @@
                          cursor: pointer;
                      }
 
+
+                     @media screen and (max-width: 378px) {
+                        .checkbox {
+                            display: none;
+                            gap: .1rem !important;
+                            align-items: center;
+   
+                            .checkbox-label {
+                                font-size: 10px;
+                                color: var(--color);
+                            }
+                        }
+   
+                        .forgot {
+                            width: 100%;
+                            font-size: 10px;
+                            color: var(--primary);
+                            cursor: pointer;
+                            text-align: right;
+                        }
+                     }
+
                  }
 
                  .login_btn {
@@ -152,6 +179,12 @@
                      cursor: pointer;
 
                  }
+
+                 @media screen and (max-width: 768px) {
+                     width: 100%;
+                     text-align: center;
+                 }
+
              }
          }
 
@@ -160,42 +193,29 @@
              background-image: url('/img/banner.png');
              background-size: cover;
              background-repeat: no-repeat;
-
              height: 100%;
-         }
-     }
- }
+             border-radius: 10px 0 0 10px;
 
+             @media screen and (max-width: 768px) {
+                 //  display: none;
+                 //  height: 50%;
+                 background-position: center center;
+                 flex: 1;
+             }
 
+             @media screen and (max-width: 678px) {
+                 display: none;
+             }
 
- @media screen and (max-width: 430px) {
-
-     .login {
-         width: 90%;
-         gap: 4rem 2rem !important;
-
-         .login_content {
-             gap: 2rem !important;
-
-             form {
-                 width: 100% !important;
+             @media screen and (max-width: 576px) {
+                 height: 40%;
              }
          }
      }
  }
 
- @media screen and (max-width: 330px) {
-     .login {
-         padding: 2rem 1rem !important;
-         width: 90%;
 
-         .login_content {
-             form {
-                 width: 100% !important;
-             }
-         }
-     }
- }
+
 
  ::ng-deep .forgotPassword {
      width: 30%;
