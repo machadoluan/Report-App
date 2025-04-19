@@ -6,15 +6,33 @@
      align-items: center;
 
      .login {
-         padding: 2rem;
-         border: 2px solid var(--card-border);
+         display: flex;
+         width: 100%;
+         height: 100%;
+         align-items: center;
          border-radius: 20px;
-         background-color: var(--background-color);
 
          .login_content {
+             height: 100%;
              display: flex;
              flex-direction: column;
-             gap: 1.5rem;
+             align-items: center;
+             justify-content: center;
+             gap: 6rem;
+             flex: .5;
+
+             .title {
+
+                 h1 {
+                     font-size: 24px;
+                 }
+
+                 p {
+                     font-size: 14px;
+                 }
+
+                 text-align: center;
+             }
 
              .login_title {
                  font-size: 18px;
@@ -25,92 +43,125 @@
                  font-size: 14px;
              }
 
-             form {
-                 width: 345px;
+             .form-container {
+                 width: 100%;
                  display: flex;
                  flex-direction: column;
-                 gap: 1rem;
-                 justify-content: space-between;
-                 transition: border-color 0.3s ease, outline 0.3s ease;
+                 align-items: center;
+                 gap: 1.5rem;
 
+                 form {
+                     width: 75%;
 
-                 .form-group {
                      display: flex;
-                     align-items: center;
-                     border: 2px solid var(--card-border);
-                     padding: 0 .7rem;
-                     border-radius: 6px;
+                     flex-direction: column;
+                     gap: 1rem;
                      justify-content: space-between;
-                     gap: .5rem;
+                     transition: border-color 0.3s ease, outline 0.3s ease;
 
 
-                     input {
-                         background-color: transparent;
-                         border: none;
-                         outline: none;
-                         color: var(--color);
-                         width: 100%;
-                         padding: .7rem 0;
+                     .form-group {
+                         display: flex;
+                         align-items: center;
+                         border: 1px solid var(--card-border);
+                         padding: 0 .7rem;
+                         border-radius: 6px;
+                         justify-content: space-between;
+                         gap: .5rem;
+                         position: relative;
+
+             
+
+
+                         input {
+                             background-color: transparent;
+                             border: none;
+                             outline: none;
+                             color: var(--color);
+                             width: 100%;
+                             padding: .7rem 0;
+                         }
+
+                         .pi-eye {
+                             cursor: pointer;
+                         }
+
+                         &:focus-within {
+                             outline: 2px solid rgba($color: var(--primary), $alpha: 0.2);
+                             border: 1px solid #3B82F6;
+                         }
+
+
                      }
 
-                     .pi-eye {
+
+                 }
+
+                 .user {
+                     width: 75%;
+
+                     display: flex;
+                     justify-content: space-between;
+                     align-items: center;
+
+                     .checkbox {
+                         display: flex;
+                         gap: .5rem;
+                         align-items: center;
+
+                         .checkbox-label {
+                             font-size: 12px;
+                             color: var(--color);
+                         }
+                     }
+
+                     .forgot {
+                         font-size: 12px;
+                         color: var(--primary);
                          cursor: pointer;
                      }
 
-                     &:focus-within {
-                         outline: 2px solid rgba($color: var(--primary), $alpha: 0.2);
-                         border: 1px solid #3B82F6;
-                     }
-                 }
-             }
-
-             .user {
-                 display: flex;
-                 justify-content: space-between;
-                 align-items: center;
-
-                 .checkbox {
-                     display: flex;
-                     gap: .5rem;
-                     align-items: center;
-
-                     .checkbox-label {
-                         font-size: 12px;
-                         color: var(--color);
-                     }
                  }
 
-                 .forgot {
-                     font-size: 12px;
-                     color: var(--primary);
+                 .login_btn {
+                     width: 75%;
+
+                     padding: .7rem 0;
+                     border-radius: 6px;
+                     background-color: #4A76E6;
+                     border: none;
                      cursor: pointer;
+                     transition: background-color 0.3s ease;
+                     color: white !important;
+
+                     &:disabled {
+                         background-color: rgba($color: #4A76E6, $alpha: 0.5);
+                     }
                  }
 
              }
 
-             .login_btn {
-                 padding: .5rem 0;
-                 border-radius: 6px;
-                 background-color: #4A76E6;
-                 border: none;
-                 cursor: pointer;
-                 transition: background-color 0.3s ease;
-                 color: white !important;
-
-                 &:disabled {
-                     background-color: rgba($color: #4A76E6, $alpha: 0.5);
-                 }
-             }
 
              .register {
-                 text-align: center;
+                 width: 75%;
                  font-size: 12px;
+                 ;
 
                  a {
                      color: var(--primary);
                      cursor: pointer;
+
                  }
              }
+         }
+
+         .banner {
+             flex: 1;
+             background-image: url('/img/banner.png');
+             background-size: cover;
+             background-repeat: no-repeat;
+
+             height: 100%;
          }
      }
  }

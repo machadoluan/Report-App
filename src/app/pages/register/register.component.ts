@@ -29,6 +29,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 export class RegisterComponent implements OnInit {
   formRegistro: FormGroup
   showPassword = false;
+  confirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,8 +42,9 @@ export class RegisterComponent implements OnInit {
       lastName: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
       termos: [false, Validators.requiredTrue]
-    })
+    }, { validators: this.passwordMatchValidator });
   }
 
   ngOnInit(): void {
@@ -52,19 +54,36 @@ export class RegisterComponent implements OnInit {
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
   }
+  toggleShowConfirmPassword() {
+    this.confirmPassword = !this.confirmPassword;
+  }
 
   register() {
+    if (this.formRegistro.invalid) {
+      this.toastrService.showError('Preencha todos os campos corretamente.');
+      return;
+    }
+
     this.authService.register(this.formRegistro.value).subscribe({
       next: (res: any) => {
         if (res.accessToken) {
-          localStorage.setItem('token', res.accessToken)
-          this.router.navigate(['/dashboard'])
-          window.location.reload()
+          localStorage.setItem('token', res.accessToken);
+          this.router.navigate(['/dashboard']);
+          window.location.reload();
         }
       },
       error: (err: any) => {
-        this.toastrService.showError(err.error.message)
+        this.toastrService.showError(err.error.message);
       }
     });
   }
+
+
+  passwordMatchValidator(group: FormGroup) {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { mismatch: true };
+  }
+
 }
+
