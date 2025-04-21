@@ -9,6 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastrService } from '../../service/toastr.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -95,11 +96,11 @@ export class RegisterComponent implements OnInit {
   }
 
   loginGoogle() {
-    window.location.href = 'http://localhost:3000/auth/google';
+    window.location.href = `${environment.apiUrl}/auth/google`;
   }
 
   loginFacebook() {
-    window.location.href = 'http://localhost:3000/auth/facebook';
+    window.location.href = `${environment.apiUrl}/auth/facebook`;
   }
 
 

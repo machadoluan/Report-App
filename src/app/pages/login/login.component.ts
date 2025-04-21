@@ -11,6 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ButtonModule } from 'primeng/button';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -106,11 +107,11 @@ export class LoginComponent implements OnInit {
 
   // login.component.ts
   loginGoogle() {
-    window.location.href = 'http://localhost:3000/auth/google';
+    window.location.href = `${environment.apiUrl}/auth/google`;
   }
 
   loginFacebook() {
-    window.location.href = 'http://localhost:3000/auth/facebook';
+    window.location.href = `${environment.apiUrl}/auth/facebook`;
   }
 
 
