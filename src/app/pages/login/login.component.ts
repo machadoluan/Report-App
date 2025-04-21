@@ -113,6 +113,4 @@ export class LoginComponent implements OnInit {
   loginFacebook() {
     window.location.href = `${environment.apiUrl}/auth/facebook`;
   }
-
-
 }
