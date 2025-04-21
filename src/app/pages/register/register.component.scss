@@ -1,6 +1,6 @@
 .container-register {
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -149,6 +149,60 @@
 
                     &:disabled {
                         background-color: rgba($color: #4A76E6, $alpha: 0.5);
+                    }
+                }
+
+                .login-width {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 2rem;
+
+                    .line {
+                        width: 75%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 1rem;
+                        font-size: 12px;
+
+                        .login-width-line {
+                            flex: 1;
+                            height: 1px;
+                            background-color: rgba($color: #000000, $alpha: .5);
+                        }
+
+                        .login-width-text {
+                            white-space: nowrap;
+                        }
+                    }
+
+                    .btns {
+                        width: 75%;
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 1rem;
+
+                        button {
+                            width: 100%;
+                            padding: .3rem 1rem;
+                            display: flex;
+                            align-items: center;
+                            border-radius: 8px;
+                            gap: .3rem;
+                            border: 1px solid var(--card-border);
+                            justify-content: center;
+                            background-color: transparent;
+                            color: #000;
+                            cursor: pointer;
+                            transition: background-color 0.3s ease, color 0.3s ease;
+
+                            &:hover {
+                                background-color: var(--card-border);
+                            }
+                        }
                     }
                 }
             }

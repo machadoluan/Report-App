@@ -3,13 +3,14 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Checkbox } from 'primeng/checkbox';
 import { AuthService } from '../../service/auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from '../../service/toastr.service';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ButtonModule } from 'primeng/button';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit {
   formForgot: FormGroup
   @ViewChild('passwordInput') passwordInput!: ElementRef
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private route: Router, private toastrService: ToastrService) {
+  constructor(private router: ActivatedRoute, private fb: FormBuilder, private authService: AuthService, private route: Router, private toastrService: ToastrService, private http: HttpClient) {
     this.userLogin = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -47,7 +48,15 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.router.queryParams.subscribe(params => {
+      const error = params['error'];
+      if (error) {
+        this.route.navigate(['/login']).then(() => {
+          this.toastrService.showError('Login cancelado!')
+        });
+      }
 
+    })
   }
 
   toggleShowPassword() {
@@ -93,4 +102,16 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+
+
+  // login.component.ts
+  loginGoogle() {
+    window.location.href = 'http://localhost:3000/auth/google';
+  }
+
+  loginFacebook() {
+    window.location.href = 'http://localhost:3000/auth/facebook';
+  }
+
+
 }

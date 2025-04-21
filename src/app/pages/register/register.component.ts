@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Checkbox } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
@@ -35,7 +35,8 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private route: ActivatedRoute
   ) {
     this.formRegistro = this.fb.group({
       firstName: ['', Validators.required],
@@ -48,7 +49,15 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const error = params['error'];
+      if (error) {
+        this.router.navigate(['/login']).then(() => {
+          this.toastrService.showError('Login cancelado!')
+        });
+      }
 
+    })
   }
 
   toggleShowPassword() {
@@ -84,6 +93,15 @@ export class RegisterComponent implements OnInit {
     const confirmPassword = group.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { mismatch: true };
   }
+
+  loginGoogle() {
+    window.location.href = 'http://localhost:3000/auth/google';
+  }
+
+  loginFacebook() {
+    window.location.href = 'http://localhost:3000/auth/facebook';
+  }
+
 
 }
 
