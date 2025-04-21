@@ -1,0 +1,194 @@
+.container-home {
+
+
+    .margin-site {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+
+    header {
+        width: 100%;
+        position: fixed;
+        display: flex;
+        align-items: center;
+        padding: 1rem 2rem;
+        justify-content: space-between;
+        max-width: 1200px;
+        background-color: white;
+
+        .logo {
+            img {
+                width: 70px;
+                height: auto;
+            }
+        }
+
+        nav {
+            ul {
+                display: flex;
+                list-style: none;
+                gap: 2rem;
+
+                li {
+                    a {
+                        color: black;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+
+        .entrar {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    }
+
+    .first-section {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        height: 100%;
+        padding: 11rem 0;
+
+        .informs {
+            flex: 1;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            h1 {
+                color: #091D4F;
+                font-size: 2rem;
+            }
+
+            p {
+                width: 85%;
+            }
+
+            .btns {
+                display: flex;
+                gap: 2rem;
+                flex-wrap: wrap;
+
+                button {
+                    background-color: var(--primary);
+                    color: white;
+                    padding: 0.7rem 2rem;
+                    border-radius: 50px;
+                    border: none;
+                    cursor: pointer;
+                    font-weight: bold;
+
+                    &:nth-child(2) {
+                        background-color: white;
+                        color: rgba(0, 0, 0, 0.6);
+                        border: 2px solid var(--primary);
+                    }
+                }
+            }
+        }
+
+        .img {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            padding: 11rem 1rem;
+
+            .img {
+                display: none;
+            }
+
+            .informs {
+                width: 100%;
+                align-items: center;
+                text-align: center;
+
+                p {
+                    width: 100%;
+                }
+
+                .btns {
+                    justify-content: center;
+                }
+            }
+        }
+    }
+
+
+    .second-section {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        align-items: center;
+        height: 100%;
+        padding: 6rem 0;
+
+        h1 {
+            color: #091D4F;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .informs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .inform,
+            .video {
+                &.inform {
+                    flex: .6;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 2rem;
+                    justify-content: center !important;
+
+                    p {
+                        font-size: 22px;
+                    }
+
+                    button {
+                        background-color: var(--primary);
+                        color: white;
+                        padding: 0.7rem 2rem;
+                        border-radius: 50px;
+                        border: none;
+                        cursor: pointer;
+                        font-weight: bold;
+                    }
+                }
+
+                &.video {
+                    flex: 1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 400px;
+                    border-radius: 10px;
+
+                    iframe {
+                        width: 80%;
+                        height: 80%;
+                        border-radius: 15px;
+                    }
+                }
+
+
+            }
+        }
+    }
+
+}
