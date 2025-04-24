@@ -15,10 +15,12 @@
         position: fixed;
         display: flex;
         align-items: center;
-        padding: 1rem 2rem;
+        padding: 1rem 0;
         justify-content: space-between;
-        max-width: 1200px;
+        border-radius: 20px;
         background-color: white;
+        max-width: 1200px;
+        z-index: 9999;
 
         .logo {
             img {
@@ -116,11 +118,25 @@
                     border: none;
                     cursor: pointer;
                     font-weight: bold;
+            transition: all 0.3s ease;
+
+
+                    &:hover{
+                      background-color: #2563EB;
+                      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                      cursor: pointer;
+                  }
 
                     &:nth-child(2) {
                         background-color: white;
                         color: rgba(0, 0, 0, 0.6);
                         border: 2px solid var(--primary);
+
+                        &:hover{
+                          background-color: transparent;
+                          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                          cursor: pointer;
+                      }
                     }
                 }
             }
@@ -154,6 +170,9 @@
         }
     }
 
+    section{
+      padding: 5rem 0;
+    }
 
     .second-section {
         display: flex;
@@ -220,12 +239,11 @@
     }
 
     .download-app-container{
-        margin: 0 5%;
-        margin-top: 50px;
-        margin-bottom: 200px;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
+        gap: 2rem;
         align-items: center;
+
         h2{
             font-size: 32px;
             color: #001D66;
@@ -237,12 +255,26 @@
             margin-bottom: 40px;
             width: 70%;
         }
+
+        div{
+          flex: 1;
+          img{
+            width: 150px;
+          }
+        }
+
+        figure{
+          display: flex;
+          justify-content: center;
+flex: 1;
+          img{
+            width: 500px;
+            height: auto;
+          }
+        }
     }
 
     .call-to-action-container{
-        margin: 0 10%;
-        margin-top: 50px;
-        margin-bottom: 200px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -250,8 +282,10 @@
         gap: 70px;
 
         h2{
+          width: 80%;
             font-size: 32px;
             text-align: center;
+            color: #001D66;
         }
         p{
             font-size: 20px;
@@ -278,7 +312,6 @@
     }
 
     .pricing-section {
-        padding: 6rem 2rem;
         text-align: center;
       
         .container {
@@ -389,6 +422,7 @@
     padding: 3rem 2rem 1rem;
     font-family: 'Inter', sans-serif;
     color: #001D66;
+    margin-top: 10rem;
   
     .footer-content {
       display: flex;
