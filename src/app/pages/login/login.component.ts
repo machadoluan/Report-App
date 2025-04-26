@@ -49,8 +49,14 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.router.queryParams.subscribe(params => {
       const error = params['error'];
+      const token = params['token']
+      if(token){
+        localStorage.setItem('token', token)
+        this.route.navigate(['/dashboard'])
+      }
       if (error) {
         this.route.navigate(['/login']).then(() => {
           this.toastrService.showError('Login cancelado!')
@@ -58,6 +64,8 @@ export class LoginComponent implements OnInit {
       }
 
     })
+
+   
   }
 
   toggleShowPassword() {
