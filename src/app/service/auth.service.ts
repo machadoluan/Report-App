@@ -32,15 +32,23 @@ export class AuthService {
   }
 
   getUserFromToken(): any | null {
-    const token = this.getToken();
-    if (token) {
+    let token = this.getToken();
+    
+    if (!token) {
+      return null;
+    }
+  
+    try {
+      token = token.split('#')[0].trim(); // <-- limpa se vier sujo por algum motivo
       const tokenPayload = token.split('.')[1];
       const decodedPayload = JSON.parse(atob(tokenPayload));
       return decodedPayload;
+    } catch (error) {
+      console.error('Erro ao decodificar o token:', error);
+      return null;
     }
-    return null;
   }
-
+  
 
   forgotPassword(email: string) {
     return this.http.post(`${this.apiUrl}/forgot-password`, { email });

@@ -25,11 +25,17 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.checkScreenWidth();
 
+    if (window.location.hash === '#_=_') {
+      history.replaceState(null, '', window.location.pathname);
+    }
+
     const token = this.cookieService.get('token');
+    console.log("Token", token)
 
     if (token) {
       localStorage.setItem('token', token);
       this.router.navigate(['/dashboard']);
+      this.cookieService.delete("token")
     }
   }
 

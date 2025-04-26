@@ -100,6 +100,9 @@ export class DashboardComponent implements OnInit {
     this.calcularMesReferente()
     const dataAtual = new Date();
     this.anoAtual = dataAtual.getFullYear();
+
+
+
   }
 
   calcularMesReferente(): void {
