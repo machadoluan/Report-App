@@ -68,10 +68,10 @@ export class ReportsService {
     );
   }
 
-  updateReport(dadosUpdate: any): Observable<registro> {
+  updateReport(viagemId: number, dadosUpdate: any): Observable<registro> {
     console.log(dadosUpdate)
     console.log(this.user.id)
-    return this.http.put<registro>(this.apiUrl, {
+    return this.http.put<registro>(`${this.apiUrl}/${viagemId}`, {
       updateData: dadosUpdate,
       userId: this.user.id
     }).pipe(

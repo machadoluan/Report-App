@@ -16,6 +16,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { HttpClient } from '@angular/common/http';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { saveAs } from 'file-saver';
+import { ViagensService } from '../../service/viagens.service';
 
 
 
@@ -74,10 +75,11 @@ export class ReportDetailsComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private tripService: ViagensService
   ) {
     this.dadosUpdate = this.fb.group({
-      viagem_nome: [{ value: "", disabled: true }, Validators.required],
+      viagem: [{ value: "", disabled: true }, Validators.required],
       tipo: [{ value: '', disabled: true }, Validators.required],
       data: [{ value: "", disabled: true }, Validators.required],
       hora: [{ value: "", disabled: true }, Validators.required],
@@ -92,6 +94,7 @@ export class ReportDetailsComponent implements OnInit {
     }
 
     this.loadReports()
+    this.loadTrips()
   }
 
   openDropDown() {
@@ -107,6 +110,36 @@ export class ReportDetailsComponent implements OnInit {
     if (!this.isMobile) {
       this.showDialog = true;
     }
+  }
+
+  loadTrips() {
+    this.tripService.getTrips().subscribe(
+      (data) => {
+        this.viagens = data;
+        this.viagens = this.viagens.map(v => ({
+          ...v,
+          nomeFormatado: `${v.origem || "Origem desconhecida"} → ${v.destino || "Destino desconhecido"} | ${v.status || "Status desconhecido"}`
+        }));
+
+        this.viagens.unshift({
+          id: null,
+          origem: '',
+          cliente: '',
+          destino: '',
+          dataInicio: '',
+          dataFim: '',
+          status: '',
+          valor: 0,
+          descricao: '',
+          nomeFormatado: 'Sem viagem'
+        });
+        
+        console.log(data)
+      },
+      (err) => {
+        console.error("Deu error:", err)
+      }
+    )
   }
 
 
@@ -184,6 +217,7 @@ export class ReportDetailsComponent implements OnInit {
 
 
   editar() {
+    this.dadosUpdate.get('viagem')?.enable();
     this.dadosUpdate.get('tipo')?.enable();
     this.dadosUpdate.get('data')?.enable();
     this.dadosUpdate.get('hora')?.enable();
@@ -252,17 +286,23 @@ export class ReportDetailsComponent implements OnInit {
 
   reportUpdate() {
     if (!this.registro?.id) {
-      this.toastrService.showError('ID da viagem não encontrado.');
+      this.toastrService.showError('ID do registro não encontrado.');
       return;
     }
 
     if (!this.dadosUpdate.dirty) {
+      this.dadosUpdate.get('viagem')?.disable();
       this.dadosUpdate.get('tipo')?.disable();
       this.dadosUpdate.get('data')?.disable();
       this.dadosUpdate.get('hora')?.disable();
       this.dadosUpdate.get('descricao')?.disable();
       this.editReport = false
     }
+
+    const viagem = this.dadosUpdate.value.viagem
+    const id = viagem?.id ?? null
+
+    console.log('viagem id', id)
 
     const dadosFormatados = {
       id: this.registro.id, // Inclui o ID da viagem
@@ -275,9 +315,10 @@ export class ReportDetailsComponent implements OnInit {
 
     console.log("Update", dadosFormatados)
 
-    this.reportService.updateReport(dadosFormatados).subscribe(
+    this.reportService.updateReport(id, dadosFormatados).subscribe(
       (res: any) => {
         this.toastrService.showSucess(`Registro ${dadosFormatados.tipo} atualizado `);
+        this.dadosUpdate.get('viagem')?.disable();
         this.dadosUpdate.get('tipo')?.disable();
         this.dadosUpdate.get('data')?.disable();
         this.dadosUpdate.get('hora')?.disable();
