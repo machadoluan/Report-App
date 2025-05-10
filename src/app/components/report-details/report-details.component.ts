@@ -41,10 +41,7 @@ import { ViagensService } from '../../service/viagens.service';
   styleUrl: './report-details.component.scss'
 })
 export class ReportDetailsComponent implements OnInit {
-
-
-
-  viagens: viagem[] = [];
+  viagens: any[] = [];
 
   registros: registro[] = [];
 
@@ -119,6 +116,10 @@ export class ReportDetailsComponent implements OnInit {
         this.viagens = this.viagens.map(v => ({
           ...v,
           nomeFormatado: `${v.origem || "Origem desconhecida"} → ${v.destino || "Destino desconhecido"} | ${v.status || "Status desconhecido"}`
+          
+
+       
+       
         }));
 
         this.viagens.unshift({
@@ -133,7 +134,9 @@ export class ReportDetailsComponent implements OnInit {
           descricao: '',
           nomeFormatado: 'Sem viagem'
         });
-        
+
+
+
         console.log(data)
       },
       (err) => {
@@ -145,31 +148,47 @@ export class ReportDetailsComponent implements OnInit {
 
   loadReports() {
     const id = this.route.snapshot.paramMap.get('id');
-
+  
     if (id) {
-      console.log(parseInt(id))
       this.reportService.getReportById(parseInt(id)).subscribe(
         (data: any) => {
-
           const tipoSelecionado = this.registroTipo.find(tipo => tipo.Tipo === data.reportFormatado.tipo);
-
-
+  
           this.registro = data.reportFormatado;
-          this.dadosUpdate.patchValue({
-            ...data.reportFormatado,
-            tipo: tipoSelecionado || null // Certifica-se de passar um objeto válido
-          });
-          console.log(this.registro)
+  
+          // Espera carregar as viagens antes de setar
+          if (this.viagens.length > 0) {
+            const viagemSelecionada = this.viagens.find(v => v.id === this.registro?.viagem_id) || this.viagens[0];
+  
+            this.dadosUpdate.patchValue({
+              ...data.reportFormatado,
+              tipo: tipoSelecionado || null,
+              viagem: viagemSelecionada
+            });
+          } else {
+            // Marca para fazer depois, se as viagens ainda não carregaram
+            const interval = setInterval(() => {
+              if (this.viagens.length > 0) {
+                const viagemSelecionada = this.viagens.find(v => v.id === this.registro?.viagem_id) || this.viagens[0];
+                this.dadosUpdate.patchValue({
+                  ...data.reportFormatado,
+                  tipo: tipoSelecionado || null,
+                  viagem: viagemSelecionada
+                });
+                clearInterval(interval);
+              }
+            }, 100); // Tenta a cada 100ms
+          }
         },
         (err) => {
-          console.error("Deu error:", err)
+          console.error("Erro ao carregar relatório:", err);
         }
-      )
-
+      );
     } else {
-      console.error("ID is null");
+      console.error("ID do registro não foi fornecido.");
     }
   }
+  
 
 
 
