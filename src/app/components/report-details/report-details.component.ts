@@ -215,7 +215,7 @@ export class ReportDetailsComponent implements OnInit {
   }
 
 
-  delete(viagem: any) {
+  delete(report: any) {
     this.dropdownMenu = false
 
     this.confirmationService.confirm({
@@ -233,11 +233,10 @@ export class ReportDetailsComponent implements OnInit {
       },
 
       accept: () => {
-        this.reportService.deleteReportId(viagem.id).subscribe(
+        this.reportService.deleteReportId(report.id).subscribe(
           (res) => {
-            this.toastrService.showSucess(`Viagem apagada com sucesso!`)
+            this.toastrService.showSucess(`Registro apagado com sucesso!`)
             this.router.navigate(['/reports'])
-
           },
           (err) => {
             this.toastrService.showError(`Erro ao deletar viagem, tente novamente mais tarde!`)
