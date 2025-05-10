@@ -53,27 +53,26 @@
 
 
     .trip_content {
-        z-index: 999;
+        height: calc(100vh - 240px);
+        overflow-y: auto;
 
         form {
-            height: calc(100vh - 240px);
-            overflow-y: scroll;
             padding: .5rem 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 1rem;
 
-            // &::-webkit-scrollbar {
-                // width: 5px;
+            &::-webkit-scrollbar {
+                width: 5px;
                 /* width of the entire scrollbar */
-            // }
-    
-            // &::-webkit-scrollbar-thumb {
-            //     background-color: var(--card-border);
-            //     /* color of the scroll thumb */
-            //     border-radius: 20px;
-            //     /* roundness of the scroll thumb */
-            // }
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: var(--card-border);
+                /* color of the scroll thumb */
+                border-radius: 20px;
+                /* roundness of the scroll thumb */
+            }
 
             .form-group {
                 display: flex;
@@ -109,15 +108,7 @@
                     }
                 }
             }
-            .trip_content::-webkit-scrollbar{
-                width: 5px;
-            }
-            .trip_content::-webkit-scrollbar-thumb{
-                background-color: var(--card-border);
-                /* color of the scroll thumb */
-                border-radius: 20px;
-                /* roundness of the scroll thumb */
-            }
+
             .data_hora {
                 width: 100%;
                 display: flex;
@@ -269,7 +260,7 @@
             color: rgba($color: #000000, $alpha: 1.0) !important;
             border: none;
             cursor: not-allowed;
-    
+
         }
 
 
