@@ -6,8 +6,9 @@ export type viagem = {
     dataFim: string;
     status: string;
     valor: number;
-    id: number;
+    id: any;
     descricao: string;
+    nomeFormatado?: string
 }
 
 export type registro = {
