@@ -170,4 +170,12 @@
     </ng-template>
 </p-dialog>
 
-<app-create-reports></app-create-reports>
+<app-create-reports (reportCreated)="adicionarNovoReport($event)"></app-create-reports>
+
+
+<div class="background_criando" *ngIf="isLoading">
+    <div class="criando">
+        <p-progress-spinner ariaLabel="loading" />
+        Excluindo registro...
+    </div>
+</div>

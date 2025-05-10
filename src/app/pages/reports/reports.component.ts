@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { registro, viagem } from '../../types/models.type';
 import { Table, TableModule } from 'primeng/table';
 import { InputIcon } from 'primeng/inputicon';
@@ -16,12 +16,14 @@ import { ReportsService } from '../../service/reports.service';
 import { ConfirmationService } from 'primeng/api';
 import { ToastrService } from '../../service/toastr.service';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ProgressSpinner } from 'primeng/progressspinner';
+
 
 
 
 @Component({
   selector: 'app-reports',
-  imports: [InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule, OverlayBadgeModule, CreateReportsComponent, RouterLink],
+  imports: [ProgressSpinner, InputIcon, IconField, InputTextModule, TableModule, CommonModule, DialogModule, SelectButtonModule, FormsModule, OverlayBadgeModule, CreateReportsComponent, RouterLink],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })
@@ -43,16 +45,18 @@ export class ReportsComponent implements OnInit {
   filteredReports: any[] = [];
   selectedFilters: string[] = [];
   filter: boolean = false
+  isLoading = false;
   searchText: string = '';
+
 
   constructor(
     private router: Router,
     private reportService: ReportsService,
     private confirmationService: ConfirmationService,
     private toastrService: ToastrService,
-
+    private cdr: ChangeDetectorRef,
     private eRef: ElementRef
-  ) {}
+  ) { }
 
   @HostListener('document:click', ['$event'])
   fecharFiltro(event: Event) {
@@ -342,22 +346,37 @@ export class ReportsComponent implements OnInit {
       },
 
       accept: () => {
-        this.reportService.deleteReportMultiple(ids).subscribe(
-          (res) => {
+        this.isLoading = true
+
+        this.reportService.deleteReportMultiple(ids).subscribe({
+
+          next: (res) => {
             this.toastrService.showSucess(`Registro apagado com sucesso!`)
-            window.location.reload();
+            this.filteredReports = this.filteredReports.filter(report => !ids.includes(report.id));
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            this.toastrService.showError(`Erro ao deletar registro, tente novamente mais tarde!`)
+            this.isLoading = false
 
           },
-          (err) => {
-            this.toastrService.showError(`Erro ao deletar registro, tente novamente mais tarde!`)
+          complete: () => {
+            this.isLoading = false;
+            this.selectedRegistros = []
 
           }
-        )
+        })
 
       },
       reject: () => {
       },
     });
+  }
+
+
+  adicionarNovoReport(novo: any){
+    console.log('Novo registro recebido:', novo);
+    this.filteredReports = [novo, ...this.filteredReports]
   }
 }
 
