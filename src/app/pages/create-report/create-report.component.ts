@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { NgxMaskDirective } from 'ngx-mask';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -25,6 +25,7 @@ import { AuthService } from '../../service/auth.service';
 export class CreateReportComponent implements AfterViewInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('timepicker') timepicker: any;
+  @Output() reportCreated = new EventEmitter<any>()
 
   display: boolean = false;
   isLoading = false;
@@ -48,7 +49,7 @@ export class CreateReportComponent implements AfterViewInit {
 
   constructor(private fb: FormBuilder, private tripService: ViagensService, private repotService: ReportsService, private toastrService: ToastrService, private authService: AuthService) {
     this.dadosReport = this.fb.group({
-      viagem: ["", Validators.required],
+      viagem: [""],
       tipo: ["", Validators.required],
       data: ["", Validators.required],
       hora: ["", Validators.required],
@@ -92,6 +93,18 @@ export class CreateReportComponent implements AfterViewInit {
           ...v,
           nomeFormatado: `${v.origem || "Origem desconhecida"} → ${v.destino || "Destino desconhecido"} | ${v.status || "Status desconhecido"}`
         }));
+        this.viagens.unshift({
+          id: null,
+          origem: '',
+          cliente: '',
+          destino: '',
+          dataInicio: '',
+          dataFim: '',
+          status: '',
+          valor: 0,
+          descricao: '',
+          nomeFormatado: 'Sem viagem'
+        });
         console.log(data)
       },
       (err) => {
@@ -148,20 +161,23 @@ export class CreateReportComponent implements AfterViewInit {
 
   createReport() {
     console.log("Dados antes ", this.dadosReport.value)
-    const id = this.dadosReport.value.viagem.id
+    const viagem = this.dadosReport.value.viagem
+
+    const id = viagem?.id ?? null;
 
     const dadosFormatados = {
       data: this.formatarData(this.dadosReport.value.data),
       tipo: this.dadosReport.value.tipo.Tipo,
-      descricao: this.dadosReport.value.descricao,
+      descricao: this.dadosReport.value?.descricao ?? '',
       hora: this.formatarHora(this.dadosReport.value.hora)
     };
 
     this.isLoading = true
     this.repotService.createReport(id, dadosFormatados, this.selectedFiles, this.user).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         console.log(res)
         this.toastrService.showSucess(`Registro de ${dadosFormatados.tipo} criado. `)
+        this.reportCreated.emit(res.report)
         this.dadosReport.reset();
         this.selectedFiles = []
       },
