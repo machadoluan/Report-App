@@ -180,6 +180,8 @@ export class CreateReportComponent implements AfterViewInit {
         this.reportCreated.emit(res.report)
         this.dadosReport.reset();
         this.selectedFiles = []
+        this.imagePreviews = []
+
       },
       error: (err) => {
         console.error(err)
@@ -243,5 +245,5 @@ export class CreateReportComponent implements AfterViewInit {
     const formattedTime = `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
     this.dadosReport.patchValue({ hora: formattedTime });
   }
-  
+
 }

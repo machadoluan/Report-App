@@ -180,6 +180,7 @@ export class CreateReportsComponent implements OnInit {
         this.toastrService.showSucess(`Registro de ${dadosFormatados.tipo} criado. `)
         this.reportCreated.emit(res.report)
         this.dadosReport.reset()
+        this.imagePreviews = []
         this.selectedFiles = []
       },
       error: (err) => {
