@@ -1,10 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel'
 
 @Component({
   selector: 'app-home',
-  imports: [CarouselModule, ButtonModule, RouterLink, CommonModule],
+  imports: [CarouselModule, ButtonModule, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
